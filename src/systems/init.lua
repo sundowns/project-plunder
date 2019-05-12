@@ -1,4 +1,6 @@
 local PATH = (...):gsub("%.init$", "")
 
-return {}
- -- sprite_renderer = require(PATH .. ".sprite_renderer"),
+return {
+    lighting = require(PATH .. ".lighting"),
+    sprite_renderer = require(PATH .. ".sprite_renderer")
+}

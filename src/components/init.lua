@@ -1,4 +1,7 @@
 local PATH = (...):gsub("%.init$", "")
 
-return {}
--- sprite = require(PATH .. ".sprite"),
+return {
+    sprite = require(PATH .. ".sprite"),
+    transform = require(PATH .. ".transform"),
+    direction = require(PATH .. ".direction")
+}
