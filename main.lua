@@ -1,5 +1,5 @@
 -- Globals
-_debug = false
+_debug = true
 _constants = nil
 _components = nil
 _entities = nil
@@ -50,7 +50,7 @@ function love.load()
     local player = _entities.player(Vector(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2))
     _instances.world:addEntity(player)
     _instances.world:emit("spriteStateUpdated", player, "run")
-    _instances.world:addEntity(_entities.light_source(Vector(0, 0)))
+    _instances.world:addEntity(_entities.light_source(Vector(0, 0), player))
 end
 
 function love.update(dt)
@@ -61,6 +61,7 @@ function love.draw()
     _instances.world:emit("attach")
     _instances.world:emit("draw")
     _instances.world:emit("detach")
+    _instances.world:emit("draw_debug")
     -- _instances.world:emit("draw_ui")
 end
 

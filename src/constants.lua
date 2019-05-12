@@ -1,5 +1,5 @@
 return {
     COLOURS = {
-        TORCHLIGHT = {255 / 255, 147 / 255, 41 / 255}
+        TORCHLIGHT = {255 / 255, 197 / 255, 143 / 255}
     }
 }

@@ -54,7 +54,6 @@ function lighting:update(dt)
         local transform = e:get(_components.transform)
         local point_light = e:get(_components.point_light)
 
-        transform.position = Vector(love.mouse.getPosition())
         self.point_lighting_shader:send(
             "lights[" .. i - 1 .. "].position",
             {transform.position.x, transform.position.y}
