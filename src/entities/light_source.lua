@@ -4,9 +4,9 @@ return function(position, encircle_target_entity)
     local light_source =
         Entity():give(_components.transform, position, Vector(0, 0)):give(
         _components.point_light,
-        0.8,
+        1,
         _constants.COLOURS.TORCHLIGHT,
-        150
-    ):give(_components.encircle, 120, position, encircle_target_entity):apply()
+        130
+    ):give(_components.encircle, 150, position, encircle_target_entity):apply()
     return light_source
 end

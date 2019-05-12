@@ -13,27 +13,26 @@ function encircling:update(dt)
         -- get encircling target if it exists
         if target then
             -- move circling origin to target position
-            encircle:update_origin(target:get(_components.transform).position)
+            local new_origin = target:get(_components.transform).position:clone()
+            if target:has(_components.dimensions) then
+                -- offset based on target's dimensions (if applicable)
+                local dimensions = target:get(_components.dimensions)
+                new_origin.x = new_origin.x + dimensions.width / 2
+                new_origin.y = new_origin.y + dimensions.height / 2
+            end
+            encircle:update_origin(new_origin)
         end
 
         -- vector from centre of screen to mouse position
         local mouse = Vector(love.mouse.getPosition())
-        local centre = Vector(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
 
-        -- TODO: use magnitude of initial direction vector to figure out where to place light (rather than max radius)
-        -- normalise and multiple by radius
-        local resultant = (mouse - centre):normalized()
-
-        local origin_x, origin_y = encircle.origin.x, encircle.origin.y
-        if target:has(_components.dimensions) then
-            -- offset based on target's dimensions (if applicable)
-            local dimensions = target:get(_components.dimensions)
-            origin_x = origin_x + dimensions.width / 2
-            origin_y = origin_y + dimensions.height / 2
-        end
+        -- normalise and multiply by desired length
+        local to_mouse = (mouse - encircle.origin)
+        local resultant = to_mouse:normalized()
+        local magnitude = math.min(to_mouse:len(), encircle.radius)
 
         -- use vector to update position of transform
-        transform.position = Vector(origin_x, origin_y) + resultant * encircle.radius
+        transform.position = encircle.origin + resultant * magnitude
     end
 end
 

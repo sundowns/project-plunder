@@ -5,19 +5,19 @@ function lighting:init()
     self.point_lighting_shader = love.graphics.newShader(require("src.shaders.point_lighting"))
     self.point_lighting_shader:send("ambient_light", 0.025)
     self.light_breath_radius_offset = 0
-    self.max_breath_offset = 8
-    self.breath_randomness = 2
+    self.max_breath_offset = 2
+    self.breath_randomness = 5
     self:breathe_lights()
 end
 
 function lighting:breathe_lights()
     self.timer:every(
-        1,
+        0.2,
         function()
             self.timer:script(
                 function(wait)
                     self.timer:tween(
-                        0.5,
+                        0.1,
                         self,
                         {
                             light_breath_radius_offset = self.max_breath_offset +
@@ -25,9 +25,9 @@ function lighting:breathe_lights()
                         },
                         "in-out-bounce"
                     )
-                    wait(0.5)
+                    wait(0.1)
                     self.timer:tween(
-                        0.5,
+                        0.1,
                         self,
                         {
                             light_breath_radius_offset = -self.max_breath_offset -

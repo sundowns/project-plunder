@@ -5,7 +5,7 @@ return function(position)
     local scale = 4
 
     local player =
-        Entity():give(_components.transform, position, Vector(200, 0)):give(
+        Entity():give(_components.transform, position, Vector(0, 0)):give(
         _components.sprite,
         "PLAYER",
         0,
