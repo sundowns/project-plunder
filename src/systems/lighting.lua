@@ -3,13 +3,51 @@ local lighting = System({_components.transform, _components.point_light})
 function lighting:init()
     self.timer = Timer.new()
     self.point_lighting_shader = love.graphics.newShader(require("src.shaders.point_lighting"))
-    self.point_lighting_shader:send("ambientLight", 0.025)
+    self.point_lighting_shader:send("ambient_light", 0.025)
+    self.light_breath_radius_offset = 0
+    self.max_breath_offset = 8
+    self.breath_randomness = 2
+    self:breathe_lights()
+end
+
+function lighting:breathe_lights()
+    self.timer:every(
+        1,
+        function()
+            self.timer:script(
+                function(wait)
+                    self.timer:tween(
+                        0.5,
+                        self,
+                        {
+                            light_breath_radius_offset = self.max_breath_offset +
+                                love.math.random(0, self.breath_randomness)
+                        },
+                        "in-out-bounce"
+                    )
+                    wait(0.5)
+                    self.timer:tween(
+                        0.5,
+                        self,
+                        {
+                            light_breath_radius_offset = -self.max_breath_offset -
+                                love.math.random(0, self.breath_randomness)
+                        },
+                        "in-out-bounce"
+                    )
+                end
+            )
+        end
+    )
 end
 
 function lighting:update(dt)
     self.timer:update(dt)
 
-    self.point_lighting_shader:send("lightCount", self.pool.size)
+    self.point_lighting_shader:send("light_count", self.pool.size)
+    self.point_lighting_shader:send("breath_offset", self.light_breath_radius_offset)
+
+    self.light_breath_radius_offset = self.light_breath_radius_offset + dt * 100
 
     for i = 1, self.pool.size do
         local e = self.pool:get(i)

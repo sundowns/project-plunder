@@ -47,7 +47,7 @@ function love.load()
     _systems = require("src.systems")
     _instances = require("src.instances")
 
-    local player = _entities.player(Vector(0, love.graphics.getHeight() / 2))
+    local player = _entities.player(Vector(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2))
     _instances.world:addEntity(player)
     _instances.world:emit("spriteStateUpdated", player, "run")
     _instances.world:addEntity(_entities.light_source(Vector(0, 0)))

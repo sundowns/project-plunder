@@ -6,7 +6,7 @@ return function(position)
         _components.point_light,
         0.75,
         _constants.COLOURS.TORCHLIGHT,
-        100
+        50
     ):apply()
     return light_source
 end
