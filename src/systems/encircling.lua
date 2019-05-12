@@ -3,7 +3,6 @@ local encircling = System({_components.transform, _components.encircle})
 function encircling:init()
 end
 
---WIP
 function encircling:update(dt)
     for i = 1, self.pool.size do
         local e = self.pool:get(i)
@@ -20,6 +19,8 @@ function encircling:update(dt)
         -- vector from centre of screen to mouse position
         local mouse = Vector(love.mouse.getPosition())
         local centre = Vector(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
+
+        -- TODO: use magnitude of initial direction vector to figure out where to place light (rather than max radius)
         -- normalise and multiple by radius
         local resultant = (mouse - centre):normalized()
 
