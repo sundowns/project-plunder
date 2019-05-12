@@ -1,22 +1,23 @@
 return [[
-#define NUM_LIGHTS 32
+#define MAX_LIGHTS 32
 struct Light {
-    vec2 pos;
+    vec2 position;
     vec3 diffuse;
-    number power;
+    number strength;
+    number radius;
 };
-extern Light lights[NUM_LIGHTS];
-extern number numLights;
+extern Light lights[MAX_LIGHTS];
+extern number lightCount;
 extern number ambientLight;
 vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords ){
     vec4 pixel = Texel(texture, texture_coords );
     vec3 finalColour;
-    for(int i = 0; i < numLights; i++)
+    for(int i = 0; i < lightCount; i++)
     {
         Light light = lights[i];
-        vec2 toLight = vec2(light.pos.x - screen_coords.x, light.pos.y - screen_coords.y);
-        number brightness = clamp(1.0 - (length(toLight) / 300 / lights[i].power), 0.0, 1.0);
-        finalColour += lights[i].diffuse * brightness * lights[i].power;
+        vec2 toLight = vec2(light.position.x - screen_coords.x, light.position.y - screen_coords.y);
+        number brightness = clamp(1.0 - (length(toLight) / lights[i].radius / lights[i].strength), 0.0, 1.0);
+        finalColour += lights[i].diffuse * brightness * lights[i].strength;
     }
     
     vec4 newAmbient = pixel * ambientLight;

@@ -47,7 +47,10 @@ function love.load()
     _systems = require("src.systems")
     _instances = require("src.instances")
 
-    _instances.world:addEntity(_entities.player(Vector(love.graphics.getWidth() / 10, love.graphics.getHeight() / 2)))
+    local player = _entities.player(Vector(0, love.graphics.getHeight() / 2))
+    _instances.world:addEntity(player)
+    _instances.world:emit("spriteStateUpdated", player, "run")
+    _instances.world:addEntity(_entities.light_source(Vector(0, 0)))
 end
 
 function love.update(dt)
@@ -55,8 +58,10 @@ function love.update(dt)
 end
 
 function love.draw()
-    _instances.world:emit("draw", dt)
-    love.graphics.print("yeetus")
+    _instances.world:emit("attach")
+    _instances.world:emit("draw")
+    _instances.world:emit("detach")
+    -- _instances.world:emit("draw_ui")
 end
 
 function love.keyreleased(key)
