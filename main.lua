@@ -69,7 +69,7 @@ function love.keyreleased(key)
     _instances.world:emit("keyreleased", key)
 end
 
-function love.keypressed(key)
+function love.keypressed(key, scancode, isrepeat)
     if key == "space" then
         love.event.quit("restart")
     elseif key == "escape" then

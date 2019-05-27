@@ -6,5 +6,6 @@ return {
     direction = require(PATH .. ".direction"),
     point_light = require(PATH .. ".point_light"),
     encircle = require(PATH .. ".encircle"),
-    dimensions = require(PATH .. ".dimensions")
+    dimensions = require(PATH .. ".dimensions"),
+    controlled = require(PATH .. ".controlled")
 }

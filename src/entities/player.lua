@@ -13,6 +13,9 @@ return function(position)
         scale,
         0,
         0
-    ):give(_components.direction):give(_components.dimensions, 32 * scale, 32 * scale):apply()
+    ):give(_components.direction):give(_components.dimensions, 32 * scale, 32 * scale):give(
+        _components.controlled,
+        {a = "left", left = "left", d = "right", right = "right"}
+    ):apply()
     return player
 end
