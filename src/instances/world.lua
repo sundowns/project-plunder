@@ -5,6 +5,7 @@ local motion = _systems.motion()
 local sprite_renderer = _systems.sprite_renderer()
 local encircling = _systems.encircling()
 local input = _systems.input()
+local walking = _systems.walking()
 
 -- ADD SYSTEMS
 
@@ -25,6 +26,10 @@ world:addSystem(input, "keypressed")
 world:addSystem(input, "keyreleased")
 world:addSystem(input, "update")
 
+world:addSystem(walking, "action_pressed")
+world:addSystem(walking, "action_held")
+world:addSystem(walking, "update")
+
 -- ENABLE SYSTEMS
 
 -- world:enableSystem(lighting, "attach")
@@ -38,12 +43,16 @@ world:enableSystem(encircling, "draw_debug")
 world:enableSystem(input, "keypressed")
 world:enableSystem(input, "keyreleased")
 
+world:enableSystem(walking, "action_pressed")
+world:enableSystem(walking, "action_held")
+
 function world:enableUpdates()
     -- world:enableSystem(lighting, "update")
     world:enableSystem(sprite_renderer, "update")
     world:enableSystem(motion, "update")
     world:enableSystem(encircling, "update")
     world:enableSystem(input, "update")
+    world:enableSystem(walking, "update")
 end
 
 function world:disableUpdates()
@@ -52,6 +61,7 @@ function world:disableUpdates()
     world:disableSystem(motion, "update")
     world:disableSystem(encircling, "update")
     world:disableSystem(input, "update")
+    world:disableSystem(walking, "update")
 end
 
 world:enableUpdates()

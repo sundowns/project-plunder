@@ -86,7 +86,7 @@ function sprite_renderer:drawSpriteInstance(instance, position, orientation, sx,
         local w, h = layer.animation:getDimensions()
         local offset_position_x = position.x
         if flipped then
-            offset_position_x = offset_position_x + w
+            offset_position_x = offset_position_x + w * sx
             sx = sx * -1
         end
         layer.animation:draw(instance.sprite.image, offset_position_x, position.y, orientation or 0, sx, sy)

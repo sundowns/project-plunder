@@ -16,6 +16,6 @@ return function(position)
     ):give(_components.direction):give(_components.dimensions, 32 * scale, 32 * scale):give(
         _components.controlled,
         {a = "left", left = "left", d = "right", right = "right"}
-    ):apply()
+    ):give(_components.walk):apply()
     return player
 end

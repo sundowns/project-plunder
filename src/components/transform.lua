@@ -14,7 +14,7 @@ function transform:setPosition(position)
 end
 
 function transform:translate(dx, dy)
-    self.position = Vector(self.pos.x + dx, self.pos.y + dy)
+    self.position = Vector(self.position.x + dx, self.position.y + dy)
 end
 
 function transform:setVelocity(velocity)
