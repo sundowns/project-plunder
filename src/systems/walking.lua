@@ -4,11 +4,15 @@ function walking:init()
 end
 
 function walking:action_pressed(action, entity)
-    self:walk(action, entity)
+    if entity:has(_components.walk) then
+        self:walk(action, entity)
+    end
 end
 
 function walking:action_held(action, entity)
-    self:walk(action, entity)
+    if entity:has(_components.walk) then
+        self:walk(action, entity)
+    end
 end
 
 function walking:walk(action, entity)
