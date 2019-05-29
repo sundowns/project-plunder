@@ -22,7 +22,7 @@ function jump:decay(dt)
         fall_speed_modifier = self.fall_speed_modifier
     end
 
-    self.y_velocity = self.y_velocity - self.base_jump_decay * fall_speed_modifier * dt
+    self.y_velocity = self.y_velocity - self.base_jump_decay * (fall_speed_modifier * dt)
 end
 
 return jump

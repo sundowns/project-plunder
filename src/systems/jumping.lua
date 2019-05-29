@@ -18,7 +18,7 @@ end
 function jumping:jump(action, entity)
     assert(action)
     assert(entity)
-    if action ~= "space" then
+    if action ~= "jump" then
         return
     end
 
