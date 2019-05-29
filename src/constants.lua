@@ -2,9 +2,10 @@ return {
     COLOURS = {
         TORCHLIGHT = {255 / 255, 197 / 255, 143 / 255}
     },
-    WALK_SPEED = 350,
-    FRICTION = 1250,
-    JUMP_ACCEL = 800,
-    JUMP_DECAY = 735,
-    GRAVITY = 300
+    WALK_SPEED = 400,
+    FRICTION = 1450,
+    JUMP_ACCEL = 16,
+    JUMP_MULTIPLIER = 1.5,
+    JUMP_SMALL_MULTIPLIER = 2.5,
+    GRAVITY = 23
 }

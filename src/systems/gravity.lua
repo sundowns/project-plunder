@@ -8,8 +8,9 @@ function gravity:update(dt)
         local e = self.pool:get(i)
         local gravity = e:get(_components.gravity)
         local transform = e:get(_components.transform)
+        local state = e:get(_components.player_state)
 
-        if transform.position.y < 500 then --beautiful hardcoding
+        if transform.position.y < 500 and state.state ~= "walk" then --beautiful hardcoding
             transform.position.y = transform.position.y + (gravity.strength * dt)
         end
     end

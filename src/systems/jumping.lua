@@ -36,22 +36,34 @@ function jumping:update(dt)
         local jump = e:get(_components.jump)
         local transform = e:get(_components.transform)
         local behaviour = e:get(_components.player_state)
+        local gravity = e:get(_components.gravity)
+        local controlled = e:get(_components.controlled)
 
         if behaviour.state == "jump" then
-            jump:decay(dt)
             if jump.y_velocity < jump.falling_trigger_velocity then
                 behaviour.state = "fall"
             end
         end
 
-        if transform.position.y > 500 and behaviour.state == "fall" then -- beautiful hardcoding!
+        if transform.position.y >= 500 and behaviour.state == "fall" then -- beautiful hardcoding!
             jump.y_velocity = 0
             behaviour.state = "walk"
         else
-            transform.position.y = transform.position.y - jump.y_velocity * dt
+            local multiplier = _constants.JUMP_SMALL_MULTIPLIER
+
+            for key, is_held in pairs(controlled.is_held) do
+                if key == "space" and is_held then
+                    if jump.y_velocity > 0 then
+                        multiplier = _constants.JUMP_MULTIPLIER
+                    end
+                end
+            end
+            jump:update(dt, gravity, multiplier)
         end
-        print(behaviour.state)
-        print(jump.y_velocity)
+
+        if behaviour.state ~= "walk" then
+            transform.position.y = transform.position.y - jump.y_velocity
+        end
     end
 end
 

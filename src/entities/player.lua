@@ -18,7 +18,7 @@ return function(position)
         {a = "left", left = "left", d = "right", right = "right", space = "jump"}
     ):give(_components.walk):give(_components.jump):give(_components.gravity, _constants.GRAVITY):give(
         _components.player_state,
-        "walk"
+        "fall"
     ):apply()
     return player
 end
