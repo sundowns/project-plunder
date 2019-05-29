@@ -45,13 +45,12 @@ function jumping:update(dt)
         else
             local multiplier = _constants.JUMP_SMALL_MULTIPLIER
 
-            for key, is_held in pairs(controlled.is_held) do
-                if key == "space" and is_held then
-                    if jump.y_velocity > 0 and behaviour.state ~= "fall" then
-                        multiplier = _constants.JUMP_MULTIPLIER
-                    end
+            if controlled.is_held.jump then
+                if jump.y_velocity > 0 and behaviour.state ~= "fall" then
+                    multiplier = _constants.JUMP_MULTIPLIER
                 end
             end
+
             jump:update(dt, gravity, multiplier)
         end
 
