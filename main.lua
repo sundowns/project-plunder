@@ -71,7 +71,7 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
     if key == "space" then
-        love.event.quit("restart")
+        --love.event.quit("restart")
     elseif key == "escape" then
         love.event.quit()
     elseif key == "f1" then
