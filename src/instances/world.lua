@@ -40,7 +40,7 @@ world:addSystem(gravity, "update")
 -- ENABLE SYSTEMS
 
 -- world:enableSystem(lighting, "attach")
--- world:enableSystem(lighting, "detach")local
+world:enableSystem(lighting, "detach")
 
 world:enableSystem(sprite_renderer, "draw")
 world:enableSystem(sprite_renderer, "spriteStateUpdated")

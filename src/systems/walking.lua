@@ -34,6 +34,14 @@ function walking:walk(action, entity)
         local direction = entity:get(_components.direction)
         direction:set(action) --left or right
     end
+
+    if entity:has(_components.player_state) then
+        local behaviour = entity:get(_components.player_state).behaviour
+        if behaviour.state == "default" then
+            behaviour:setState("walk")
+            self:getInstance():emit("spriteStateUpdated", entity, "walk")
+        end
+    end
 end
 
 function walking:update(dt)
@@ -44,6 +52,14 @@ function walking:update(dt)
 
         local transform = e:get(_components.transform)
         transform.position.x = transform.position.x + (walk.x_velocity * dt)
+
+        if e:has(_components.player_state) then
+            local behaviour = e:get(_components.player_state).behaviour
+            if behaviour.state == "walk" and walk.x_velocity == 0 then
+                behaviour:setState("default")
+                self:getInstance():emit("spriteStateUpdated", e, "default")
+            end
+        end
     end
 end
 

@@ -36,6 +36,7 @@ function love.load()
     System = require("libs.concord.system")
     Timer = require("libs.timer")
     Vector = require("libs.vector")
+    Behavior = require("libs.behavior")
 
     _fonts = {
         ["DEBUG"] = resources.fonts.all_business(20)

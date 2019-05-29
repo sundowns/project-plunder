@@ -1,5 +1,7 @@
 local gravity = System({_components.gravity, _components.transform})
 
+local FLOOR = 500 -- crazy hack
+
 function gravity:init()
 end
 
@@ -8,11 +10,9 @@ function gravity:update(dt)
         local e = self.pool:get(i)
         local gravity = e:get(_components.gravity)
         local transform = e:get(_components.transform)
-        local state = e:get(_components.player_state)
+        local state = e:get(_components.player_state).behaviour
 
-        if transform.position.y < 500 and state.state ~= "walk" then --beautiful hardcoding
-            transform.position.y = transform.position.y + (gravity.strength * dt)
-        end
+        transform.position.y = math.min((transform.position.y + (gravity.strength * dt)), FLOOR)
     end
 end
 

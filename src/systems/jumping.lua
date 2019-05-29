@@ -17,9 +17,10 @@ function jumping:jump(action, entity)
     end
 
     local jump = entity:get(_components.jump)
-    local state = entity:get(_components.player_state)
-    if state.state == "walk" then
-        state.state = "jump"
+    local behaviour = entity:get(_components.player_state).behaviour
+    if behaviour.state == "walk" or behaviour.state == "default" then
+        behaviour:setState("jump")
+        self:getInstance():emit("spriteStateUpdated", entity, "jump")
         jump:jump()
     end
 end
@@ -29,19 +30,21 @@ function jumping:update(dt)
         local e = self.pool:get(i)
         local jump = e:get(_components.jump)
         local transform = e:get(_components.transform)
-        local behaviour = e:get(_components.player_state)
+        local behaviour = e:get(_components.player_state).behaviour
         local gravity = e:get(_components.gravity)
         local controlled = e:get(_components.controlled)
 
         if behaviour.state == "jump" then
             if jump.y_velocity < jump.falling_trigger_velocity then
-                behaviour.state = "fall"
+                behaviour:setState("fall")
+                self:getInstance():emit("spriteStateUpdated", e, "fall")
             end
         end
 
         if transform.position.y >= 500 and behaviour.state == "fall" then -- beautiful hardcoding!
             jump.y_velocity = 0
-            behaviour.state = "walk"
+            behaviour:setState("default")
+            self:getInstance():emit("spriteStateUpdated", e, "default")
         else
             local multiplier = _constants.JUMP_SMALL_MULTIPLIER
 
@@ -54,7 +57,7 @@ function jumping:update(dt)
             jump:update(dt, gravity, multiplier)
         end
 
-        if behaviour.state ~= "walk" then
+        if behaviour.state == "jump" or behaviour.state == "fall" then
             transform.position.y = transform.position.y - jump.y_velocity
         end
     end
