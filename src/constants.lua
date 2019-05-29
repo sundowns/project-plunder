@@ -5,7 +5,7 @@ return {
     WALK_SPEED = 400,
     FRICTION = 1450,
     JUMP_ACCEL = 16,
-    JUMP_MULTIPLIER = 1.5,
+    JUMP_MULTIPLIER = 1.4,
     JUMP_SMALL_MULTIPLIER = 2.5,
     GRAVITY = 23
 }
