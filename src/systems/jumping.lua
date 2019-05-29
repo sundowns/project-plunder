@@ -53,7 +53,7 @@ function jumping:update(dt)
 
             for key, is_held in pairs(controlled.is_held) do
                 if key == "space" and is_held then
-                    if jump.y_velocity > 0 then
+                    if jump.y_velocity > 0 and behaviour.state ~= "fall" then
                         multiplier = _constants.JUMP_MULTIPLIER
                     end
                 end
