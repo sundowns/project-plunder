@@ -8,5 +8,8 @@ return {
     encircle = require(PATH .. ".encircle"),
     dimensions = require(PATH .. ".dimensions"),
     controlled = require(PATH .. ".controlled"),
-    walk = require(PATH .. ".walk")
+    walk = require(PATH .. ".walk"),
+    jump = require(PATH .. ".jump"),
+    gravity = require(PATH .. ".gravity"),
+    player_state = require(PATH .. "..player_state")
 }
