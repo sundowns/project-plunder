@@ -33,7 +33,6 @@ world:addSystem(walking, "action_held")
 world:addSystem(walking, "update")
 
 world:addSystem(jumping, "action_pressed")
-world:addSystem(jumping, "action_held")
 world:addSystem(jumping, "update")
 
 world:addSystem(gravity, "update")
