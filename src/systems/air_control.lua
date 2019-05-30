@@ -22,6 +22,11 @@ function air_control:move(action, entity)
         return
     end
 
+    local state = entity:get(_components.player_state).behaviour.state
+    if state ~= "jump" and state ~= "fall" then
+        return
+    end
+
     local direction_modifier = 1
     if action == "left" then
         direction_modifier = -1
