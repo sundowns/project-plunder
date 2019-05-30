@@ -7,6 +7,7 @@ return {
     encircling = require(PATH .. ".encircling"),
     input = require(PATH .. ".input"),
     walking = require(PATH .. ".walking"),
+    air_control = require(PATH .. ".air_control"),
     jumping = require(PATH .. ".jumping"),
     gravity = require(PATH .. ".gravity")
 }
