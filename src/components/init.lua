@@ -9,6 +9,7 @@ return {
     dimensions = require(PATH .. ".dimensions"),
     controlled = require(PATH .. ".controlled"),
     walk = require(PATH .. ".walk"),
+    air_control = require(PATH .. ".air_control"),
     jump = require(PATH .. ".jump"),
     gravity = require(PATH .. ".gravity"),
     player_state = require(PATH .. "..player_state")

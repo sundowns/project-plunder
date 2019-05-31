@@ -16,9 +16,9 @@ return function(position)
     ):give(_components.direction):give(_components.dimensions, 32 * scale, 32 * scale):give(
         _components.controlled,
         {a = "left", left = "left", d = "right", right = "right", space = "jump"}
-    ):give(_components.walk):give(_components.jump):give(_components.gravity, _constants.GRAVITY):give(
-        _components.player_state,
-        "fall"
-    ):apply()
+    ):give(_components.walk):give(_components.air_control):give(_components.jump):give(
+        _components.gravity,
+        _constants.GRAVITY
+    ):give(_components.player_state, "fall"):apply()
     return player
 end

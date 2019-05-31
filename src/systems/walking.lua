@@ -50,11 +50,12 @@ function walking:update(dt)
         local walk = e:get(_components.walk)
         walk:apply_friction(dt)
 
-        local transform = e:get(_components.transform)
-        transform.position.x = transform.position.x + (walk.x_velocity * dt)
-
         if e:has(_components.player_state) then
             local behaviour = e:get(_components.player_state).behaviour
+            if behaviour.state ~= "jump" and behaviour.state ~= "fall" then
+                local transform = e:get(_components.transform)
+                transform.position.x = transform.position.x + (walk.x_velocity * dt)
+            end
             if behaviour.state == "walk" and walk.x_velocity == 0 then
                 behaviour:setState("default")
                 self:getInstance():emit("spriteStateUpdated", e, "default")
