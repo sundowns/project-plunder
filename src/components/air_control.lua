@@ -1,16 +1,16 @@
 local air_control =
     Component(
     function(e)
-        e.accel = _constants.AIRCONTROL_ACCEL
-        e.maxspeed = _constants.AIRCONTROL_MAXSPEED
+        e.acceleration = _constants.AIRCONTROL_ACCELERATION
+        e.max_speed = _constants.AIRCONTROL_MAX_SPEED
         e.x_velocity = 0
     end
 )
 
 function air_control:move(modifier)
-    self.x_velocity = self.x_velocity + self.accel * modifier
-    if math.abs(self.x_velocity) > self.maxspeed then
-        self.x_velocity = self.maxspeed * modifier
+    self.x_velocity = self.x_velocity + self.acceleration * modifier
+    if math.abs(self.x_velocity) > self.max_speed then
+        self.x_velocity = self.max_speed * modifier
     end
 end
 

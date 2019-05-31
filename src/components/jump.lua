@@ -1,7 +1,7 @@
 local jump =
     Component(
     function(e)
-        e.jump_velocity = _constants.JUMP_ACCEL
+        e.jump_velocity = _constants.JUMP_ACCELERATION
         e.falling_trigger_velocity = 3
         e.y_velocity = 0
     end

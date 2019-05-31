@@ -1,17 +1,17 @@
 local walk =
     Component(
     function(e)
-        e.accel = _constants.WALK_ACCEL
-        e.maxspeed = _constants.WALK_MAXSPEED
+        e.acceleration = _constants.WALK_ACCELERATION
+        e.max_speed = _constants.WALK_MAX_SPEED
         e.friction = _constants.FRICTION
         e.x_velocity = 0
     end
 )
 
 function walk:move(modifier)
-    self.x_velocity = self.x_velocity + self.accel * modifier
-    if math.abs(self.x_velocity) > self.maxspeed then
-        self.x_velocity = self.maxspeed * modifier
+    self.x_velocity = self.x_velocity + self.acceleration * modifier
+    if math.abs(self.x_velocity) > self.max_speed then
+        self.x_velocity = self.max_speed * modifier
     end
 end
 
