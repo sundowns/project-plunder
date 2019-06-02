@@ -29,7 +29,8 @@ function jumping:jump(action, entity)
     if behaviour.state == "walk" or behaviour.state == "default" then
         behaviour:setState("jump")
         self:getInstance():emit("sprite_state_updated", entity, "jump")
-        air_controlled.x_velocity = walk.x_velocity
+        air_controlled.x_velocity = walk.x_velocity * _constants.PLAYER_GROUND_TO_AIR_MOMENTUM_CONSERVATION_RATIO
+
         transform.velocity.y = -jump.jump_velocity
         transform.position.y = transform.position.y - 10
     end
@@ -87,8 +88,22 @@ function jumping:update(dt)
                 transform.velocity.y = 0
                 if e:has(_components.walk) then
                     if e:has(_components.air_control) then
-                        e:get(_components.walk).x_velocity = e:get(_components.air_control).x_velocity
+                        -- only do it if player still holding current direction
+                        if e:has(_components.controlled) and e:has(_components.direction) then
+                            local controlled = e:get(_components.controlled)
+                            local direction = e:get(_components.direction)
+                            local held_modifier = 0.25
+                            if not controlled.is_held[string.lower(direction.value)] then
+                                held_modifier = 1
+                            end
+
+                            e:get(_components.walk).x_velocity =
+                                e:get(_components.air_control).x_velocity *
+                                _constants.PLAYER_AIR_TO_GROUND_MOMENTUM_CONSERVATION_RATIO *
+                                held_modifier
+                        end
                     end
+
                     behaviour:setState("walk")
                     self:getInstance():emit("sprite_state_updated", e, "walk")
                 end

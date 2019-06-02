@@ -15,7 +15,7 @@ function gravity:update(dt)
                 local multiplier = _constants.JUMP_SMALL_MULTIPLIER
 
                 if e:has(_components.controlled) then
-                    if e:get(_components.controlled).is_held.jump and behaviour.state ~= "fall" then
+                    if e:get(_components.controlled).is_held.jump and behaviour.state == "jump" then
                         multiplier = _constants.JUMP_MULTIPLIER
                     end
                 end

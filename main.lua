@@ -57,7 +57,7 @@ function love.load()
     _instances.world:emit("set_collision_world", _collision_world)
     _instances.world:emit("load_stage", "resources/stage/test.lua")
 
-    local player = _entities.player(Vector(love.graphics.getWidth() / 4, love.graphics.getHeight() / 5))
+    local player = _entities.player(Vector(love.graphics.getWidth() / 4, love.graphics.getHeight() / 2))
     _instances.world:addEntity(player)
     _instances.world:emit("sprite_state_updated", player, "run")
     _instances.world:addEntity(_entities.light_source(Vector(0, 0), player))
