@@ -72,15 +72,13 @@ function jumping:update(dt)
 
         -- check if player has landed
         if behaviour.state == "fall" then
-            local items_left,
-                len_left = -- need to come up with a better way to determine when player can jump agian
+            local items_left, len_left =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x,
                 transform.position.y + collides.offset.y + collides.height * 1.025
             )
 
-            local items_right,
-                len_right = -- need to come up with a better way to determine when player can jump agian
+            local items_right, len_right =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x + collides.width,
                 transform.position.y + collides.offset.y + collides.height * 1.025
