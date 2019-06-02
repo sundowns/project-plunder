@@ -6,11 +6,6 @@ function motion:update(dt)
         local transform = e:get(_components.transform)
 
         transform.position = transform.position + transform.velocity * dt
-
-        -- temp code to move puddy back to left of screen
-        if transform.position.x > love.graphics.getWidth() then
-            transform.position.x = 0
-        end
     end
 end
 

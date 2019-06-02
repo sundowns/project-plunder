@@ -1,6 +1,11 @@
-local jumping = System({_components.controlled, _components.transform, _components.jump})
+local jumping = System({_components.transform, _components.jump, _components.player_state, _components.collides, "ALL"})
 
 function jumping:init()
+    self.collision_world = nil
+end
+
+function jumping:set_collision_world(collision_world)
+    self.collision_world = collision_world
 end
 
 function jumping:action_pressed(action, entity)
@@ -20,52 +25,105 @@ function jumping:jump(action, entity)
     local behaviour = entity:get(_components.player_state).behaviour
     local air_controlled = entity:get(_components.air_control)
     local walk = entity:get(_components.walk)
+    local transform = entity:get(_components.transform)
     if behaviour.state == "walk" or behaviour.state == "default" then
         behaviour:setState("jump")
-        self:getInstance():emit("spriteStateUpdated", entity, "jump")
+        self:getInstance():emit("sprite_state_updated", entity, "jump")
         air_controlled.x_velocity = walk.x_velocity
-        jump:jump()
+        transform.velocity.y = -jump.jump_velocity
+        transform.position.y = transform.position.y - 10
     end
 end
 
 function jumping:update(dt)
-    for i = 1, self.pool.size do
-        local e = self.pool:get(i)
+    for i = 1, self.ALL.size do
+        local e = self.ALL:get(i)
         local jump = e:get(_components.jump)
         local transform = e:get(_components.transform)
         local behaviour = e:get(_components.player_state).behaviour
-        local gravity = e:get(_components.gravity)
-        local controlled = e:get(_components.controlled)
-        local air_controlled = e:get(_components.air_control)
-        local walk = e:get(_components.walk)
+        local gravity = e:get(_components.gravity).deceleration or 0
+        local collides = e:get(_components.collides)
 
         if behaviour.state == "jump" then
-            if jump.y_velocity < jump.falling_trigger_velocity then
+            if transform.velocity.y > jump.falling_trigger_velocity then
                 behaviour:setState("fall")
-                self:getInstance():emit("spriteStateUpdated", e, "fall")
+                self:getInstance():emit("sprite_state_updated", e, "fall")
             end
         end
 
-        if transform.position.y >= 500 and behaviour.state == "fall" then -- beautiful hardcoding!
-            jump.y_velocity = 0
-            walk.x_velocity = air_controlled.x_velocity
-            behaviour:setState("walk")
-            self:getInstance():emit("spriteStateUpdated", e, "walk")
-        else
-            local multiplier = _constants.JUMP_SMALL_MULTIPLIER
+        -- query to see if player is falling
+        if behaviour.state == "walk" or behaviour.state == "default" then
+            local items_left, len_left =
+                self.collision_world:queryPoint(
+                transform.position.x + collides.offset.x,
+                transform.position.y + collides.offset.y + collides.height * 1.025
+            )
 
-            if controlled.is_held.jump then
-                if jump.y_velocity > 0 and behaviour.state ~= "fall" then
-                    multiplier = _constants.JUMP_MULTIPLIER
+            local items_right, len_right =
+                self.collision_world:queryPoint(
+                transform.position.x + collides.offset.x + collides.width,
+                transform.position.y + collides.offset.y + collides.height * 1.025
+            )
+            if len_left == 0 and len_right == 0 then
+                behaviour:setState("fall")
+                self:getInstance():emit("sprite_state_updated", e, "fall")
+            end
+        end
+
+        -- check if player has landed
+        if behaviour.state == "fall" then
+            local items_left,
+                len_left = -- need to come up with a better way to determine when player can jump agian
+                self.collision_world:queryPoint(
+                transform.position.x + collides.offset.x,
+                transform.position.y + collides.offset.y + collides.height * 1.025
+            )
+
+            local items_right,
+                len_right = -- need to come up with a better way to determine when player can jump agian
+                self.collision_world:queryPoint(
+                transform.position.x + collides.offset.x + collides.width,
+                transform.position.y + collides.offset.y + collides.height * 1.025
+            )
+            if len_right > 0 or len_left > 0 then
+                transform.velocity.y = 0
+                if e:has(_components.walk) then
+                    if e:has(_components.air_control) then
+                        e:get(_components.walk).x_velocity = e:get(_components.air_control).x_velocity
+                    end
+                    behaviour:setState("walk")
+                    self:getInstance():emit("sprite_state_updated", e, "walk")
                 end
             end
-
-            jump:update(dt, gravity, multiplier)
         end
+    end
+end
 
-        if behaviour.state == "jump" or behaviour.state == "fall" then
-            transform.position.y = transform.position.y - jump.y_velocity
+function jumping:draw()
+    if _debug then
+        love.graphics.setColor(0, 1, 1)
+        for i = 1, self.ALL.size do
+            local e = self.ALL:get(i)
+            local jump = e:get(_components.jump)
+            local transform = e:get(_components.transform)
+            local collides = e:get(_components.collides)
+
+            local left =
+                Vector(
+                transform.position.x + collides.offset.x,
+                transform.position.y + collides.offset.y + collides.height * 1.025
+            )
+
+            local right =
+                Vector(
+                transform.position.x + collides.offset.x + collides.width,
+                transform.position.y + collides.offset.y + collides.height * 1.025
+            )
+
+            love.graphics.circle("fill", left.x, left.y, 2)
+            love.graphics.circle("fill", right.x, right.y, 2)
         end
+        _util.l.resetColour()
     end
 end
 
