@@ -66,7 +66,7 @@ function sprite_renderer:createInstance(spriteName, currentState)
     }
 end
 
-function sprite_renderer:spriteStateUpdated(entity, newState)
+function sprite_renderer:sprite_state_updated(entity, newState)
     local sprite = entity:get(_components.sprite)
     sprite.animation.animations = self:retrieveLayerInstances(sprite.animation.sprite.id, newState)
 end

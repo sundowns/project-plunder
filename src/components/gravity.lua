@@ -1,7 +1,8 @@
 local gravity =
     Component(
-    function(e, strength)
+    function(e, strength, deceleration)
         e.strength = strength
+        e.deceleration = deceleration
     end
 )
 

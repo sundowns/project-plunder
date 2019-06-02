@@ -6,7 +6,7 @@ return function(position, encircle_target_entity)
         _components.point_light,
         1,
         _constants.COLOURS.TORCHLIGHT,
-        130
-    ):give(_components.encircle, 150, position, encircle_target_entity):apply()
+        170
+    ):give(_components.encircle, 125, position, encircle_target_entity):apply()
     return light_source
 end

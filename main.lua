@@ -5,6 +5,7 @@ _components = nil
 _entities = nil
 _systems = nil
 _fonts = nil
+_collision_world = nil
 
 local _instances = nil -- should not have visbility of each other...
 
@@ -17,6 +18,8 @@ Instance = nil
 System = nil
 Vector = nil
 Timer = nil
+Bump = nil
+STI = nil
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest", 0)
@@ -37,6 +40,8 @@ function love.load()
     Timer = require("libs.timer")
     Vector = require("libs.vector")
     Behavior = require("libs.behavior")
+    Bump = require("libs.bump")
+    STI = require("libs.sti")
 
     _fonts = {
         ["DEBUG"] = resources.fonts.all_business(20)
@@ -47,10 +52,14 @@ function love.load()
     _entities = require("src.entities")
     _systems = require("src.systems")
     _instances = require("src.instances")
+    _collision_world = Bump.newWorld(32)
 
-    local player = _entities.player(Vector(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2))
+    _instances.world:emit("set_collision_world", _collision_world)
+    _instances.world:emit("load_stage", "resources/stage/test.lua")
+
+    local player = _entities.player(Vector(love.graphics.getWidth() / 4, love.graphics.getHeight() / 2))
     _instances.world:addEntity(player)
-    _instances.world:emit("spriteStateUpdated", player, "run")
+    _instances.world:emit("sprite_state_updated", player, "run")
     _instances.world:addEntity(_entities.light_source(Vector(0, 0), player))
 end
 

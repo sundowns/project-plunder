@@ -9,5 +9,8 @@ return {
     walking = require(PATH .. ".walking"),
     air_control = require(PATH .. ".air_control"),
     jumping = require(PATH .. ".jumping"),
-    gravity = require(PATH .. ".gravity")
+    gravity = require(PATH .. ".gravity"),
+    state_manager = require(PATH .. ".state_manager"),
+    stage_manager = require(PATH .. ".stage_manager"),
+    collider = require(PATH .. ".collider")
 }
