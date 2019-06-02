@@ -53,6 +53,7 @@ world:addSystem(collider, "update")
 world:addSystem(collider, "draw")
 
 world:addSystem(jumping, "action_pressed")
+world:addSystem(jumping, "action_held")
 world:addSystem(jumping, "update")
 world:addSystem(jumping, "set_collision_world")
 world:addSystem(jumping, "draw")

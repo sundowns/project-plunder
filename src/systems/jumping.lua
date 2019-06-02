@@ -14,6 +14,12 @@ function jumping:action_pressed(action, entity)
     end
 end
 
+function jumping:action_held(action, entity)
+    if entity:has(_components.jump) then
+        self:jump(action, entity)
+    end
+end
+
 function jumping:jump(action, entity)
     assert(action)
     assert(entity)
