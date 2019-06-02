@@ -35,7 +35,7 @@ end
 function gravity:apply_gravity(transform, gravity, dt, multiplier)
     transform.position.y = transform.position.y + (gravity.strength * multiplier * dt)
     transform.velocity.y =
-        math.min(_constants.PLAYER_TERMINAL_VELOCITY, transform.velocity.y + (gravity.deceleration * dt))
+        math.min(_constants.PLAYER_TERMINAL_VELOCITY, transform.velocity.y + (gravity.deceleration * multiplier * dt))
 end
 
 return gravity
