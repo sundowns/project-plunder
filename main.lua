@@ -20,6 +20,7 @@ Vector = nil
 Timer = nil
 Bump = nil
 STI = nil
+Camera = nil
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest", 0)
@@ -42,6 +43,7 @@ function love.load()
     Behavior = require("libs.behavior")
     Bump = require("libs.bump")
     STI = require("libs.sti")
+    Camera = require("libs.camera")
 
     _fonts = {
         ["DEBUG"] = resources.fonts.all_business(20)
@@ -68,9 +70,11 @@ function love.update(dt)
 end
 
 function love.draw()
+    _instances.world:emit("attach_lighting")
     _instances.world:emit("attach")
     _instances.world:emit("draw")
     _instances.world:emit("detach")
+    _instances.world:emit("detach_lighting")
     _instances.world:emit("draw_debug")
     -- _instances.world:emit("draw_ui")
 end

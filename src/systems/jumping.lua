@@ -69,6 +69,19 @@ function jumping:update(dt)
             if len_left == 0 and len_right == 0 then
                 behaviour:setState("fall")
                 self:getInstance():emit("sprite_state_updated", e, "fall")
+                if e:has(_components.controlled) and e:has(_components.direction) then
+                    local controlled = e:get(_components.controlled)
+                    local direction = e:get(_components.direction)
+                    local held_modifier = 0.25
+                    if not controlled.is_held[string.lower(direction.value)] then
+                        held_modifier = 1
+                    end
+
+                    e:get(_components.air_control).x_velocity =
+                        e:get(_components.walk).x_velocity *
+                        _constants.PLAYER_WALK_OFF_LEDGE_MOMENTUM_CONSERVATION_RATIO *
+                        held_modifier
+                end
             end
         end
 

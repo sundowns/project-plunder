@@ -15,8 +15,8 @@ local collider = _systems.collider()
 
 -- ADD SYSTEMS
 
-world:addSystem(lighting, "attach")
-world:addSystem(lighting, "detach")
+world:addSystem(lighting, "attach_lighting")
+world:addSystem(lighting, "detach_lighting")
 world:addSystem(lighting, "update")
 
 world:addSystem(motion, "update")
@@ -59,8 +59,8 @@ world:addSystem(jumping, "draw")
 
 -- ENABLE SYSTEMS
 
-world:enableSystem(lighting, "attach")
-world:enableSystem(lighting, "detach")
+world:enableSystem(lighting, "attach_lighting")
+world:enableSystem(lighting, "detach_lighting")
 
 world:enableSystem(encircling, "draw_debug")
 
@@ -89,7 +89,7 @@ world:enableSystem(jumping, "set_collision_world")
 world:enableSystem(jumping, "draw")
 
 function world:enableUpdates()
-    -- world:enableSystem(lighting, "update")
+    world:enableSystem(lighting, "update")
     world:enableSystem(sprite_renderer, "update")
     world:enableSystem(motion, "update")
     world:enableSystem(encircling, "update")

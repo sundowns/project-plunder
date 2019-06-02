@@ -64,11 +64,11 @@ function lighting:update(dt)
     end
 end
 
-function lighting:attach()
+function lighting:attach_lighting()
     love.graphics.setShader(self.point_lighting_shader)
 end
 
-function lighting:detach()
+function lighting:detach_lighting()
     love.graphics.setShader()
 end
 

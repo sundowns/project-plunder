@@ -17,9 +17,9 @@ end
 
 function stage_manager:draw()
     if self.stage then
-        self.stage:draw()
+        self.stage:draw(0, 0, _constants.WORLD_SCALE, _constants.WORLD_SCALE)
         if _debug then
-            self.stage:bump_draw(self.collision_world)
+            self.stage:bump_draw(self.collision_world, 0, 0, _constants.WORLD_SCALE, _constants.WORLD_SCALE)
         end
     end
 end
