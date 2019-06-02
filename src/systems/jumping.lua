@@ -32,7 +32,6 @@ function jumping:jump(action, entity)
         air_controlled.x_velocity = walk.x_velocity * _constants.PLAYER_GROUND_TO_AIR_MOMENTUM_CONSERVATION_RATIO
 
         transform.velocity.y = -jump.jump_velocity
-        transform.position.y = transform.position.y - 10
     end
 end
 
@@ -57,13 +56,15 @@ function jumping:update(dt)
             local items_left, len_left =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x,
-                transform.position.y + collides.offset.y + collides.height * 1.025
+                transform.position.y + collides.offset.y +
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
 
             local items_right, len_right =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x + collides.width,
-                transform.position.y + collides.offset.y + collides.height * 1.025
+                transform.position.y + collides.offset.y +
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
             if len_left == 0 and len_right == 0 then
                 behaviour:setState("fall")
@@ -76,13 +77,15 @@ function jumping:update(dt)
             local items_left, len_left =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x,
-                transform.position.y + collides.offset.y + collides.height * 1.025
+                transform.position.y + collides.offset.y +
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
 
             local items_right, len_right =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x + collides.width,
-                transform.position.y + collides.offset.y + collides.height * 1.025
+                transform.position.y + collides.offset.y +
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
             if len_right > 0 or len_left > 0 then
                 transform.velocity.y = 0
