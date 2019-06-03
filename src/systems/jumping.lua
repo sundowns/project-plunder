@@ -15,9 +15,9 @@ function jumping:action_pressed(action, entity)
 end
 
 function jumping:action_held(action, entity)
-    if entity:has(_components.jump) then
-        self:jump(action, entity)
-    end
+    --if entity:has(_components.jump) then
+    --    self:jump(action, entity)
+    --end
 end
 
 function jumping:jump(action, entity)
@@ -51,7 +51,18 @@ function jumping:update(dt)
         local collides = e:get(_components.collides)
 
         if behaviour.state == "jump" then
-            if transform.velocity.y > jump.falling_trigger_velocity then
+            -- query to see if player headbonks
+            local items, len =
+                self.collision_world:queryRect(
+                transform.position.x + collides.offset.x + collides.width * 0.2,
+                transform.position.y + collides.offset.y - 5,
+                collides.width * 0.6,
+                0.5
+            )
+            if len > 0 then
+                behaviour:setState("fall")
+                self:getInstance():emit("sprite_state_updated", e, "fall")
+            elseif transform.velocity.y > jump.falling_trigger_velocity then -- check for transition to falling state
                 behaviour:setState("fall")
                 self:getInstance():emit("sprite_state_updated", e, "fall")
             end
