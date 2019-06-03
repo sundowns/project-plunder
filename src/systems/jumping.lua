@@ -51,20 +51,22 @@ function jumping:update(dt)
         local collides = e:get(_components.collides)
 
         if behaviour.state == "jump" then
-            -- query to see if player headbonks
-            local items, len =
-                self.collision_world:queryRect(
-                transform.position.x + collides.offset.x + collides.width * 0.2,
-                transform.position.y + collides.offset.y - 5,
-                collides.width * 0.6,
-                0.5
-            )
-            if len > 0 then
+            if transform.velocity.y > jump.falling_trigger_velocity then -- check for transition to falling state
                 behaviour:setState("fall")
                 self:getInstance():emit("sprite_state_updated", e, "fall")
-            elseif transform.velocity.y > jump.falling_trigger_velocity then -- check for transition to falling state
-                behaviour:setState("fall")
-                self:getInstance():emit("sprite_state_updated", e, "fall")
+            else
+                -- query to see if player headbonks
+                local items, len =
+                    self.collision_world:queryRect(
+                    transform.position.x + collides.offset.x + collides.width * 0.2,
+                    transform.position.y + collides.offset.y - 1,
+                    collides.width * 0.6,
+                    0.1
+                )
+                if len > 0 then
+                    behaviour:setState("fall")
+                    self:getInstance():emit("sprite_state_updated", e, "fall")
+                end
             end
         end
 
@@ -77,13 +79,20 @@ function jumping:update(dt)
                     collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
 
+            local items_centre, len_centre =
+                self.collision_world:queryPoint(
+                transform.position.x + collides.offset.x + collides.width / 2,
+                transform.position.y + collides.offset.y +
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
+            )
+
             local items_right, len_right =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x + collides.width,
                 transform.position.y + collides.offset.y +
                     collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
-            if len_left == 0 and len_right == 0 then
+            if len_left == 0 and len_right == 0 and len_centre == 0 then
                 behaviour:setState("fall")
                 self:getInstance():emit("sprite_state_updated", e, "fall")
                 if e:has(_components.controlled) and e:has(_components.direction) then
@@ -111,13 +120,20 @@ function jumping:update(dt)
                     collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
 
+            local items_centre, len_centre =
+                self.collision_world:queryPoint(
+                transform.position.x + collides.offset.x + collides.width / 2,
+                transform.position.y + collides.offset.y +
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
+            )
+
             local items_right, len_right =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x + collides.width,
                 transform.position.y + collides.offset.y +
                     collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
-            if len_right > 0 or len_left > 0 then
+            if len_centre > 0 or len_right > 0 or len_left > 0 then
                 transform.velocity.y = 0
                 if e:has(_components.walk) then
                     if e:has(_components.air_control) then
@@ -157,17 +173,27 @@ function jumping:draw()
             local left =
                 Vector(
                 transform.position.x + collides.offset.x,
-                transform.position.y + collides.offset.y + collides.height * 1.025
+                transform.position.y + collides.offset.y +
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
 
             local right =
                 Vector(
                 transform.position.x + collides.offset.x + collides.width,
-                transform.position.y + collides.offset.y + collides.height * 1.025
+                transform.position.y + collides.offset.y +
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
+            )
+
+            local centre =
+                Vector(
+                transform.position.x + collides.offset.x + collides.width / 2,
+                transform.position.y + collides.offset.y +
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
 
             love.graphics.circle("fill", left.x, left.y, 2)
             love.graphics.circle("fill", right.x, right.y, 2)
+            love.graphics.circle("fill", centre.x, centre.y, 2)
         end
         _util.l.resetColour()
     end
