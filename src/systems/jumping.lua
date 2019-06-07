@@ -28,13 +28,12 @@ function jumping:jump(action, entity)
     end
 
     local jump = entity:get(_components.jump)
-    local behaviour = entity:get(_components.player_state).behaviour
+    local player_state = entity:get(_components.player_state)
     local air_controlled = entity:get(_components.air_control)
     local walk = entity:get(_components.walk)
     local transform = entity:get(_components.transform)
-    if behaviour.state == "walk" or behaviour.state == "default" then
-        behaviour:setState("jump")
-        self:getInstance():emit("sprite_state_updated", entity, "jump")
+    if player_state.behaviour.state == "walk" or player_state.behaviour.state == "default" then
+        player_state:set("jump", self:getInstance(), entity)
         air_controlled.x_velocity = walk.x_velocity * _constants.PLAYER_GROUND_TO_AIR_MOMENTUM_CONSERVATION_RATIO
 
         transform.velocity.y = -jump.jump_velocity
@@ -46,14 +45,13 @@ function jumping:update(dt)
         local e = self.ALL:get(i)
         local jump = e:get(_components.jump)
         local transform = e:get(_components.transform)
-        local behaviour = e:get(_components.player_state).behaviour
+        local player_state = e:get(_components.player_state)
         local gravity = e:get(_components.gravity).deceleration or 0
         local collides = e:get(_components.collides)
 
-        if behaviour.state == "jump" then
+        if player_state.behaviour.state == "jump" then
             if transform.velocity.y > jump.falling_trigger_velocity then -- check for transition to falling state
-                behaviour:setState("fall")
-                self:getInstance():emit("sprite_state_updated", e, "fall")
+                player_state:set("fall", self:getInstance(), e)
             else
                 -- query to see if player headbonks
                 local items, len =
@@ -64,14 +62,13 @@ function jumping:update(dt)
                     0.1
                 )
                 if len > 0 then
-                    behaviour:setState("fall")
-                    self:getInstance():emit("sprite_state_updated", e, "fall")
+                    player_state:set("fall", self:getInstance(), e)
                 end
             end
         end
 
         -- query to see if player is falling
-        if behaviour.state == "walk" or behaviour.state == "default" then
+        if player_state.behaviour.state == "walk" or player_state.behaviour.state == "default" then
             local items_left, len_left =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x,
@@ -93,8 +90,7 @@ function jumping:update(dt)
                     collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
             if len_left == 0 and len_right == 0 and len_centre == 0 then
-                behaviour:setState("fall")
-                self:getInstance():emit("sprite_state_updated", e, "fall")
+                player_state:set("fall", self:getInstance(), e)
                 if e:has(_components.controlled) and e:has(_components.direction) then
                     local controlled = e:get(_components.controlled)
                     local direction = e:get(_components.direction)
@@ -112,7 +108,7 @@ function jumping:update(dt)
         end
 
         -- check if player has landed
-        if behaviour.state == "fall" then
+        if player_state.behaviour.state == "fall" then
             local items_left, len_left =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x,
@@ -153,8 +149,7 @@ function jumping:update(dt)
                         end
                     end
 
-                    behaviour:setState("walk")
-                    self:getInstance():emit("sprite_state_updated", e, "walk")
+                    player_state:set("walk", self:getInstance(), e)
                 end
             end
         end

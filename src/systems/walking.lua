@@ -36,10 +36,9 @@ function walking:walk(action, entity)
     end
 
     if entity:has(_components.player_state) then
-        local behaviour = entity:get(_components.player_state).behaviour
-        if behaviour.state == "default" then
-            behaviour:setState("walk")
-            self:getInstance():emit("sprite_state_updated", entity, "walk")
+        local player_state = entity:get(_components.player_state)
+        if player_state.behaviour.state == "default" then
+            player_state:set("walk", self:getInstance(), entity)
         end
     end
 end
@@ -51,14 +50,13 @@ function walking:update(dt)
         walk:apply_friction(dt)
 
         if e:has(_components.player_state) then
-            local behaviour = e:get(_components.player_state).behaviour
-            if behaviour.state ~= "jump" and behaviour.state ~= "fall" then
+            local player_state = e:get(_components.player_state)
+            if player_state.behaviour.state ~= "jump" and player_state.behaviour.state ~= "fall" then
                 local transform = e:get(_components.transform)
                 transform.position.x = transform.position.x + (walk.x_velocity * dt)
             end
-            if behaviour.state == "walk" and walk.x_velocity == 0 then
-                behaviour:setState("default")
-                self:getInstance():emit("sprite_state_updated", e, "default")
+            if player_state.behaviour.state == "walk" and walk.x_velocity == 0 then
+                player_state:set("default", self:getInstance(), e)
             end
         end
     end
