@@ -38,19 +38,12 @@ end
 
 function player_state:set(new_state, instance, entity)
     assert(self.behaviour.states[new_state], "[ERR] Attempted to set non-existent state: " .. new_state)
-    print(#self.previous_states)
+
+    table.insert(self.previous_states, {name = new_state, duration = self.current_state_elapsed})
     if #self.previous_states > self.state_history_buffer_size then
-        print("yeet")
-        self.previous_states[1] = nil
-        for i = 2, #self.previous_states do
-            self.previous_states[i - 1] = self.previous_states[i]
-        end
-    -- self.previous_states[#self.previous_states + 1] = nil
-    -- remove oldest state
-    -- shift everything in the buffer
+        table.remove(self.previous_states, 1)
     end
 
-    self.previous_states[#self.previous_states + 1] = {name = new_state, duration = self.current_state_elapsed}
     self.current_state_elapsed = 0
     self.behaviour:setState(new_state)
     instance:emit("sprite_state_updated", entity, new_state)
