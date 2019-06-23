@@ -70,14 +70,14 @@ function air_control:update(dt)
                 local items_left, len_left =
                     self.collision_world:queryPoint(
                     transform.position.x + (collides.offset.x * -(_constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED)),
-                    transform.position.y + collides.offset.y
+                    transform.position.y + collides.offset.y + (collides.height / 2)
                 )
 
                 local items_right, len_right =
                     self.collision_world:queryPoint(
                     transform.position.x + collides.offset.x +
                         collides.width * (_constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED),
-                    transform.position.y + collides.offset.y
+                    transform.position.y + collides.offset.y + (collides.height / 2)
                 )
 
                 -- only do it if player still holding current direction
@@ -102,6 +102,10 @@ function air_control:update(dt)
                         if movement_state.behaviour.state == "fall" then
                             movement_state:set("wallslide", self:getInstance(), e)
                         end
+                    end
+                else
+                    if movement_state.behaviour.state == "wallslide" then
+                        movement_state:set("fall", self:getInstance(), e)
                     end
                 end
                 print(movement_state.behaviour.state)
