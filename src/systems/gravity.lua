@@ -25,6 +25,8 @@ function gravity:update(dt)
                 end
 
                 self:apply_gravity(transform, gravity, dt, multiplier)
+            elseif behaviour.state == "wallslide" then
+                self:apply_gravity(transform, gravity, 0.5, 0.2)
             end
         else
             self:apply_gravity(transform, gravity, dt)

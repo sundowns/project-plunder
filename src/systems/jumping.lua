@@ -110,7 +110,7 @@ function jumping:update(dt)
         end
 
         -- check if player has landed
-        if movement_state.behaviour.state == "fall" then
+        if movement_state.behaviour.state == "fall" or movement_state.behaviour.state == "wallslide" then
             local items_left, len_left =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x,
@@ -143,7 +143,6 @@ function jumping:update(dt)
                             if not controlled.is_held[string.lower(direction.value)] then
                                 held_modifier = 1
                             end
-
                             e:get(_components.walk).x_velocity =
                                 e:get(_components.air_control).x_velocity *
                                 _constants.PLAYER_AIR_TO_GROUND_MOMENTUM_CONSERVATION_RATIO *
