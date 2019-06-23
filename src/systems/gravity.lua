@@ -26,7 +26,8 @@ function gravity:update(dt)
 
                 self:apply_gravity(transform, gravity, dt, multiplier)
             elseif behaviour.state == "wallslide" then
-                self:apply_gravity(transform, gravity, 0.5, 0.2)
+                transform.position.y = transform.position.y + _constants.PLAYER_WALLSLIDE_FALL_RATE * dt
+                transform.velocity.y = _constants.PLAYER_WALLSLIDE_VELOCITY * dt
             end
         else
             self:apply_gravity(transform, gravity, dt)

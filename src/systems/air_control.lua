@@ -65,25 +65,26 @@ function air_control:update(dt)
             end
 
             -- test to see if we should wallslide
-            if behaviour.state == "fall" or "wallslide" then
+            if movement_state.behaviour.state == "fall" or movement_state.behaviour.state == "wallslide" then
                 local collides = e:get(_components.collides)
                 local items_left, len_left =
                     self.collision_world:queryPoint(
-                    transform.position.x + (collides.offset.x * -(_constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED)),
-                    transform.position.y + collides.offset.y + (collides.height / 2)
+                    transform.position.x + collides.offset.x,
+                    transform.position.y + collides.offset.y +
+                        (collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED)
                 )
 
                 local items_right, len_right =
                     self.collision_world:queryPoint(
-                    transform.position.x + collides.offset.x +
-                        collides.width * (_constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED),
-                    transform.position.y + collides.offset.y + (collides.height / 2)
+                    transform.position.x + collides.offset.x + collides.width,
+                    transform.position.y + collides.offset.y +
+                        (collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED)
                 )
 
                 -- only do it if player still holding current direction
                 local controlled = e:get(_components.controlled)
                 local direction = e:get(_components.direction)
-                if len_left > 0 and direction.value == "LEFT" then
+                if len_left > 0 then --and direction.value == "LEFT" then
                     if not controlled.is_held["left"] then
                         if movement_state.behaviour.state == "wallslide" then
                             movement_state:set("fall", self:getInstance(), e)
@@ -93,7 +94,7 @@ function air_control:update(dt)
                             movement_state:set("wallslide", self:getInstance(), e)
                         end
                     end
-                elseif len_right > 0 and direction.value == "RIGHT" then
+                elseif len_right > 0 then --and direction.value == "RIGHT" then
                     if not controlled.is_held["right"] then
                         if movement_state.behaviour.state == "wallslide" then
                             movement_state:set("fall", self:getInstance(), e)
@@ -109,6 +110,7 @@ function air_control:update(dt)
                     end
                 end
                 print(movement_state.behaviour.state)
+                print(len_right)
             end
         end
     end
