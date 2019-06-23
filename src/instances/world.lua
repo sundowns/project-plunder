@@ -15,9 +15,9 @@ local collider = _systems.collider()
 
 -- ADD SYSTEMS
 
--- world:addSystem(lighting, "attach_lighting")
--- world:addSystem(lighting, "detach_lighting")
--- world:addSystem(lighting, "update")
+world:addSystem(lighting, "attach_lighting")
+world:addSystem(lighting, "detach_lighting")
+world:addSystem(lighting, "update")
 
 world:addSystem(motion, "update")
 
@@ -26,6 +26,8 @@ world:addSystem(encircling, "draw_debug")
 
 world:addSystem(input, "keypressed")
 world:addSystem(input, "keyreleased")
+world:addSystem(input, "mousepressed")
+world:addSystem(input, "mousereleased")
 world:addSystem(input, "update")
 
 world:addSystem(walking, "action_pressed")
@@ -60,13 +62,15 @@ world:addSystem(jumping, "draw")
 
 -- ENABLE SYSTEMS
 
--- world:enableSystem(lighting, "attach_lighting")
--- world:enableSystem(lighting, "detach_lighting")
+world:enableSystem(lighting, "attach_lighting")
+world:enableSystem(lighting, "detach_lighting")
 
 world:enableSystem(encircling, "draw_debug")
 
 world:enableSystem(input, "keypressed")
 world:enableSystem(input, "keyreleased")
+world:enableSystem(input, "mousepressed")
+world:enableSystem(input, "mousereleased")
 
 world:enableSystem(walking, "action_pressed")
 world:enableSystem(walking, "action_held")

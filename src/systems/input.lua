@@ -33,6 +33,16 @@ function input:keypressed(key)
     end
 end
 
+function input:mousepressed(x, y, button)
+    -- We dont care about x, y we just want to track the event (just poll the mouse position if needed)
+    self:keypressed("mouse" .. button)
+end
+
+function input:mousereleased(x, y, button)
+    -- We dont care about x, y we just want to track the event (just poll the mouse position if needed)
+    self:keyreleased("mouse" .. button)
+end
+
 function input:keyreleased(key)
     for i = 1, self.pool.size do
         local controlled = self.pool:get(i):get(_components.controlled)

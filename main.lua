@@ -94,3 +94,11 @@ function love.keypressed(key, scancode, isrepeat)
 
     _instances.world:emit("keypressed", key)
 end
+
+function love.mousepressed(x, y, button, istouch, presses)
+    _instances.world:emit("mousepressed", x, y, button)
+end
+
+function love.mousereleased(x, y, button, istouch, presses)
+    _instances.world:emit("mousereleased", x, y, button)
+end
