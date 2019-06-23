@@ -3,6 +3,8 @@ local movement_state =
     function(e, states, initial_state)
         e.behaviour = Behavior(states)
         e.previous_states = {}
+        e.timer = Timer.new()
+        e.forgive_jump = false
         e.state_history_buffer_size = 10
         e.behaviour:setState(initial_state)
         e.current_state_elapsed = 0
@@ -16,6 +18,7 @@ local movement_state =
 function movement_state:update(dt)
     self.current_state_elapsed = self.current_state_elapsed + dt
     self.behaviour:update(dt)
+    self.timer:update(dt)
     -- if love.keyboard.isDown("p") then --delete this
     --     _util.t.print(self.previous_states)
     -- end
@@ -32,6 +35,16 @@ function movement_state:set(new_state, instance, entity)
     self.current_state_elapsed = 0
     self.behaviour:setState(new_state)
     instance:emit("sprite_state_updated", entity, new_state)
+end
+
+function movement_state:forgiveJump()
+    self.forgive_jump = true
+    self.timer:after(
+        0.1,
+        function()
+            self.forgive_jump = false
+        end
+    )
 end
 
 return movement_state

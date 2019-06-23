@@ -30,7 +30,10 @@ function jumping:jump(action, entity)
     local air_controlled = entity:get(_components.air_control)
     local walk = entity:get(_components.walk)
     local transform = entity:get(_components.transform)
-    if movement_state.behaviour.state == "walk" or movement_state.behaviour.state == "default" then
+    if
+        movement_state.behaviour.state == "walk" or movement_state.behaviour.state == "default" or
+            movement_state.forgive_jump
+     then
         movement_state:set("jump", self:getInstance(), entity)
         air_controlled.x_velocity = walk.x_velocity * _constants.PLAYER_GROUND_TO_AIR_MOMENTUM_CONSERVATION_RATIO
 
@@ -89,6 +92,7 @@ function jumping:update(dt)
             )
             if len_left == 0 and len_right == 0 and len_centre == 0 then
                 movement_state:set("fall", self:getInstance(), e)
+                movement_state:forgiveJump()
                 if e:has(_components.controlled) and e:has(_components.direction) then
                     local controlled = e:get(_components.controlled)
                     local direction = e:get(_components.direction)
@@ -146,7 +150,6 @@ function jumping:update(dt)
                                 held_modifier
                         end
                     end
-
                     movement_state:set("walk", self:getInstance(), e)
                 end
             end
