@@ -164,7 +164,6 @@ function jumping:update(dt)
                 end
             end
         end
-        print(transform.velocity.x)
     end
 end
 
