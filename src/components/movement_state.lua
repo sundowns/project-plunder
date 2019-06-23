@@ -1,28 +1,13 @@
-local states = {
-    default = {
-        {duration = 1}
-    },
-    walk = {
-        {duration = 1}
-    },
-    jump = {
-        {duration = 1}
-    },
-    fall = {
-        {duration = 1}
-    }
-}
-
 local movement_state =
     Component(
-    function(e)
+    function(e, states, initial_state)
         e.behaviour = Behavior(states)
         e.previous_states = {}
         e.state_history_buffer_size = 10
-        e.behaviour:setState("fall")
+        e.behaviour:setState(initial_state)
         e.current_state_elapsed = 0
         e.previous_states[#e.previous_states + 1] = {
-            name = "fall",
+            name = initial_state,
             duration = e.current_state_elapsed
         }
     end

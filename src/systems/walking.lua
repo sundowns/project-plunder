@@ -55,7 +55,7 @@ function walking:update(dt)
 
         if e:has(_components.movement_state) then
             local movement_state = e:get(_components.movement_state)
-            if movement_state.behaviour.state ~= "jump" and movement_state.behaviour.state ~= "fall" then
+            if movement_state.behaviour.state == "walk" or movement_state.behaviour.state == "default" then
                 local transform = e:get(_components.transform)
                 transform.position.x = transform.position.x + (walk.x_velocity * dt)
             end

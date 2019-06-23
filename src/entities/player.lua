@@ -12,7 +12,24 @@ return function(position)
         _components.gravity,
         _constants.GRAVITY,
         _constants.GRAVITY_DECELERATION
-    ):give(_components.movement_state, "fall"):give(
+    ):give(
+        _components.movement_state,
+        {
+            default = {
+                {duration = 1}
+            },
+            walk = {
+                {duration = 1}
+            },
+            jump = {
+                {duration = 1}
+            },
+            fall = {
+                {duration = 1}
+            }
+        },
+        "fall"
+    ):give(
         _components.collides,
         _constants.PLAYER_WIDTH,
         _constants.PLAYER_HEIGHT,
