@@ -22,6 +22,17 @@ function walking:walk(action, entity)
         return
     end
 
+    if entity:has(_components.movement_state) then
+        local movement_state = entity:get(_components.movement_state)
+        if movement_state.behaviour.state == "default" then
+            movement_state:set("walk", self:getInstance(), entity)
+        end
+
+        if movement_state.behaviour.state ~= "walk" then
+            return
+        end
+    end
+
     local direction_modifier = 1
     if action == "left" then
         direction_modifier = -1
@@ -34,13 +45,6 @@ function walking:walk(action, entity)
     if direction and direction.value ~= action then
         direction:set(action) --left or right
     end
-
-    if entity:has(_components.player_state) then
-        local player_state = entity:get(_components.player_state)
-        if player_state.behaviour.state == "default" then
-            player_state:set("walk", self:getInstance(), entity)
-        end
-    end
 end
 
 function walking:update(dt)
@@ -49,14 +53,14 @@ function walking:update(dt)
         local walk = e:get(_components.walk)
         walk:apply_friction(dt)
 
-        if e:has(_components.player_state) then
-            local player_state = e:get(_components.player_state)
-            if player_state.behaviour.state ~= "jump" and player_state.behaviour.state ~= "fall" then
+        if e:has(_components.movement_state) then
+            local movement_state = e:get(_components.movement_state)
+            if movement_state.behaviour.state ~= "jump" and movement_state.behaviour.state ~= "fall" then
                 local transform = e:get(_components.transform)
                 transform.position.x = transform.position.x + (walk.x_velocity * dt)
             end
-            if player_state.behaviour.state == "walk" and walk.x_velocity == 0 then
-                player_state:set("default", self:getInstance(), e)
+            if movement_state.behaviour.state == "walk" and walk.x_velocity == 0 then
+                movement_state:set("default", self:getInstance(), e)
             end
         end
     end

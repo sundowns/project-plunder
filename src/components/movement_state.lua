@@ -13,7 +13,7 @@ local states = {
     }
 }
 
-local player_state =
+local movement_state =
     Component(
     function(e)
         e.behaviour = Behavior(states)
@@ -28,15 +28,15 @@ local player_state =
     end
 )
 
-function player_state:update(dt)
+function movement_state:update(dt)
     self.current_state_elapsed = self.current_state_elapsed + dt
     self.behaviour:update(dt)
-    if love.keyboard.isDown("p") then --delete this
-        _util.t.print(self.previous_states)
-    end
+    -- if love.keyboard.isDown("p") then --delete this
+    --     _util.t.print(self.previous_states)
+    -- end
 end
 
-function player_state:set(new_state, instance, entity)
+function movement_state:set(new_state, instance, entity)
     assert(self.behaviour.states[new_state], "[ERR] Attempted to set non-existent state: " .. new_state)
 
     table.insert(self.previous_states, {name = new_state, duration = self.current_state_elapsed})
@@ -49,4 +49,4 @@ function player_state:set(new_state, instance, entity)
     instance:emit("sprite_state_updated", entity, new_state)
 end
 
-return player_state
+return movement_state

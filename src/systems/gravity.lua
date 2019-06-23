@@ -1,4 +1,4 @@
-local gravity = System({_components.gravity, _components.transform, _components.player_state})
+local gravity = System({_components.gravity, _components.transform, _components.movement_state})
 
 function gravity:init()
 end
@@ -8,7 +8,7 @@ function gravity:update(dt)
         local e = self.pool:get(i)
         local gravity = e:get(_components.gravity)
         local transform = e:get(_components.transform)
-        local behaviour = e:get(_components.player_state).behaviour
+        local behaviour = e:get(_components.movement_state).behaviour
 
         if behaviour then
             if behaviour.state == "fall" or behaviour.state == "jump" then

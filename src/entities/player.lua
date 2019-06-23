@@ -12,7 +12,7 @@ return function(position)
         _components.gravity,
         _constants.GRAVITY,
         _constants.GRAVITY_DECELERATION
-    ):give(_components.player_state, "fall"):give(
+    ):give(_components.movement_state, "fall"):give(
         _components.collides,
         _constants.PLAYER_WIDTH,
         _constants.PLAYER_HEIGHT,
