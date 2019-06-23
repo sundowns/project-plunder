@@ -3,7 +3,7 @@ return function(position)
     assert(position.x and position.y, "Received non-vector position to player entity")
 
     local player =
-        Entity():give(_components.transform, position, Vector(0, 0)):give(_components.sprite, "PLAYER", 0, 1, 1, 0, 0):give(
+        Entity():give(_components.transform, position, Vector(0, 0)):give(_components.sprite, "PLAYER"):give(
         _components.direction
     ):give(_components.dimensions, 32, 32):give(
         _components.controlled,

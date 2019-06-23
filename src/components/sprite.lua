@@ -1,6 +1,6 @@
 local sprite =
     Component(
-    function(e, name, rot, sx, sy, offset_x, offset_y)
+    function(e, name, sx, sy, offset_x, offset_y)
         e.name = name
         e.animation = nil
         e.sx = sx or 1
