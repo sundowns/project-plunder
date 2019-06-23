@@ -22,8 +22,8 @@ function air_control:move(action, entity)
         return
     end
 
-    if entity:has(_components.player_state) then
-        local state = entity:get(_components.player_state).behaviour.state
+    if entity:has(_components.movement_state) then
+        local state = entity:get(_components.movement_state).behaviour.state
         if state ~= "jump" and state ~= "fall" then
             return
         end
@@ -49,8 +49,8 @@ function air_control:update(dt)
         local air_controlled = e:get(_components.air_control)
         local transform = e:get(_components.transform)
 
-        if e:has(_components.player_state) then
-            local behaviour = e:get(_components.player_state).behaviour
+        if e:has(_components.movement_state) then
+            local behaviour = e:get(_components.movement_state).behaviour
             if behaviour.state == "jump" or behaviour.state == "fall" then
                 transform.position.x = transform.position.x + (air_controlled.x_velocity * dt)
             else

@@ -1,4 +1,5 @@
-local jumping = System({_components.transform, _components.jump, _components.player_state, _components.collides, "ALL"})
+local jumping =
+    System({_components.transform, _components.jump, _components.movement_state, _components.collides, "ALL"})
 
 function jumping:init()
     self.collision_world = nil
@@ -15,9 +16,6 @@ function jumping:action_pressed(action, entity)
 end
 
 function jumping:action_held(action, entity)
-    --if entity:has(_components.jump) then
-    --    self:jump(action, entity)
-    --end
 end
 
 function jumping:jump(action, entity)
@@ -28,12 +26,12 @@ function jumping:jump(action, entity)
     end
 
     local jump = entity:get(_components.jump)
-    local player_state = entity:get(_components.player_state)
+    local movement_state = entity:get(_components.movement_state)
     local air_controlled = entity:get(_components.air_control)
     local walk = entity:get(_components.walk)
     local transform = entity:get(_components.transform)
-    if player_state.behaviour.state == "walk" or player_state.behaviour.state == "default" then
-        player_state:set("jump", self:getInstance(), entity)
+    if movement_state.behaviour.state == "walk" or movement_state.behaviour.state == "default" then
+        movement_state:set("jump", self:getInstance(), entity)
         air_controlled.x_velocity = walk.x_velocity * _constants.PLAYER_GROUND_TO_AIR_MOMENTUM_CONSERVATION_RATIO
 
         transform.velocity.y = -jump.jump_velocity
@@ -45,13 +43,13 @@ function jumping:update(dt)
         local e = self.ALL:get(i)
         local jump = e:get(_components.jump)
         local transform = e:get(_components.transform)
-        local player_state = e:get(_components.player_state)
+        local movement_state = e:get(_components.movement_state)
         local gravity = e:get(_components.gravity).deceleration or 0
         local collides = e:get(_components.collides)
 
-        if player_state.behaviour.state == "jump" then
+        if movement_state.behaviour.state == "jump" then
             if transform.velocity.y > jump.falling_trigger_velocity then -- check for transition to falling state
-                player_state:set("fall", self:getInstance(), e)
+                movement_state:set("fall", self:getInstance(), e)
             else
                 -- query to see if player headbonks
                 local items, len =
@@ -62,13 +60,13 @@ function jumping:update(dt)
                     0.1
                 )
                 if len > 0 then
-                    player_state:set("fall", self:getInstance(), e)
+                    movement_state:set("fall", self:getInstance(), e)
                 end
             end
         end
 
         -- query to see if player is falling
-        if player_state.behaviour.state == "walk" or player_state.behaviour.state == "default" then
+        if movement_state.behaviour.state == "walk" or movement_state.behaviour.state == "default" then
             local items_left, len_left =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x,
@@ -90,7 +88,7 @@ function jumping:update(dt)
                     collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
             if len_left == 0 and len_right == 0 and len_centre == 0 then
-                player_state:set("fall", self:getInstance(), e)
+                movement_state:set("fall", self:getInstance(), e)
                 if e:has(_components.controlled) and e:has(_components.direction) then
                     local controlled = e:get(_components.controlled)
                     local direction = e:get(_components.direction)
@@ -108,7 +106,7 @@ function jumping:update(dt)
         end
 
         -- check if player has landed
-        if player_state.behaviour.state == "fall" then
+        if movement_state.behaviour.state == "fall" then
             local items_left, len_left =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x,
@@ -149,7 +147,7 @@ function jumping:update(dt)
                         end
                     end
 
-                    player_state:set("walk", self:getInstance(), e)
+                    movement_state:set("walk", self:getInstance(), e)
                 end
             end
         end

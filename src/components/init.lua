@@ -12,6 +12,6 @@ return {
     air_control = require(PATH .. ".air_control"),
     jump = require(PATH .. ".jump"),
     gravity = require(PATH .. ".gravity"),
-    player_state = require(PATH .. ".player_state"),
+    movement_state = require(PATH .. ".movement_state"),
     collides = require(PATH .. ".collides")
 }
