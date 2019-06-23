@@ -4,7 +4,7 @@ local movement_state =
         e.behaviour = Behavior(states)
         e.previous_states = {}
         e.timer = Timer.new()
-        e.forgive_jump = false
+        e.is_forgiving_jump = false
         e.state_history_buffer_size = 10
         e.behaviour:setState(initial_state)
         e.current_state_elapsed = 0
@@ -37,12 +37,12 @@ function movement_state:set(new_state, instance, entity)
     instance:emit("sprite_state_updated", entity, new_state)
 end
 
-function movement_state:forgiveJump()
-    self.forgive_jump = true
+function movement_state:forgive_jump()
+    self.is_forgiving_jump = true
     self.timer:after(
         0.1,
         function()
-            self.forgive_jump = false
+            self.is_forgiving_jump = false
         end
     )
 end
