@@ -7,12 +7,12 @@ local walljump =
 )
 
 function walljump:jump(entity)
-    local direction = entity:get(_components.direction)
+    local controlled = entity:get(_components.controlled)
     local air_controlled = entity:get(_components.air_control)
     local transform = entity:get(_components.transform)
     local multiplier = 1
 
-    if direction.value == "RIGHT" then
+    if controlled.is_held["right"] then
         multiplier = -1
     end
 
