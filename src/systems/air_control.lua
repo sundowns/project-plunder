@@ -91,7 +91,7 @@ function air_control:update(dt)
                 -- only do it if player still holding current direction
                 local controlled = e:get(_components.controlled)
                 if len_left > 0 then
-                    if controlled.is_held["right"] then
+                    if not controlled.is_held["left"] then
                         if movement_state.behaviour.state == "wallslide" then
                             movement_state:set("fall", self:getInstance(), e)
                         end
@@ -101,7 +101,7 @@ function air_control:update(dt)
                         end
                     end
                 elseif len_right > 0 then
-                    if controlled.is_held["left"] then
+                    if not controlled.is_held["right"] then
                         if movement_state.behaviour.state == "wallslide" then
                             movement_state:set("fall", self:getInstance(), e)
                         end
