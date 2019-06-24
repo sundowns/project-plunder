@@ -39,14 +39,9 @@ function jumping:jump(action, entity)
 
         transform.velocity.y = -jump.jump_velocity
     elseif movement_state.behaviour.state == "wallslide" then
-        local direction = entity:get(_components.direction)
-        local multiplier = 1
-        if direction.value == "RIGHT" then
-            multiplier = -1
-        end
+        local walljump = entity:get(_components.walljump)
+        walljump:jump(entity)
         movement_state:set("jump", self:getInstance(), entity)
-        air_controlled.x_velocity = jump.walljump_x_velocity * multiplier
-        transform.velocity.y = -jump.walljump_y_velocity
     end
 end
 
@@ -163,6 +158,11 @@ function jumping:update(dt)
                     movement_state.timer:clear()
                 end
             end
+        end
+        -- update walljump timer
+        if e:has(_components.walljump) then
+            local walljump = e:get(_components.walljump)
+            walljump:update(dt)
         end
     end
 end

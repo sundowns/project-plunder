@@ -40,6 +40,13 @@ function air_control:move(action, entity)
         direction_modifier = -1
     end
 
+    if entity:has(_components.walljump) then
+        local walljump = entity:get(_components.walljump)
+        if walljump.is_locked_out and action == walljump.lockout_direction then
+            return
+        end
+    end
+
     local air_controlled = entity:get(_components.air_control)
     air_controlled:move(direction_modifier)
 
