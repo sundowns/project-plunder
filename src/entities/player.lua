@@ -29,6 +29,9 @@ return function(position)
             },
             wallslide = {
                 {duration = 1}
+            },
+            walljumping = {
+                {duration = 1}
             }
         },
         "fall"

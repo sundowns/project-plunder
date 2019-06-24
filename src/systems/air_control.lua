@@ -40,13 +40,6 @@ function air_control:move(action, entity)
         direction_modifier = -1
     end
 
-    if entity:has(_components.walljump) then
-        local walljump = entity:get(_components.walljump)
-        if walljump.is_locked_out and action == walljump.lockout_direction then
-            return
-        end
-    end
-
     local air_controlled = entity:get(_components.air_control)
     air_controlled:move(direction_modifier)
 
@@ -65,7 +58,10 @@ function air_control:update(dt)
 
         if e:has(_components.movement_state) then
             local behaviour = movement_state.behaviour
-            if behaviour.state == "jump" or behaviour.state == "fall" or behaviour.state == "wallslide" then
+            if
+                behaviour.state == "jump" or behaviour.state == "fall" or behaviour.state == "wallslide" or
+                    behaviour.state == "walljumping"
+             then
                 transform.position.x = transform.position.x + (air_controlled.x_velocity * dt)
             else
                 air_controlled.x_velocity = 0

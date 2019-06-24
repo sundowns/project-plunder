@@ -41,7 +41,7 @@ function jumping:jump(action, entity)
     elseif movement_state.behaviour.state == "wallslide" then
         local walljump = entity:get(_components.walljump)
         walljump:jump(entity)
-        movement_state:set("jump", self:getInstance(), entity)
+        movement_state:set("walljumping", self:getInstance(), entity)
     end
 end
 
@@ -54,7 +54,7 @@ function jumping:update(dt)
         local gravity = e:get(_components.gravity).deceleration or 0
         local collides = e:get(_components.collides)
 
-        if movement_state.behaviour.state == "jump" then
+        if movement_state.behaviour.state == "jump" or movement_state.behaviour.state == "walljumping" then
             if transform.velocity.y > jump.falling_trigger_velocity then -- check for transition to falling state
                 movement_state:set("fall", self:getInstance(), e)
             else
@@ -158,11 +158,6 @@ function jumping:update(dt)
                     movement_state.timer:clear()
                 end
             end
-        end
-        -- update walljump timer
-        if e:has(_components.walljump) then
-            local walljump = e:get(_components.walljump)
-            walljump:update(dt)
         end
     end
 end

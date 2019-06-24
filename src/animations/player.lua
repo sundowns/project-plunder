@@ -10,7 +10,8 @@ return {
         "fall",
         "walk",
         "jump",
-        "wallslide"
+        "wallslide",
+        "walljumping"
     },
     layers = {
         {
@@ -43,6 +44,11 @@ return {
                 frame_duration = 0.10,
                 x = "1-6",
                 y = 1
+            },
+            walljumping = {
+                frame_duration = 0.095,
+                x = "1-6",
+                y = 4
             }
         }
     }
