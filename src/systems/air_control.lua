@@ -41,7 +41,8 @@ function air_control:move(action, entity)
     end
 
     local air_controlled = entity:get(_components.air_control)
-    air_controlled:move(direction_modifier)
+    local transform = entity:get(_components.transform)
+    air_controlled:move(transform, direction_modifier)
 
     if entity:has(_components.direction) then
         local direction = entity:get(_components.direction)
@@ -59,7 +60,7 @@ function air_control:update(dt)
         if e:has(_components.movement_state) then
             local behaviour = movement_state.behaviour
             if behaviour.state == "jump" or behaviour.state == "fall" or behaviour.state == "wallslide" then
-                transform.position.x = transform.position.x + (air_controlled.x_velocity * dt)
+                transform.position.x = transform.position.x + (transform.velocity.x * dt)
             else
                 air_controlled.x_velocity = 0
             end

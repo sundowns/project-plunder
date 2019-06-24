@@ -4,26 +4,26 @@ local walk =
         e.acceleration = _constants.WALK_ACCELERATION
         e.max_speed = _constants.WALK_MAX_SPEED
         e.friction = _constants.FRICTION
-        e.x_velocity = 0
     end
 )
 
-function walk:move(modifier)
-    self.x_velocity = self.x_velocity + self.acceleration * modifier
-    if math.abs(self.x_velocity) > self.max_speed then
-        self.x_velocity = self.max_speed * modifier
+function walk:move(transform, modifier)
+    local speed = transform.velocity.x + self.acceleration * modifier
+    if math.abs(speed) > self.max_speed then
+        speed = self.max_speed * modifier
     end
+    transform.velocity.x = speed
 end
 
-function walk:apply_friction(dt)
-    if self.x_velocity > 0 then
-        self.x_velocity = self.x_velocity - (self.friction * dt)
-    elseif self.x_velocity < 0 then
-        self.x_velocity = self.x_velocity + (self.friction * dt)
+function walk:apply_friction(transform, dt)
+    if transform.velocity.x > 0 then
+        transform.velocity.x = transform.velocity.x - (self.friction * dt)
+    elseif transform.velocity.x < 0 then
+        transform.velocity.x = transform.velocity.x + (self.friction * dt)
     end
 
-    if math.abs(self.x_velocity) < 15 then
-        self.x_velocity = 0
+    if math.abs(transform.velocity.x) < 15 then
+        transform.velocity.x = 0
     end
 end
 

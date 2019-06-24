@@ -35,7 +35,7 @@ function jumping:jump(action, entity)
             movement_state.is_forgiving_jump
      then
         movement_state:set("jump", self:getInstance(), entity)
-        air_controlled.x_velocity = walk.x_velocity * _constants.PLAYER_GROUND_TO_AIR_MOMENTUM_CONSERVATION_RATIO
+        air_controlled.x_velocity = transform.velocity.x * _constants.PLAYER_GROUND_TO_AIR_MOMENTUM_CONSERVATION_RATIO
 
         transform.velocity.y = -jump.jump_velocity
     elseif movement_state.behaviour.state == "wallslide" then
@@ -111,8 +111,7 @@ function jumping:update(dt)
                     end
 
                     e:get(_components.air_control).x_velocity =
-                        e:get(_components.walk).x_velocity *
-                        _constants.PLAYER_WALK_OFF_LEDGE_MOMENTUM_CONSERVATION_RATIO *
+                        transform.velocity.x * _constants.PLAYER_WALK_OFF_LEDGE_MOMENTUM_CONSERVATION_RATIO *
                         held_modifier
                 end
             end
@@ -152,7 +151,7 @@ function jumping:update(dt)
                             if not controlled.is_held[string.lower(direction.value)] then
                                 held_modifier = 1
                             end
-                            e:get(_components.walk).x_velocity =
+                            transform.velocity.x =
                                 e:get(_components.air_control).x_velocity *
                                 _constants.PLAYER_AIR_TO_GROUND_MOMENTUM_CONSERVATION_RATIO *
                                 held_modifier

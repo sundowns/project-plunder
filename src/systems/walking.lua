@@ -39,7 +39,8 @@ function walking:walk(action, entity)
     end
 
     local walk = entity:get(_components.walk)
-    walk:move(direction_modifier)
+    local transform = entity:get(_components.transform)
+    walk:move(transform, direction_modifier)
 
     local direction = entity:get(_components.direction)
     if direction and direction.value ~= action then
@@ -51,15 +52,15 @@ function walking:update(dt)
     for i = 1, self.pool.size do
         local e = self.pool:get(i)
         local walk = e:get(_components.walk)
-        walk:apply_friction(dt)
+        local transform = e:get(_components.transform)
 
         if e:has(_components.movement_state) then
             local movement_state = e:get(_components.movement_state)
             if movement_state.behaviour.state == "walk" or movement_state.behaviour.state == "default" then
-                local transform = e:get(_components.transform)
-                transform.position.x = transform.position.x + (walk.x_velocity * dt)
+                walk:apply_friction(transform, dt)
+                transform.position.x = transform.position.x + (transform.velocity.x * dt)
             end
-            if movement_state.behaviour.state == "walk" and walk.x_velocity == 0 then
+            if movement_state.behaviour.state == "walk" and transform.velocity.x == 0 then
                 movement_state:set("default", self:getInstance(), e)
             end
         end
