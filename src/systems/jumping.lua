@@ -151,10 +151,10 @@ function jumping:update(dt)
                             if not controlled.is_held[string.lower(direction.value)] then
                                 held_modifier = 1
                             end
-                            transform.velocity.x =
-                                e:get(_components.air_control).x_velocity *
-                                _constants.PLAYER_AIR_TO_GROUND_MOMENTUM_CONSERVATION_RATIO *
-                                held_modifier
+                        --transform.velocity.x =
+                        --    e:get(_components.air_control).x_velocity *
+                        --    _constants.PLAYER_AIR_TO_GROUND_MOMENTUM_CONSERVATION_RATIO *
+                        --    held_modifier
                         end
                     end
                     movement_state:set("walk", self:getInstance(), e)
