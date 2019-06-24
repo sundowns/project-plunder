@@ -1,5 +1,13 @@
 local air_control =
-    System({_components.controlled, _components.transform, _components.air_control, _components.collides})
+    System(
+    {
+        _components.controlled,
+        _components.transform,
+        _components.air_control,
+        _components.collides,
+        _components.movement_state
+    }
+)
 
 function air_control:init()
     self.collision_world = nil
@@ -28,20 +36,20 @@ function air_control:move(action, entity)
         return
     end
 
-    if entity:has(_components.movement_state) then
-        local state = entity:get(_components.movement_state).behaviour.state
-        if state == "jump" or state == "fall" then
-            local direction_modifier = 1
-            if action == "left" then
-                direction_modifier = -1
-            end
-            local air_controlled = entity:get(_components.air_control)
-            air_controlled:move(direction_modifier)
-            if entity:has(_components.direction) then
-                local direction = entity:get(_components.direction)
-                direction:set(action) --left or right
-            end
+    local state = entity:get(_components.movement_state).behaviour.state
+    if state == "jump" or state == "fall" then
+        local air_controlled = entity:get(_components.air_control)
+        local direction_modifier = 1
+
+        if action == "left" then
+            direction_modifier = -1
         end
+        if entity:has(_components.direction) then
+            local direction = entity:get(_components.direction)
+            direction:set(action) --left or right
+        end
+
+        air_controlled:move(direction_modifier)
     end
 end
 
