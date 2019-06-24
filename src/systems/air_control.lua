@@ -41,8 +41,6 @@ function air_control:move(action, entity)
                 local direction = entity:get(_components.direction)
                 direction:set(action) --left or right
             end
-        else
-            return
         end
     end
 end
