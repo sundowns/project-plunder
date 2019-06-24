@@ -30,22 +30,20 @@ function air_control:move(action, entity)
 
     if entity:has(_components.movement_state) then
         local state = entity:get(_components.movement_state).behaviour.state
-        if state ~= "jump" and state ~= "fall" and state ~= "wallslide" then
+        if state == "jump" or state == "fall" then
+            local direction_modifier = 1
+            if action == "left" then
+                direction_modifier = -1
+            end
+            local air_controlled = entity:get(_components.air_control)
+            air_controlled:move(direction_modifier)
+            if entity:has(_components.direction) then
+                local direction = entity:get(_components.direction)
+                direction:set(action) --left or right
+            end
+        else
             return
         end
-    end
-
-    local direction_modifier = 1
-    if action == "left" then
-        direction_modifier = -1
-    end
-
-    local air_controlled = entity:get(_components.air_control)
-    air_controlled:move(direction_modifier)
-
-    if entity:has(_components.direction) then
-        local direction = entity:get(_components.direction)
-        direction:set(action) --left or right
     end
 end
 
@@ -92,7 +90,7 @@ function air_control:update(dt)
                             movement_state:set("fall", self:getInstance(), e)
                         end
                     else
-                        if movement_state.behaviour.state == "fall" and not controlled.is_held["right"] then
+                        if movement_state.behaviour.state == "fall" then
                             movement_state:set("wallslide", self:getInstance(), e)
                         end
                     end
@@ -102,7 +100,7 @@ function air_control:update(dt)
                             movement_state:set("fall", self:getInstance(), e)
                         end
                     else
-                        if movement_state.behaviour.state == "fall" and not controlled.is_held["left"] then
+                        if movement_state.behaviour.state == "fall" then
                             movement_state:set("wallslide", self:getInstance(), e)
                         end
                     end
