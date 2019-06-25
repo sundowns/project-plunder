@@ -35,6 +35,9 @@ commands:
             lua
             echo "done"
 
+# install and use luacheck: https://github.com/mpeterv/luacheck 
+# some kind of testrunner?
+
 
 jobs:
   build:
