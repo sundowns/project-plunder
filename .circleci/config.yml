@@ -17,8 +17,9 @@ commands:
     steps:
       - run: 
           name: "Install Lua"
-          command: 
+          command: |
             sudo apt install lua5.3	
+            sudo apt-get install liblua5.2-dev
 
   install_luarocks:
     description: "Installs luarocks"
