@@ -14,17 +14,20 @@ executors:
 commands:
   install_lua:
     description: "Installs lua"
-    parameters:
-      to:
-        type: string
-        default: "Hello World"
     steps:
-      - run: echo << parameters.to >>
+      - run: 
+          name: "Install Lua"
+          command: |
+            curl -R -O http://www.lua.org/ftp/lua-5.3.5.tar.gz
+            tar zxf lua-5.3.5.tar.gz
+            cd lua-5.3.5
+            make linux test
+            echo "done"
   install_luarocks:
     description: "Installs luarocks"
     steps:
       - run:
-          name: "install lua"
+          name: "Install luarocks"
           command: | 
             wget https://luarocks.org/releases/luarocks-3.1.3.tar.gz
             tar zxpf luarocks-3.1.3.tar.gz
@@ -32,7 +35,7 @@ commands:
             ./configure; sudo make bootstrap
             sudo luarocks install luasocket
             lua
-            echo "finished"
+            echo "done"
 
 
 jobs:
