@@ -27,13 +27,9 @@ commands:
       - run:
           name: "Install luarocks"
           command: | 
-            wget https://luarocks.org/releases/luarocks-3.1.3.tar.gz
-            tar zxpf luarocks-3.1.3.tar.gz
-            cd luarocks-3.1.3
-            ./configure; sudo make bootstrap
-            sudo luarocks install luasocket
-            lua
-            echo "done"
+            sudo apt-get update
+            sudo apt-get install luarocks
+            luarocks --version
 
 # install and use luacheck: https://github.com/mpeterv/luacheck 
 # some kind of testrunner?
