@@ -33,8 +33,9 @@ commands:
 
   luacheck:
     description: "Run luacheck"
+    # parameters:
+    # TODO: parameterise the luacheck target (src atm)
     steps:
-      - checkout
       - run:
           name: "Install luacheck"
           command: |
@@ -45,7 +46,7 @@ commands:
             sudo luacheck src
 
 
-# install and use luacheck: https://github.com/mpeterv/luacheck 
+# 
 # some kind of testrunner?
 
 
