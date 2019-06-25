@@ -19,7 +19,6 @@ System = nil
 Vector = nil
 Timer = nil
 Bump = nil
-STI = nil
 Camera = nil
 
 function love.load()
@@ -42,7 +41,7 @@ function love.load()
     Vector = require("libs.vector")
     Behavior = require("libs.behavior")
     Bump = require("libs.bump")
-    STI = require("libs.sti")
+    Cartographer = require("libs.cartographer")
     Camera = require("libs.camera")
 
     _fonts = {
