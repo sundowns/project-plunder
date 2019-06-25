@@ -6,9 +6,36 @@ function stage_manager:init()
 end
 
 function stage_manager:load_stage(path)
-    self.stage = STI(path, {"bump"})
+    self.stage = Cartographer.load(path)
     assert(self.collision_world, "stage_manager attempted to load stage with collision world unset")
-    self.stage:bump_init(self.collision_world)
+    assert(self.stage.layers["World"], "attempted to load map without 'World' tile layer")
+
+    local collidable_tile_data = self:read_tile_layer(self.stage.layers["World"])
+    -- Stage data is stored in a 1 dimensional array of tiles
+    for id, tile in ipairs(collidable_tile_data.tiles) do
+        if tile ~= 0 then -- 0 means no tile
+            local x = ((id - 1) % collidable_tile_data.columns) * _constants.TILE_WIDTH
+            local y = math.floor(id / collidable_tile_data.columns) * _constants.TILE_HEIGHT
+            self.collision_world:add(
+                {
+                    is_tile = true
+                },
+                x,
+                y,
+                _constants.TILE_WIDTH,
+                _constants.TILE_HEIGHT
+            )
+        end
+    end
+end
+
+function stage_manager:read_tile_layer(layer)
+    assert(layer.data)
+    return {
+        columns = layer.width,
+        rows = layer.height,
+        tiles = layer.data
+    }
 end
 
 function stage_manager:set_collision_world(collision_world)
@@ -17,10 +44,7 @@ end
 
 function stage_manager:draw()
     if self.stage then
-        self.stage:draw(0, 0, _constants.WORLD_SCALE, _constants.WORLD_SCALE)
-        if _debug then
-            self.stage:bump_draw(self.collision_world, 0, 0, _constants.WORLD_SCALE, _constants.WORLD_SCALE)
-        end
+        self.stage:draw()
     end
 end
 
