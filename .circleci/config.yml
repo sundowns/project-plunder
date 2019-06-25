@@ -36,7 +36,7 @@ commands:
     steps:
       - checkout
       - run:
-          name: "Install dependencies"
+          name: "Install luacheck"
           command: |
             sudo luarocks install luacheck
       - run:
