@@ -38,11 +38,11 @@ commands:
       - run:
           name: "Install dependencies"
           command: |
-            luarocks install luacheck
+            sudo luarocks install luacheck
       - run:
           name: "luacheck"
           command: |
-            luacheck src
+            sudo luacheck src
 
 
 # install and use luacheck: https://github.com/mpeterv/luacheck 
