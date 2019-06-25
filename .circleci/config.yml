@@ -31,22 +31,37 @@ commands:
             sudo apt-get install luarocks
             luarocks --version
 
+  luacheck:
+    description: "Run luacheck"
+    steps:
+      - checkout
+      - run:
+          name: "Install dependencies"
+          command: |
+            luarocks install luacheck
+      - run:
+          name: "luacheck"
+          command: |
+            luacheck src
+
+
 # install and use luacheck: https://github.com/mpeterv/luacheck 
 # some kind of testrunner?
 
 
 jobs:
-  build:
+  validate_lua:
     executor: ubuntu
     steps:
       - checkout
       - install_lua
       - install_luarocks
+      - luacheck
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
   # Name the workflow "Welcome"
-  verify_and_build:
+  validate_and_build:
     # Run the welcome/run job in its own container
     jobs:
-      - build
+      - validate_lua
