@@ -6,15 +6,42 @@ version: 2.1
 #   # Declare a dependency on the welcome-orb
 #   welcome: circleci/welcome-orb@0.3.1
 
-jobs:
-  build:
+executors:
+  ubuntu:
     machine:
       image: ubuntu-1604:201903-01
+
+commands:
+  install_lua:
+    description: "Installs lua"
+    parameters:
+      to:
+        type: string
+        default: "Hello World"
+    steps:
+      - run: echo << parameters.to >>
+  install_luarocks:
+    description: "Installs luarocks"
+    steps:
+      - run:
+          name: "install lua"
+          command: | 
+            wget https://luarocks.org/releases/luarocks-3.1.3.tar.gz
+            tar zxpf luarocks-3.1.3.tar.gz
+            cd luarocks-3.1.3
+            ./configure; sudo make bootstrap
+            sudo luarocks install luasocket
+            lua
+            echo "finished"
+
+
+jobs:
+  build:
+    executor: ubuntu
     steps:
       - checkout
-      - run:
-          name: "Testing"
-          command: echo "Hi"
+      - install_lua
+      - install_luarocks
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
