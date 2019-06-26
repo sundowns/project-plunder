@@ -45,10 +45,7 @@ commands:
           command: |
             sudo luacheck src
 
-
-# 
 # some kind of testrunner?
-
 
 jobs:
   validate_lua:
