@@ -38,6 +38,10 @@ function jumping:jump(action, entity)
         air_controlled.x_velocity = walk.x_velocity * _constants.PLAYER_GROUND_TO_AIR_MOMENTUM_CONSERVATION_RATIO
 
         transform.velocity.y = -jump.jump_velocity
+    elseif movement_state.behaviour.state == "wallslide" then
+        local walljump = entity:get(_components.walljump)
+        walljump:jump(entity)
+        movement_state:set("walljumping", self:getInstance(), entity)
     end
 end
 
@@ -50,7 +54,7 @@ function jumping:update(dt)
         local gravity = e:get(_components.gravity).deceleration or 0
         local collides = e:get(_components.collides)
 
-        if movement_state.behaviour.state == "jump" then
+        if movement_state.behaviour.state == "jump" or movement_state.behaviour.state == "walljumping" then
             if transform.velocity.y > jump.falling_trigger_velocity then -- check for transition to falling state
                 movement_state:set("fall", self:getInstance(), e)
             else
@@ -110,7 +114,7 @@ function jumping:update(dt)
         end
 
         -- check if player has landed
-        if movement_state.behaviour.state == "fall" then
+        if movement_state.behaviour.state == "fall" or movement_state.behaviour.state == "wallslide" then
             local items_left, len_left =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x,
@@ -143,7 +147,6 @@ function jumping:update(dt)
                             if not controlled.is_held[string.lower(direction.value)] then
                                 held_modifier = 1
                             end
-
                             e:get(_components.walk).x_velocity =
                                 e:get(_components.air_control).x_velocity *
                                 _constants.PLAYER_AIR_TO_GROUND_MOMENTUM_CONSERVATION_RATIO *

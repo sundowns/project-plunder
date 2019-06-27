@@ -8,7 +8,7 @@ return function(position)
     ):give(_components.dimensions, 32, 32):give(
         _components.controlled,
         {a = "left", left = "left", d = "right", right = "right", space = "jump", mouse1 = "target_light"}
-    ):give(_components.walk):give(_components.air_control):give(_components.jump):give(
+    ):give(_components.walk):give(_components.air_control):give(_components.jump):give(_components.walljump):give(
         _components.gravity,
         _constants.GRAVITY,
         _constants.GRAVITY_DECELERATION
@@ -25,6 +25,12 @@ return function(position)
                 {duration = 1}
             },
             fall = {
+                {duration = 1}
+            },
+            wallslide = {
+                {duration = 1}
+            },
+            walljumping = {
                 {duration = 1}
             }
         },

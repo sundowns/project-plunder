@@ -9,7 +9,9 @@ return {
         "default",
         "fall",
         "walk",
-        "jump"
+        "jump",
+        "wallslide",
+        "walljumping"
     },
     layers = {
         {
@@ -34,6 +36,16 @@ return {
                 y = 5
             },
             jump = {
+                frame_duration = 0.095,
+                x = "1-6",
+                y = 4
+            },
+            wallslide = {
+                frame_duration = 0.10,
+                x = "1-6",
+                y = 1
+            },
+            walljumping = {
                 frame_duration = 0.095,
                 x = "1-6",
                 y = 4

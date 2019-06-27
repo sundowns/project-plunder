@@ -11,12 +11,14 @@ function gravity:update(dt)
         local behaviour = e:get(_components.movement_state).behaviour
 
         if behaviour then
-            if behaviour.state == "fall" or behaviour.state == "jump" then
+            if behaviour.state == "fall" or behaviour.state == "jump" or behaviour.state == "walljumping" then
                 local multiplier = _constants.JUMP_SMALL_MULTIPLIER
 
                 if e:has(_components.controlled) then
-                    if e:get(_components.controlled).is_held.jump and behaviour.state == "jump" then
-                        multiplier = _constants.JUMP_MULTIPLIER
+                    if e:get(_components.controlled).is_held.jump then
+                        if behaviour.state == "jump" or behaviour.state == "walljumping" then
+                            multiplier = _constants.JUMP_MULTIPLIER
+                        end
                     end
                 end
 
@@ -25,6 +27,9 @@ function gravity:update(dt)
                 end
 
                 self:apply_gravity(transform, gravity, dt, multiplier)
+            elseif behaviour.state == "wallslide" then
+                transform.position.y = transform.position.y + _constants.PLAYER_WALLSLIDE_FALL_RATE * dt
+                transform.velocity.y = _constants.PLAYER_WALLSLIDE_VELOCITY * dt
             end
         else
             self:apply_gravity(transform, gravity, dt)

@@ -37,6 +37,7 @@ world:addSystem(walking, "update")
 world:addSystem(air_control, "action_pressed")
 world:addSystem(air_control, "action_held")
 world:addSystem(air_control, "update")
+world:addSystem(air_control, "set_collision_world")
 
 world:addSystem(gravity, "update")
 

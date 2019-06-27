@@ -11,6 +11,7 @@ return {
     walk = require(PATH .. ".walk"),
     air_control = require(PATH .. ".air_control"),
     jump = require(PATH .. ".jump"),
+    walljump = require(PATH .. ".walljump"),
     gravity = require(PATH .. ".gravity"),
     movement_state = require(PATH .. ".movement_state"),
     collides = require(PATH .. ".collides")

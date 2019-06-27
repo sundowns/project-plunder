@@ -1,6 +1,20 @@
-local air_control = System({_components.controlled, _components.transform, _components.air_control})
+local air_control =
+    System(
+    {
+        _components.controlled,
+        _components.transform,
+        _components.air_control,
+        _components.collides,
+        _components.movement_state
+    }
+)
 
 function air_control:init()
+    self.collision_world = nil
+end
+
+function air_control:set_collision_world(collision_world)
+    self.collision_world = collision_world
 end
 
 function air_control:action_pressed(action, entity)
@@ -22,24 +36,20 @@ function air_control:move(action, entity)
         return
     end
 
-    if entity:has(_components.movement_state) then
-        local state = entity:get(_components.movement_state).behaviour.state
-        if state ~= "jump" and state ~= "fall" then
-            return
+    local state = entity:get(_components.movement_state).behaviour.state
+    if state == "jump" or state == "fall" then
+        local air_controlled = entity:get(_components.air_control)
+        local direction_modifier = 1
+
+        if action == "left" then
+            direction_modifier = -1
         end
-    end
+        if entity:has(_components.direction) then
+            local direction = entity:get(_components.direction)
+            direction:set(action) --left or right
+        end
 
-    local direction_modifier = 1
-    if action == "left" then
-        direction_modifier = -1
-    end
-
-    local air_controlled = entity:get(_components.air_control)
-    air_controlled:move(direction_modifier)
-
-    if entity:has(_components.direction) then
-        local direction = entity:get(_components.direction)
-        direction:set(action) --left or right
+        air_controlled:move(direction_modifier)
     end
 end
 
@@ -48,13 +58,63 @@ function air_control:update(dt)
         local e = self.pool:get(i)
         local air_controlled = e:get(_components.air_control)
         local transform = e:get(_components.transform)
+        local movement_state = e:get(_components.movement_state)
 
         if e:has(_components.movement_state) then
-            local behaviour = e:get(_components.movement_state).behaviour
-            if behaviour.state == "jump" or behaviour.state == "fall" then
+            local behaviour = movement_state.behaviour
+            if
+                behaviour.state == "jump" or behaviour.state == "fall" or behaviour.state == "wallslide" or
+                    behaviour.state == "walljumping"
+             then
                 transform.position.x = transform.position.x + (air_controlled.x_velocity * dt)
             else
                 air_controlled.x_velocity = 0
+            end
+
+            -- test to see if we should wallslide
+            if movement_state.behaviour.state == "fall" or movement_state.behaviour.state == "wallslide" then
+                local collides = e:get(_components.collides)
+                local items_left, len_left =
+                    self.collision_world:queryPoint(
+                    transform.position.x + collides.offset.x,
+                    transform.position.y + collides.offset.y +
+                        (collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED)
+                )
+
+                local items_right, len_right =
+                    self.collision_world:queryPoint(
+                    transform.position.x + collides.offset.x + collides.width,
+                    transform.position.y + collides.offset.y +
+                        (collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED)
+                )
+
+                -- only do it if player still holding current direction
+                local controlled = e:get(_components.controlled)
+                if len_left > 0 then
+                    if not controlled.is_held["left"] then
+                        if movement_state.behaviour.state == "wallslide" then
+                            movement_state:set("fall", self:getInstance(), e)
+                        end
+                    else
+                        if movement_state.behaviour.state == "fall" then
+                            movement_state:set("wallslide", self:getInstance(), e)
+                        end
+                    end
+                elseif len_right > 0 then
+                    if not controlled.is_held["right"] then
+                        if movement_state.behaviour.state == "wallslide" then
+                            movement_state:set("fall", self:getInstance(), e)
+                        end
+                    else
+                        if movement_state.behaviour.state == "fall" then
+                            movement_state:set("wallslide", self:getInstance(), e)
+                        end
+                    end
+                else
+                    if movement_state.behaviour.state == "wallslide" then
+                        movement_state:set("fall", self:getInstance(), e)
+                    end
+                end
             end
         end
     end
