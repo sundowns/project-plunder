@@ -32,3 +32,7 @@ std = {
         "_debug"
     }
 }
+
+codes = true
+
+files["src/shaders/**/*/?.lua"] = {ignore = {"212"}}

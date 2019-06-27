@@ -93,7 +93,7 @@ world:enableSystem(jumping, "action_held")
 world:enableSystem(jumping, "set_collision_world")
 world:enableSystem(jumping, "draw")
 
-function world:enableUpdates()
+function world.enableUpdates()
     world:enableSystem(lighting, "update")
     world:enableSystem(sprite_renderer, "update")
     world:enableSystem(motion, "update")
@@ -107,7 +107,7 @@ function world:enableUpdates()
     world:enableSystem(collider, "update")
 end
 
-function world:disableUpdates()
+function world.disableUpdates()
     world:disableSystem(lighting, "update")
     world:disableSystem(sprite_renderer, "update")
     world:disableSystem(motion, "update")
@@ -121,6 +121,6 @@ function world:disableUpdates()
     world:disableSystem(collider, "update")
 end
 
-world:enableUpdates()
+world.enableUpdates()
 
 return world
