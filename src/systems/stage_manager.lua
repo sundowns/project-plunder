@@ -15,7 +15,7 @@ function stage_manager:load_stage(path)
     for id, tile in ipairs(collidable_tile_data.tiles) do
         if tile ~= 0 then -- 0 means no tile
             local x = ((id - 1) % collidable_tile_data.columns) * _constants.TILE_WIDTH
-            local y = math.floor(id / collidable_tile_data.columns) * _constants.TILE_HEIGHT
+            local y = math.floor((id - 1) / collidable_tile_data.columns) * _constants.TILE_HEIGHT
             self.collision_world:add(
                 {
                     is_tile = true
