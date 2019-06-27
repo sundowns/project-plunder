@@ -41,7 +41,7 @@ function jumping:jump(action, entity)
     end
 end
 
-function jumping:update(dt)
+function jumping:update(_)
     for i = 1, self.ALL.size do
         local e = self.ALL:get(i)
         local jump = e:get(_components.jump)

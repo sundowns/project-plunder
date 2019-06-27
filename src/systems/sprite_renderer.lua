@@ -6,7 +6,7 @@ end
 
 function sprite_renderer:entityAdded(e)
     local sprite = e:get(_components.sprite)
-    local instance = self:createInstance(sprite.name)
+    local instance = self:create_instance(sprite.name)
     sprite:setAnimationData(instance)
 end
 
@@ -18,7 +18,7 @@ function sprite_renderer:draw()
         local flipped = e:has(_components.direction) and e:get(_components.direction).value == "LEFT"
 
         if img.visible then
-            self:drawSpriteInstance(
+            self:draw_sprite_instance(
                 img.animation,
                 Vector(position.x + img.offset_x, position.y + img.offset_y),
                 0,
@@ -30,7 +30,7 @@ function sprite_renderer:draw()
     end
 end
 
-function sprite_renderer:loadSpriteSheet(spriteName)
+function sprite_renderer:load_sprite_sheet(spriteName)
     local err, sprite_file
     sprite_file, err = love.filesystem.load("src/animations/" .. string.lower(spriteName) .. ".lua")
     if not sprite_file then
@@ -42,13 +42,13 @@ function sprite_renderer:loadSpriteSheet(spriteName)
     return self.spriteBank[spriteName]
 end
 
-function sprite_renderer:createInstance(spriteName, currentState)
+function sprite_renderer:create_instance(spriteName, currentState)
     if spriteName == nil then
         return nil
     end
 
     if self.spriteBank[spriteName] == nil then
-        if self:loadSpriteSheet(spriteName) == nil then
+        if self:load_sprite_sheet(spriteName) == nil then
             return nil
         end
     end
@@ -59,7 +59,7 @@ function sprite_renderer:createInstance(spriteName, currentState)
     end
 
     return {
-        animations = self:retrieveLayerInstances(spriteName, currentState),
+        animations = self:retrieve_layer_instances(spriteName, currentState),
         sprite = self.spriteBank[spriteName],
         currentState = currentState,
         time_scale = 1 --slow-mo?
@@ -68,22 +68,22 @@ end
 
 function sprite_renderer:sprite_state_updated(entity, newState)
     local sprite = entity:get(_components.sprite)
-    sprite.animation.animations = self:retrieveLayerInstances(sprite.animation.sprite.id, newState)
+    sprite.animation.animations = self:retrieve_layer_instances(sprite.animation.sprite.id, newState)
 end
 
 function sprite_renderer:update(dt)
     for i = 1, self.pool.size do
         local e = self.pool:get(i)
         local sprite = e:get(_components.sprite)
-        for i, layer in pairs(sprite.animation.animations) do
+        for _, layer in pairs(sprite.animation.animations) do
             layer.animation:update(dt)
         end
     end
 end
 
-function sprite_renderer:drawSpriteInstance(instance, position, orientation, sx, sy, flipped)
-    for i, layer in pairs(instance.animations) do
-        local w, h = layer.animation:getDimensions()
+function sprite_renderer.draw_sprite_instance(_, instance, position, orientation, sx, sy, flipped)
+    for _, layer in pairs(instance.animations) do
+        local w, _ = layer.animation:getDimensions()
         local offset_position_x = position.x
         if flipped then
             offset_position_x = offset_position_x + w * sx
@@ -93,9 +93,9 @@ function sprite_renderer:drawSpriteInstance(instance, position, orientation, sx,
     end
 end
 
-function sprite_renderer:retrieveLayerInstances(spriteName, currentState)
+function sprite_renderer:retrieve_layer_instances(spriteName, currentState)
     local layers = {}
-    for i, layer in pairs(self.spriteBank[spriteName].layers) do
+    for _, layer in pairs(self.spriteBank[spriteName].layers) do
         local anim_data = layer[currentState]
         table.insert(
             layers,
