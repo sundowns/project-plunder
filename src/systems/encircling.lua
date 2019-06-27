@@ -31,6 +31,7 @@ function encircling:update(_)
 
         if player_is_targetting then
             -- vector from centre of screen to mouse position
+            -- TODO: need to somehow get camera coordinates. syncronous communcation between systems :thinking:
             local mouse = Vector(love.mouse.getPosition())
 
             -- normalise and multiply by desired length

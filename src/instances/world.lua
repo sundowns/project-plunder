@@ -12,6 +12,7 @@ local gravity = _systems.gravity()
 local state_manager = _systems.state_manager()
 local stage_manager = _systems.stage_manager()
 local collider = _systems.collider()
+local camera = _systems.camera()
 
 -- ADD SYSTEMS
 
@@ -60,6 +61,10 @@ world:addSystem(jumping, "update")
 world:addSystem(jumping, "set_collision_world")
 world:addSystem(jumping, "draw")
 
+world:addSystem(camera, "attach")
+world:addSystem(camera, "detach")
+world:addSystem(camera, "update")
+
 -- ENABLE SYSTEMS
 
 world:enableSystem(lighting, "attach_lighting")
@@ -93,6 +98,9 @@ world:enableSystem(jumping, "action_held")
 world:enableSystem(jumping, "set_collision_world")
 world:enableSystem(jumping, "draw")
 
+world:enableSystem(camera, "attach")
+world:enableSystem(camera, "detach")
+
 function world.enableUpdates()
     world:enableSystem(lighting, "update")
     world:enableSystem(sprite_renderer, "update")
@@ -105,6 +113,7 @@ function world.enableUpdates()
     world:enableSystem(gravity, "update")
     world:enableSystem(state_manager, "update")
     world:enableSystem(collider, "update")
+    world:enableSystem(camera, "update")
 end
 
 function world.disableUpdates()
@@ -119,6 +128,7 @@ function world.disableUpdates()
     world:disableSystem(gravity, "update")
     world:disableSystem(state_manager, "update")
     world:disableSystem(collider, "update")
+    world:disableSystem(camera, "update")
 end
 
 world.enableUpdates()
