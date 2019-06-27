@@ -6,20 +6,60 @@ version: 2.1
 #   # Declare a dependency on the welcome-orb
 #   welcome: circleci/welcome-orb@0.3.1
 
-jobs:
-  build:
+executors:
+  ubuntu:
     machine:
       image: ubuntu-1604:201903-01
+
+commands:
+  install_lua:
+    description: "Installs lua"
+    steps:
+      - run: 
+          name: "Install Lua"
+          command: |
+            sudo apt install lua5.3	
+            sudo apt-get install liblua5.2-dev
+
+  install_luarocks:
+    description: "Installs luarocks"
+    steps:
+      - run:
+          name: "Install luarocks"
+          command: | 
+            sudo apt-get update
+            sudo apt-get install luarocks
+            luarocks --version
+
+  luacheck:
+    description: "Run luacheck"
+    # parameters:
+    # TODO: parameterise the luacheck target (src atm)
+    steps:
+      - run:
+          name: "Install luacheck"
+          command: |
+            sudo luarocks install luacheck
+      - run:
+          name: "luacheck"
+          command: |
+            sudo luacheck src
+
+# some kind of testrunner?
+
+jobs:
+  validate_lua:
+    executor: ubuntu
     steps:
       - checkout
-      - run:
-          name: "Testing"
-          command: echo "Hi"
+      - install_lua
+      - install_luarocks
+      - luacheck
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
   # Name the workflow "Welcome"
-  verify_and_build:
+  validate_and_build:
     # Run the welcome/run job in its own container
     jobs:
-      - build
+      - validate_lua
