@@ -35,4 +35,4 @@ std = {
 
 codes = true
 
-files["src/shaders/**/*/?.lua"] = {ignore = {"212"}}
+exclude_files = {"src/shaders/**/*.lua"}
