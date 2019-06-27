@@ -1,8 +1,5 @@
 local walking = System({_components.controlled, _components.transform, _components.walk})
 
-function walking:init()
-end
-
 function walking:action_pressed(action, entity)
     if entity:has(_components.walk) then
         self:walk(action, entity)

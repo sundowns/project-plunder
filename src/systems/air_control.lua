@@ -1,8 +1,5 @@
 local air_control = System({_components.controlled, _components.transform, _components.air_control})
 
-function air_control:init()
-end
-
 function air_control:action_pressed(action, entity)
     if entity:has(_components.air_control) then
         self:move(action, entity)
@@ -15,7 +12,7 @@ function air_control:action_held(action, entity)
     end
 end
 
-function air_control:move(action, entity)
+function air_control.move(_, action, entity)
     assert(action)
     assert(entity)
     if action ~= "left" and action ~= "right" then

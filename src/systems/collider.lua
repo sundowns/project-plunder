@@ -18,7 +18,7 @@ function collider:entityRemoved(e)
     self.collision_world:remove(e:get(_components.collides))
 end
 
-function collider:update(dt)
+function collider:update(_)
     for i = 1, self.ALL.size do
         local e = self.ALL:get(i)
         self:update_entity(e)
@@ -29,7 +29,7 @@ function collider:draw()
     if _debug then
         love.graphics.setColor(1, 0, 0)
         love.graphics.setLineWidth(1)
-        local items, len = self.collision_world:getItems()
+        local items, _ = self.collision_world:getItems()
         for i = #items, 1, -1 do
             love.graphics.rectangle("line", self.collision_world:getRect(items[i]))
         end
@@ -41,7 +41,7 @@ end
 function collider:update_entity(e)
     local transform = e:get(_components.transform)
     local collides = e:get(_components.collides)
-    local actualX, actualY, cols, len =
+    local actualX, actualY, _, _ =
         self.collision_world:move(
         collides,
         transform.position.x + collides.offset.x,

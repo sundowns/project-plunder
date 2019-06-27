@@ -13,7 +13,6 @@ end
 function input:poll_keys()
     for i = 1, self.pool.size do
         local controlled = self.pool:get(i):get(_components.controlled)
-        local to_trigger = {}
         for action, is_held in pairs(controlled.is_held) do
             if is_held then
                 self:getInstance():emit("action_held", action, self.pool:get(i))
@@ -33,12 +32,12 @@ function input:keypressed(key)
     end
 end
 
-function input:mousepressed(x, y, button)
+function input:mousepressed(_, _, button)
     -- We dont care about x, y we just want to track the event (just poll the mouse position if needed)
     self:keypressed("mouse" .. button)
 end
 
-function input:mousereleased(x, y, button)
+function input:mousereleased(_, _, button)
     -- We dont care about x, y we just want to track the event (just poll the mouse position if needed)
     self:keyreleased("mouse" .. button)
 end

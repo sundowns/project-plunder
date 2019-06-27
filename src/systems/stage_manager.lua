@@ -29,7 +29,7 @@ function stage_manager:load_stage(path)
     end
 end
 
-function stage_manager:read_tile_layer(layer)
+function stage_manager.read_tile_layer(_, layer)
     assert(layer.data)
     return {
         columns = layer.width,

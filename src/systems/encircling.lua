@@ -1,9 +1,6 @@
 local encircling = System({_components.transform, _components.encircle})
 
-function encircling:init()
-end
-
-function encircling:update(dt)
+function encircling:update(_)
     for i = 1, self.pool.size do
         local e = self.pool:get(i)
         local transform = e:get(_components.transform)

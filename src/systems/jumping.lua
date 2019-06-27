@@ -15,7 +15,7 @@ function jumping:action_pressed(action, entity)
     end
 end
 
-function jumping:action_held(action, entity)
+function jumping.action_held(_, _, _)
 end
 
 function jumping:jump(action, entity)
@@ -47,7 +47,6 @@ function jumping:update(dt)
         local jump = e:get(_components.jump)
         local transform = e:get(_components.transform)
         local movement_state = e:get(_components.movement_state)
-        local gravity = e:get(_components.gravity).deceleration or 0
         local collides = e:get(_components.collides)
 
         if movement_state.behaviour.state == "jump" then
@@ -55,7 +54,7 @@ function jumping:update(dt)
                 movement_state:set("fall", self:getInstance(), e)
             else
                 -- query to see if player headbonks
-                local items, len =
+                local _, len =
                     self.collision_world:queryRect(
                     transform.position.x + collides.offset.x + collides.width * 0.2,
                     transform.position.y + collides.offset.y - 1,
@@ -70,21 +69,21 @@ function jumping:update(dt)
 
         -- query to see if player is falling
         if movement_state.behaviour.state == "walk" or movement_state.behaviour.state == "default" then
-            local items_left, len_left =
+            local _, len_left =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x,
                 transform.position.y + collides.offset.y +
                     collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
 
-            local items_centre, len_centre =
+            local _, len_centre =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x + collides.width / 2,
                 transform.position.y + collides.offset.y +
                     collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
 
-            local items_right, len_right =
+            local _, len_right =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x + collides.width,
                 transform.position.y + collides.offset.y +
@@ -111,21 +110,21 @@ function jumping:update(dt)
 
         -- check if player has landed
         if movement_state.behaviour.state == "fall" then
-            local items_left, len_left =
+            local _, len_left =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x,
                 transform.position.y + collides.offset.y +
                     collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
 
-            local items_centre, len_centre =
+            local _, len_centre =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x + collides.width / 2,
                 transform.position.y + collides.offset.y +
                     collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
             )
 
-            local items_right, len_right =
+            local _, len_right =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x + collides.width,
                 transform.position.y + collides.offset.y +
@@ -164,7 +163,6 @@ function jumping:draw()
         love.graphics.setColor(0, 1, 1)
         for i = 1, self.ALL.size do
             local e = self.ALL:get(i)
-            local jump = e:get(_components.jump)
             local transform = e:get(_components.transform)
             local collides = e:get(_components.collides)
 

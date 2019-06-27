@@ -68,7 +68,7 @@ function lighting:attach_lighting()
     love.graphics.setShader(self.point_lighting_shader)
 end
 
-function lighting:detach_lighting()
+function lighting.detach_lighting(_)
     love.graphics.setShader()
 end
 
