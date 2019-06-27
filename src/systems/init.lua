@@ -12,5 +12,6 @@ return {
     gravity = require(PATH .. ".gravity"),
     state_manager = require(PATH .. ".state_manager"),
     stage_manager = require(PATH .. ".stage_manager"),
-    collider = require(PATH .. ".collider")
+    collider = require(PATH .. ".collider"),
+    camera = require(PATH .. ".camera")
 }
