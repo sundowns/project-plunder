@@ -24,6 +24,7 @@ std = {
         "System",
         "Instance",
         "Cartographer",
+        "Camera",
         "_util",
         -- Our globals
         "_constants",
