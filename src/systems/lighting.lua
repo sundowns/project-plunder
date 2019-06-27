@@ -3,7 +3,7 @@ local lighting = System({_components.transform, _components.point_light})
 function lighting:init()
     self.timer = Timer.new()
     self.point_lighting_shader = love.graphics.newShader(require("src.shaders.point_lighting"))
-    self.point_lighting_shader:send("ambient_light", 0.025)
+    self.point_lighting_shader:send("ambient_light", 0.0125) -- TODO: make config variable (based on brightness slider)
     self.light_breath_radius_offset = 0
     self.max_breath_offset = 2
     self.breath_randomness = 5
@@ -39,6 +39,12 @@ function lighting:breathe_lights()
             )
         end
     )
+end
+
+function lighting:camera_moved(position)
+    assert(position.x and position.y)
+    self.point_lighting_shader:send("cam_offset", {position.x, position.y})
+    print(position.x, position.y)
 end
 
 function lighting:update(dt)

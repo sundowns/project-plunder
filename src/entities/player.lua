@@ -34,6 +34,6 @@ return function(position)
         _constants.PLAYER_WIDTH,
         _constants.PLAYER_HEIGHT,
         Vector(6, 12) -- offset relative to transform (arbitrary numbers that look nice atm)
-    ):apply()
+    ):give(_components.camera_target):apply()
     return player
 end
