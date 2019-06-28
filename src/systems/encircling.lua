@@ -31,7 +31,6 @@ function encircling:update(_)
 
         if player_is_targetting then
             -- vector from centre of screen to mouse position
-            -- TODO: need to somehow get camera coordinates. synchronous communcation between systems :thinking:
             local mouse_pos = Vector(love.mouse.getPosition())
             local origin = encircle.origin
             if target:has(_components.camera_target) then
