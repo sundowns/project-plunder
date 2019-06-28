@@ -23,7 +23,7 @@ function camera:update()
 end
 
 function camera:set_camera(new_camera)
-    self.current_camera = new_camera
+    -- self.current_camera = new_camera
     -- self.current_camera:zoomTo(self.zoom) -- TODO: make shader work with zoom (and mouse pos)
 end
 
