@@ -31,16 +31,20 @@ function encircling:update(_)
 
         if player_is_targetting then
             -- vector from centre of screen to mouse position
-            -- TODO: need to somehow get camera coordinates. syncronous communcation between systems :thinking:
-            local mouse = Vector(love.mouse.getPosition())
+            -- TODO: need to somehow get camera coordinates. synchronous communcation between systems :thinking:
+            local mouse_pos = Vector(love.mouse.getPosition())
+            local origin = encircle.origin
+            if target:has(_components.camera_target) then
+                mouse_pos = Vector(target:get(_components.camera_target).camera:worldCoords(mouse_pos.x, mouse_pos.y))
+            end
 
             -- normalise and multiply by desired length
-            local to_mouse = (mouse - encircle.origin)
+            local to_mouse = (mouse_pos - origin)
             local resultant = to_mouse:normalized()
             local magnitude = math.min(to_mouse:len(), encircle.radius)
 
             -- use vector to update position of transform
-            transform.position = encircle.origin + resultant * magnitude
+            transform.position = origin + resultant * magnitude
         else
             transform.position = encircle.origin
         end
@@ -52,7 +56,19 @@ function encircling:draw_debug()
         for i = 1, self.pool.size do
             local e = self.pool:get(i)
             local transform = e:get(_components.transform)
-            love.graphics.circle("fill", transform.position.x, transform.position.y, 4)
+            local encircle = e:get(_components.encircle)
+            if encircle.target_entity:has(_components.camera_target) then
+                local player_position_via_camera =
+                    Vector(
+                    encircle.target_entity:get(_components.camera_target).camera:cameraCoords(
+                        transform.position.x,
+                        transform.position.y
+                    )
+                )
+                love.graphics.circle("fill", player_position_via_camera.x, player_position_via_camera.y, 4)
+            else
+                love.graphics.circle("fill", transform.position.x, transform.position.y, 4)
+            end
         end
     end
 end

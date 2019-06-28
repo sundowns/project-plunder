@@ -44,7 +44,7 @@ end
 function lighting:camera_moved(position)
     assert(position.x and position.y)
     self.point_lighting_shader:send("cam_offset", {position.x, position.y})
-    print(position.x, position.y)
+    -- print(position.x, position.y)
 end
 
 function lighting:update(dt)
