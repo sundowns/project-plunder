@@ -19,7 +19,7 @@ local camera = _systems.camera()
 world:addSystem(lighting, "attach_lighting")
 world:addSystem(lighting, "detach_lighting")
 world:addSystem(lighting, "update")
-world:addSystem(lighting, "camera_moved")
+world:addSystem(lighting, "camera_updated")
 
 world:addSystem(motion, "update")
 
@@ -70,7 +70,7 @@ world:addSystem(camera, "update")
 
 world:enableSystem(lighting, "attach_lighting")
 world:enableSystem(lighting, "detach_lighting")
-world:enableSystem(lighting, "camera_moved")
+world:enableSystem(lighting, "camera_updated")
 
 world:enableSystem(encircling, "draw_debug")
 
