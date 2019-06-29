@@ -2,7 +2,13 @@ local camera = System({_components.camera_target, _components.transform})
 
 function camera:init()
     self.current_camera = nil
-    self.previous_position = Vector(0, 0)
+    self.previous_position = Vector(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
+end
+
+function camera.entityAdded(_, e)
+    local entity_camera = e:get(_components.camera_target).camera
+    local position = e:get(_components.transform).position
+    entity_camera:lookAt(position.x, position.y)
 end
 
 function camera:update()
@@ -13,6 +19,7 @@ function camera:update()
         local camera_target = e:get(_components.camera_target)
         if not self.current_camera or self.current_camera.id ~= camera_target.id then
             self:set_camera(camera_target.camera)
+            self.previous_position = nil
         end
         if target_position ~= self.previous_position then
             self:move_camera(e:get(_components.transform).position)
@@ -30,7 +37,7 @@ function camera:move_camera(target)
     if not self.current_camera then
         return
     end
-    self.current_camera:lookAt(target.x, target.y)
+    self.current_camera:lockPosition(target.x, target.y, Camera.smooth.damped(_constants.CAMERA_DAMPENING))
 
     self:getInstance():emit("camera_updated", self.current_camera)
 end
