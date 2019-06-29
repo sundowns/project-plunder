@@ -11,7 +11,6 @@ extern Light lights[MAX_LIGHTS];
 extern number light_count;
 extern number ambient_light;
 extern number breath_offset; //This could be moved to the light struct and be per-light
-extern vec2 cam_offset;
 
 vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords){
     vec4 pixel = Texel(texture, texture_coords);
@@ -19,7 +18,10 @@ vec4 effect( vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
     for(int i = 0; i < light_count; i++)
     {
         Light light = lights[i];
-        vec2 to_light = vec2(light.position.x - screen_coords.x + cam_offset.x, light.position.y - screen_coords.y + cam_offset.y);
+        vec2 to_light = vec2(
+            light.position.x - screen_coords.x,
+            light.position.y - screen_coords.y
+        );
         number brightness = clamp(1.0 - (length(to_light) / (lights[i].radius + breath_offset) / lights[i].strength), 0.0, 1.0);
         final_colour += lights[i].diffuse * brightness * lights[i].strength;
     }

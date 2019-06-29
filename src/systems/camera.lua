@@ -3,7 +3,6 @@ local camera = System({_components.camera_target, _components.transform})
 function camera:init()
     self.current_camera = nil
     self.previous_position = Vector(0, 0)
-    self.zoom = 1.5
 end
 
 function camera:update()
@@ -24,7 +23,7 @@ end
 
 function camera:set_camera(new_camera)
     self.current_camera = new_camera
-    -- self.current_camera:zoomTo(self.zoom) -- TODO: make shader work with zoom (and mouse pos)
+    self.current_camera:zoomTo(1.8)
 end
 
 function camera:move_camera(target)
@@ -32,9 +31,8 @@ function camera:move_camera(target)
         return
     end
     self.current_camera:lookAt(target.x, target.y)
-    local cam_x, cam_y = self.current_camera:worldCoords(target.x, target.y)
 
-    self:getInstance():emit("camera_moved", Vector(target.x - cam_x, target.y - cam_y))
+    self:getInstance():emit("camera_updated", self.current_camera)
 end
 
 function camera:attach()
