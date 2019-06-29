@@ -5,7 +5,7 @@ return function(position)
     local player =
         Entity():give(_components.transform, position, Vector(0, 0)):give(_components.sprite, "PLAYER"):give(
         _components.direction
-    ):give(_components.dimensions, 32, 32):give(
+    ):give(_components.dimensions, _constants.PLAYER_WIDTH, _constants.PLAYER_HEIGHT):give(
         _components.controlled,
         {a = "left", left = "left", d = "right", right = "right", space = "jump", mouse1 = "target_light"}
     ):give(_components.walk):give(_components.air_control):give(_components.jump):give(

@@ -59,10 +59,17 @@ function lighting:update(dt)
         local transform = e:get(_components.transform)
         local point_light = e:get(_components.point_light)
         local radius = point_light.radius
-        local position = transform.position
+        local position = transform.position:clone()
+
+        if e:has(_components.dimensions) then
+            local dimensions = e:get(_components.dimensions)
+            position.x = position.x + dimensions.width / 2
+            position.y = position.y + dimensions.height / 2
+            print("huh")
+        end
 
         if self.current_camera then
-            position = Vector(self.current_camera:cameraCoords(transform.position.x, transform.position.y))
+            position = Vector(self.current_camera:cameraCoords(position.x, position.y))
             radius = radius * self.current_camera.scale
         end
 

@@ -32,7 +32,12 @@ function encircling:update(_)
         if player_is_targetting then
             -- vector from centre of screen to mouse position
             local mouse_pos = Vector(love.mouse.getPosition())
-            local origin = encircle.origin
+            local origin = encircle.origin:clone()
+            if target:has(_components.dimensions) then
+                local dimensions = target:get(_components.dimensions)
+                origin.x = origin.x + dimensions.width / 2
+                origin.y = origin.y + dimensions.height / 2
+            end
             if target:has(_components.camera_target) then
                 mouse_pos = Vector(target:get(_components.camera_target).camera:worldCoords(mouse_pos.x, mouse_pos.y))
             end
@@ -45,7 +50,13 @@ function encircling:update(_)
             -- use vector to update position of transform
             transform.position = origin + resultant * magnitude
         else
-            transform.position = encircle.origin
+            local origin = encircle.origin:clone()
+            if target:has(_components.dimensions) then
+                local dimensions = target:get(_components.dimensions)
+                origin.x = origin.x + dimensions.width / 2
+                origin.y = origin.y + dimensions.height / 2
+            end
+            transform.position = origin
         end
     end
 end
