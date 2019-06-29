@@ -65,7 +65,6 @@ function lighting:update(dt)
             local dimensions = e:get(_components.dimensions)
             position.x = position.x + dimensions.width / 2
             position.y = position.y + dimensions.height / 2
-            print("huh")
         end
 
         if self.current_camera then
