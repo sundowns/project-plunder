@@ -3,7 +3,7 @@ local lighting = System({_components.transform, _components.point_light})
 function lighting:init()
     self.timer = Timer.new()
     self.point_lighting_shader = love.graphics.newShader(require("src.shaders.point_lighting"))
-    self.point_lighting_shader:send("ambient_light", 0.025)
+    self.point_lighting_shader:send("ambient_light", 0.0125) -- TODO: make config variable (based on brightness slider)
     self.light_breath_radius_offset = 0
     self.max_breath_offset = 2
     self.breath_randomness = 5
@@ -41,6 +41,11 @@ function lighting:breathe_lights()
     )
 end
 
+function lighting:camera_updated(camera)
+    assert(camera)
+    self.current_camera = camera
+end
+
 function lighting:update(dt)
     self.timer:update(dt)
 
@@ -53,14 +58,24 @@ function lighting:update(dt)
         local e = self.pool:get(i)
         local transform = e:get(_components.transform)
         local point_light = e:get(_components.point_light)
+        local radius = point_light.radius
+        local position = transform.position:clone()
 
-        self.point_lighting_shader:send(
-            "lights[" .. i - 1 .. "].position",
-            {transform.position.x, transform.position.y}
-        )
+        if e:has(_components.dimensions) then
+            local dimensions = e:get(_components.dimensions)
+            position.x = position.x + dimensions.width / 2
+            position.y = position.y + dimensions.height / 2
+        end
+
+        if self.current_camera then
+            position = Vector(self.current_camera:cameraCoords(position.x, position.y))
+            radius = radius * self.current_camera.scale
+        end
+
+        self.point_lighting_shader:send("lights[" .. i - 1 .. "].position", {position.x, position.y})
         self.point_lighting_shader:send("lights[" .. i - 1 .. "].diffuse", point_light.colour)
         self.point_lighting_shader:send("lights[" .. i - 1 .. "].strength", point_light.strength)
-        self.point_lighting_shader:send("lights[" .. i - 1 .. "].radius", point_light.radius)
+        self.point_lighting_shader:send("lights[" .. i - 1 .. "].radius", radius)
     end
 end
 

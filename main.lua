@@ -106,7 +106,7 @@ function love.keyreleased(key)
     _instances.world:emit("keyreleased", key)
 end
 
-function love.keypressed(key, scancode, isrepeat)
+function love.keypressed(key, _, _)
     if key == "space" then
         --love.event.quit("restart")
     elseif key == "escape" then
@@ -118,10 +118,10 @@ function love.keypressed(key, scancode, isrepeat)
     _instances.world:emit("keypressed", key)
 end
 
-function love.mousepressed(x, y, button, istouch, presses)
+function love.mousepressed(x, y, button, _, _)
     _instances.world:emit("mousepressed", x, y, button)
 end
 
-function love.mousereleased(x, y, button, istouch, presses)
+function love.mousereleased(x, y, button, _, _)
     _instances.world:emit("mousereleased", x, y, button)
 end

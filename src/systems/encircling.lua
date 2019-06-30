@@ -31,17 +31,32 @@ function encircling:update(_)
 
         if player_is_targetting then
             -- vector from centre of screen to mouse position
-            local mouse = Vector(love.mouse.getPosition())
+            local mouse_pos = Vector(love.mouse.getPosition())
+            local origin = encircle.origin:clone()
+            if target:has(_components.dimensions) then
+                local dimensions = target:get(_components.dimensions)
+                origin.x = origin.x + dimensions.width / 2
+                origin.y = origin.y + dimensions.height / 2
+            end
+            if target:has(_components.camera_target) then
+                mouse_pos = Vector(target:get(_components.camera_target).camera:worldCoords(mouse_pos.x, mouse_pos.y))
+            end
 
             -- normalise and multiply by desired length
-            local to_mouse = (mouse - encircle.origin)
+            local to_mouse = (mouse_pos - origin)
             local resultant = to_mouse:normalized()
             local magnitude = math.min(to_mouse:len(), encircle.radius)
 
             -- use vector to update position of transform
-            transform.position = encircle.origin + resultant * magnitude
+            transform.position = origin + resultant * magnitude
         else
-            transform.position = encircle.origin
+            local origin = encircle.origin:clone()
+            if target:has(_components.dimensions) then
+                local dimensions = target:get(_components.dimensions)
+                origin.x = origin.x + dimensions.width / 2
+                origin.y = origin.y + dimensions.height / 2
+            end
+            transform.position = origin
         end
     end
 end
@@ -51,7 +66,19 @@ function encircling:draw_debug()
         for i = 1, self.pool.size do
             local e = self.pool:get(i)
             local transform = e:get(_components.transform)
-            love.graphics.circle("fill", transform.position.x, transform.position.y, 4)
+            local encircle = e:get(_components.encircle)
+            if encircle.target_entity:has(_components.camera_target) then
+                local player_position_via_camera =
+                    Vector(
+                    encircle.target_entity:get(_components.camera_target).camera:cameraCoords(
+                        transform.position.x,
+                        transform.position.y
+                    )
+                )
+                love.graphics.circle("fill", player_position_via_camera.x, player_position_via_camera.y, 4)
+            else
+                love.graphics.circle("fill", transform.position.x, transform.position.y, 4)
+            end
         end
     end
 end
