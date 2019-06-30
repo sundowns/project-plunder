@@ -16,6 +16,7 @@ local function init_ecs_world()
 end
 
 local function load_dependencies()
+    Cartographer = require("cartographer")
     Timer = require("timer")
     Vector = require("vector")
     Behavior = require("behavior")

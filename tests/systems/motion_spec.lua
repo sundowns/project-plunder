@@ -3,7 +3,7 @@ require("util.init_ecs") -- Must always come first
 local motion_system = nil
 local world_instance = nil
 
-local function init_motion_system(entities)
+local function init_system(entities)
     world_instance = Instance()
     motion_system = require("systems.motion")()
 
@@ -15,14 +15,20 @@ local function init_motion_system(entities)
     end
 end
 
-T(
+local test = function(title, test)
+    print(title .. " - running.")
+    T(title, test)
+    print(title .. " - passed.")
+end
+
+test(
     "Motion System",
-    function(T)
-        T(
+    function(test)
+        test(
             "Given an entity with no velocity",
-            function(T)
+            function(test)
                 -- Arrange data/world for test
-                init_motion_system(
+                init_system(
                     {
                         Entity():give(_components.transform, Vector(0, 0), Vector(0, 0)):apply()
                     }
@@ -33,15 +39,15 @@ T(
 
                 -- Test / assert the outcomes
                 local transform = motion_system.pool:get(1):get(_components.transform)
-                T:assert(transform.position == Vector(0, 0), "The position does not change")
+                test:assert(transform.position == Vector(0, 0), "The position does not change")
             end
         )
 
-        T(
+        test(
             "Given an entity with some velocity",
-            function(T)
+            function(test)
                 -- Arrange data/world for test
-                init_motion_system(
+                init_system(
                     {
                         Entity():give(_components.transform, Vector(0, 0), Vector(10, 50)):apply()
                     }
@@ -52,7 +58,7 @@ T(
 
                 -- Test / assert the outcomes
                 local transform = motion_system.pool:get(1):get(_components.transform)
-                T:assert(transform.position == Vector(10, 50), "The position is updated correctly")
+                test:assert(transform.position == Vector(10, 50), "The position is updated correctly")
             end
         )
     end

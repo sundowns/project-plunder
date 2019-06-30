@@ -1,0 +1,3 @@
+return {
+    collision_world = {}
+}
