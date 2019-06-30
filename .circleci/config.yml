@@ -15,7 +15,7 @@ commands:
   install_lua:
     description: "Installs lua"
     steps:
-      - run: 
+      - run:
           name: "Install Lua"
           command: |
             sudo apt install lua5.3	
@@ -26,7 +26,7 @@ commands:
     steps:
       - run:
           name: "Install luarocks"
-          command: | 
+          command: |
             sudo apt-get update
             sudo apt-get install luarocks
             luarocks --version
@@ -45,21 +45,33 @@ commands:
           command: |
             sudo luacheck src
 
-# some kind of testrunner?
+  unit_test:
+    description: "Run unit tests"
+    # parameters:
+    # TODO: parameterise the busted target (src atm)
+    steps:
+      - run:
+          name: "Install busted"
+          command: |
+            sudo luarocks install busted
+      - run:
+          name: "run tests"
+          command: |
+            busted tests
 
 jobs:
-  validate_lua:
+  validate_and_test:
     executor: ubuntu
     steps:
       - checkout
       - install_lua
       - install_luarocks
       - luacheck
+      - unit_test
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
-  # Name the workflow "Welcome"
   validate_and_build:
-    # Run the welcome/run job in its own container
     jobs:
-      - validate_lua
+      - validate_and_test
+      # - build_binary
