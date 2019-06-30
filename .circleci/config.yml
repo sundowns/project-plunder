@@ -54,7 +54,7 @@ commands:
           name: "run tests"
           command: |
             cd tests
-            sudo test.lua systems 
+            sudo lua test.lua systems 
 
 jobs:
   validate_and_test:
