@@ -61,7 +61,14 @@ commands:
           name: "build .love"
           command: |
             mkdir build;  
-            zip -9 -r build/grim-gamers.love .
+            mkdir tmp;
+            cp src -r build;
+            cp libs -r build;
+            cp resources -r build;
+            cp main.lua build;
+            cp conf.lua build;
+            cd build;
+            zip -9 -r grim-gamers.love .
       - store_artifacts:
           path: build/grim-gamers.love
           destination: grim-gamers.love
