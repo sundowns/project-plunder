@@ -54,6 +54,19 @@ commands:
             cd tests
             lua test.lua ./**/*_spec.lua
 
+  build_binary:
+    description: "Build and save binary distributable"
+    steps:
+      - run:
+        name: "build .love"
+        command: |
+          echo "gamer" > /tmp/artifacts/thingo
+      # - store_artifacts:
+      #     path: /tmp/artifact-1
+      #     destination: artifact-file
+      - store_artifacts:
+          path: /tmp/artifacts
+
 jobs:
   validate_and_test:
     executor: ubuntu
@@ -63,6 +76,12 @@ jobs:
       - install_luarocks
       - luacheck
       - unit_test
+
+      # - store_artifacts:
+      #     path: /tmp/artifact-1
+      #     destination: artifact-file
+      # - store_artifacts:
+      #     path: /tmp/artifacts
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
