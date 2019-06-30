@@ -48,16 +48,13 @@ commands:
   unit_test:
     description: "Run unit tests"
     # parameters:
-    # TODO: parameterise the busted target (src atm)
+    # TODO: parameterise the directory target (systems atm)
     steps:
-      - run:
-          name: "Install busted"
-          command: |
-            sudo luarocks install busted
       - run:
           name: "run tests"
           command: |
-            busted tests
+            cd tests
+            sudo test.lua systems 
 
 jobs:
   validate_and_test:

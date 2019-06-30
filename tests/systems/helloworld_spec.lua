@@ -1,58 +1,21 @@
-describe(
-    "Busted unit testing framework",
-    function()
-        describe(
-            "should be awesome",
-            function()
-                it(
-                    "should be easy to use",
-                    function()
-                        assert.truthy("Yup.")
-                    end
-                )
-
-                it(
-                    "should have lots of features",
-                    function()
-                        -- deep check comparisons!
-                        assert.are.same({table = "great"}, {table = "great"})
-
-                        -- or check by reference!
-                        assert.are_not.equal({table = "great"}, {table = "great"})
-
-                        assert.truthy("this is a string") -- truthy: not false or nil
-
-                        assert.True(1 == 1)
-                        assert.is_true(1 == 1)
-
-                        assert.falsy(nil)
-                        assert.has_error(
-                            function()
-                                error("Wat")
-                            end,
-                            "Wat"
-                        )
-                    end
-                )
-
-                it(
-                    "should provide some shortcuts to common functions",
-                    function()
-                        assert.are.unique({{thing = 1}, {thing = 2}, {thing = 3}})
-                    end
-                )
-
-                it(
-                    "should have mocks and spies for functional tests",
-                    function()
-                        local thing = require("thing_module")
-                        spy.on(thing, "greet")
-                        thing.greet("Hi!")
-
-                        assert.spy(thing.greet).was.called()
-                        assert.spy(thing.greet).was.called_with("Hi!")
-                    end
-                )
+T(
+    "Given a value of 1",
+    function(T)
+        local value = 1
+        T(
+            "When incremented by 1",
+            function(T)
+                assert(value == 1)
+                value = value + 1
+                T:assert(value == 2, "Then the value is equal to 2")
+            end
+        )
+        T(
+            "When incremented by 2",
+            function(T)
+                assert(value == 1) -- value is 1 again here!
+                value = value + 2
+                T:assert(value == 3, "Then the value is equal to 3")
             end
         )
     end
