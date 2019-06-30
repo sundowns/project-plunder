@@ -1,6 +1,20 @@
-# Development Environment Setup
+# Grim Gamers
 
-Ideas:
+## Development Environment
+
+### VS Code Extensions
+
+- [Love2D Support](https://marketplace.visualstudio.com/items?itemName=pixelbyte-studios.pixelbyte-love2d) - Love API autocomplete. Run Love2D in vscode
+- [Luacheck](https://marketplace.visualstudio.com/items?itemName=rog2.luacheck) - Validate and lints lua code
+- [vscode-lua](https://marketplace.visualstudio.com/items?itemName=trixnz.vscode-lua) - Intellisense / error checking / autocomplete for lua
+
+### Running unit tests
+
+The bash script `tests/run.sh` can be invoked via a terminal to run all unit tests. In windows this is typically done like so (from project root): `./tests/run-unit-tests.sh`.
+
+---
+
+## Brainstorming
 
 - 2D Side-scrolling platformer / metroidvania / roguelite
 - Two worlds: Alive/Real vs Decayed world
