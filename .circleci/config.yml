@@ -55,7 +55,6 @@ commands:
           command: |
             cd tests
             sudo lua test.lua ./**/*_spec.lua
-            sudo lua test.lua ./systems/helloworld_spec.lua
 
 jobs:
   validate_and_test:

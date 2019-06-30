@@ -5,9 +5,8 @@ T(
         T(
             "When incremented by 1",
             function(T)
-                assert(value == 1)
                 value = value + 1
-                T:assert(value == 2, "Then the value is equal to 2")
+                T:assert(false, "Then the value is equal to 2")
             end
         )
         T(
