@@ -47,14 +47,12 @@ commands:
 
   unit_test:
     description: "Run unit tests"
-    # parameters:
-    # TODO: parameterise the directory target (systems atm)
     steps:
       - run:
           name: "run tests"
           command: |
             cd tests
-            sudo lua test.lua ./**/*_spec.lua
+            lua test.lua ./**/*_spec.lua
 
 jobs:
   validate_and_test:
