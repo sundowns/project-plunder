@@ -16,10 +16,12 @@ local camera = _systems.camera()
 
 -- ADD SYSTEMS
 
--- world:addSystem(lighting, "attach_lighting")
--- world:addSystem(lighting, "detach_lighting")
--- world:addSystem(lighting, "update")
--- world:addSystem(lighting, "camera_updated")
+if _config:get("ENABLE_LIGHTING") then
+    world:addSystem(lighting, "attach_lighting")
+    world:addSystem(lighting, "detach_lighting")
+    world:addSystem(lighting, "update")
+    world:addSystem(lighting, "camera_updated")
+end
 
 world:addSystem(motion, "update")
 
@@ -68,9 +70,11 @@ world:addSystem(camera, "update")
 
 -- ENABLE SYSTEMS
 
--- world:enableSystem(lighting, "attach_lighting")
--- world:enableSystem(lighting, "detach_lighting")
--- world:enableSystem(lighting, "camera_updated")
+if _config:get("ENABLE_LIGHTING") then
+    world:enableSystem(lighting, "attach_lighting")
+    world:enableSystem(lighting, "detach_lighting")
+    world:enableSystem(lighting, "camera_updated")
+end
 
 world:enableSystem(encircling, "draw_debug")
 
@@ -103,7 +107,7 @@ world:enableSystem(jumping, "draw")
 world:enableSystem(camera, "attach")
 world:enableSystem(camera, "detach")
 
-function world.enableUpdates()
+function world.enable_updates()
     world:enableSystem(lighting, "update")
     world:enableSystem(sprite_renderer, "update")
     world:enableSystem(motion, "update")
@@ -118,7 +122,7 @@ function world.enableUpdates()
     world:enableSystem(camera, "update")
 end
 
-function world.disableUpdates()
+function world.disable_updates()
     world:disableSystem(lighting, "update")
     world:disableSystem(sprite_renderer, "update")
     world:disableSystem(motion, "update")
@@ -133,6 +137,6 @@ function world.disableUpdates()
     world:disableSystem(camera, "update")
 end
 
-world.enableUpdates()
+world.enable_updates()
 
 return world
