@@ -1,30 +1,14 @@
--- Globals
-_debug = true
-_constants = nil
-_components = nil
-_entities = nil
-_systems = nil
-_fonts = nil
-_collision_world = nil
+_debug = false
 
 local _instances = nil -- should not have visbility of each other...
 
--- Libraries
-_util = nil
-ECS = nil
-Component = nil
-Entity = nil
-Instance = nil
-System = nil
-Vector = nil
-Timer = nil
-Bump = nil
-Camera = nil
-
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest", 0)
+    -- Globals
     _constants = require("src.constants")
     _util = require("libs.util")
+    serialize = require("libs.serialize")
+    _config = require("src.config_manager")
     anim8 = require("libs.anim8")
     resources = require("libs.cargo").init("resources")
     ECS =
@@ -48,7 +32,6 @@ function love.load()
         ["DEBUG"] = resources.fonts.all_business(20)
     }
     love.graphics.setFont(_fonts.DEBUG)
-
     _components = require("src.components")
     _entities = require("src.entities")
     _systems = require("src.systems")
@@ -107,8 +90,11 @@ function love.keyreleased(key)
 end
 
 function love.keypressed(key, _, _)
-    if key == "space" then
-        --love.event.quit("restart")
+    if key == "r" then
+        love.event.quit("restart")
+    elseif key == "l" then
+        _config:toggle("ENABLE_LIGHTING")
+        love.event.quit("restart")
     elseif key == "escape" then
         love.event.quit()
     elseif key == "f1" then

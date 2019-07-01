@@ -1,6 +1,5 @@
 std = {
-    globals = {}, -- these globals can be set and accessed.
-    read_globals = {
+    globals = {
         -- these globals can only be accessed.
         -- Standard Lua library
         "math",
@@ -12,25 +11,35 @@ std = {
         "assert",
         "tostring",
         "print",
+        "setfenv",
+        "type",
+        "loadstring",
         -- Third party libraries
         "love",
         "resources",
         "anim8",
+        "serialize",
         "Vector",
         "Behavior",
         "Timer",
+        "ECS",
         "Entity",
         "Component",
         "System",
         "Instance",
         "Cartographer",
+        "Bump",
         "Camera",
         "_util",
         -- Our globals
         "_constants",
+        "_fonts",
         "_components",
+        "_entities",
         "_systems",
-        "_debug"
+        "_collision_world",
+        "_debug",
+        "_config"
     }
 }
 

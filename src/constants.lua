@@ -1,4 +1,7 @@
 return {
+    DEBUG = {
+        ENABLE_LIGHTING = true
+    },
     COLOURS = {
         WHITE_TORCHLIGHT = {230 / 255, 197 / 255, 143 / 255}, --#e6c58f
         ORANGE_TORCHLIGHT = {255 / 255, 141 / 255, 51 / 255} -- #ff8d33
