@@ -47,17 +47,31 @@ commands:
 
   unit_test:
     description: "Run unit tests"
-    # parameters:
-    # TODO: parameterise the busted target (src atm)
     steps:
-      - run:
-          name: "Install busted"
-          command: |
-            sudo luarocks install busted
       - run:
           name: "run tests"
           command: |
-            busted tests
+            cd tests
+            lua test.lua ./**/*_spec.lua
+
+  build_binary:
+    description: "Build and save binary distributable"
+    steps:
+      - run:
+          name: "build .love"
+          command: |
+            mkdir build;  
+            mkdir tmp;
+            cp src -r build;
+            cp libs -r build;
+            cp resources -r build;
+            cp main.lua build;
+            cp conf.lua build;
+            cd build;
+            zip -9 -r grim-gamers.love .
+      - store_artifacts:
+          path: build/grim-gamers.love
+          destination: grim-gamers.love
 
 jobs:
   validate_and_test:
@@ -68,10 +82,10 @@ jobs:
       - install_luarocks
       - luacheck
       - unit_test
+      - build_binary
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
   validate_and_build:
     jobs:
       - validate_and_test
-      # - build_binary

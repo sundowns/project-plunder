@@ -1,8 +1,8 @@
 local transform =
     Component(
     function(e, position, velocity)
-        assert(position.x and position.y, "Transform component received a non-vector position on creation")
-        assert(velocity.x and velocity.y, "Transform component received a non-vector velocity on creation")
+        assert(position and position.x and position.y, "Transform component received a non-vector position on creation")
+        assert(velocity and velocity.x and velocity.y, "Transform component received a non-vector velocity on creation")
         e.position = position
         e.velocity = velocity
     end

@@ -36,4 +36,4 @@ std = {
 
 codes = true
 
-exclude_files = {"src/shaders/**/*.lua"}
+exclude_files = {"src/shaders/**/*.lua", "tests/**/*.lua"}
