@@ -52,7 +52,8 @@ commands:
           name: "run tests"
           command: |
             cd tests
-            lua test.lua ./**/*_spec.lua
+            ./run.sh
+            # lua test.lua ./**/*_spec.lua
 
   build_binary:
     description: "Build and save binary distributable"

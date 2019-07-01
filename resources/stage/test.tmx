@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="9">
  <tileset firstgid="1" source="../tileset/tileset.tsx"/>
+ <tileset firstgid="37" source="objects.tsx"/>
  <layer id="4" name="Background" width="32" height="16">
   <data encoding="csv">
 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
@@ -44,4 +45,24 @@
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
 </data>
  </layer>
+ <objectgroup id="5" name="Objects">
+  <object id="5" type="static_light_orange" x="143" y="224">
+   <properties>
+    <property name="radius" type="int" value="190"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="7" type="static_light_orange" x="751" y="377">
+   <properties>
+    <property name="radius" type="int" value="30"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="8" type="static_light_orange" x="718" y="156">
+   <properties>
+    <property name="radius" type="int" value="80"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
 </map>

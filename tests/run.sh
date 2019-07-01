@@ -3,6 +3,7 @@
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
 WHITE='\033[1;37m'
+RED='\033[1;31m'
 NC='\033[0m' # No Color
 
 ROOT_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
@@ -27,5 +28,8 @@ printf "\n${CYAN}=====| RUNNING ALL TESTS |=====${NC}\n\n"
 
 printf "${WHITE}"
 ${LUA_PATH} ${ROOT_PATH}/test.lua ${ROOT_PATH}/**/*_spec.lua
-
-printf "\n${GREEN}=====| ALL TESTS PASSED |=====${NC}\n"
+if [ $? -eq 0 ]; then
+    printf "\n${GREEN}=====| ALL TESTS PASSED :D |=====${NC}\n\n"
+else
+    printf "\n${RED}=====| SOME TESTS FAILED :c |=====${NC}\n\n"
+fi

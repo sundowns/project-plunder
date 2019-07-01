@@ -52,23 +52,6 @@ function love.load()
             _constants.PLAYER_LIGHT_SOURCE_RADIUS
         )
     )
-
-    -- Two dummy lights, to be deleted once loading from map file
-    _instances.world:addEntity(
-        _entities.static_light_source(
-            Vector(25, 150),
-            _constants.COLOURS.ORANGE_TORCHLIGHT,
-            _constants.STATIC_LIGHT_SOURCE_RADIUS
-        )
-    )
-
-    _instances.world:addEntity(
-        _entities.static_light_source(
-            Vector(600, 125),
-            _constants.COLOURS.ORANGE_TORCHLIGHT,
-            _constants.STATIC_LIGHT_SOURCE_RADIUS
-        )
-    )
 end
 
 function love.update(dt)

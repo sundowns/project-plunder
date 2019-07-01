@@ -8,8 +8,8 @@ return {
   height = 16,
   tilewidth = 32,
   tileheight = 32,
-  nextlayerid = 5,
-  nextobjectid = 1,
+  nextlayerid = 7,
+  nextobjectid = 9,
   properties = {},
   tilesets = {
     {
@@ -22,6 +22,32 @@ return {
       margin = 0,
       columns = 6,
       image = "../tileset/tileset.png",
+      imagewidth = 192,
+      imageheight = 192,
+      tileoffset = {
+        x = 0,
+        y = 0
+      },
+      grid = {
+        orientation = "orthogonal",
+        width = 32,
+        height = 32
+      },
+      properties = {},
+      terrains = {},
+      tilecount = 36,
+      tiles = {}
+    },
+    {
+      name = "objects",
+      firstgid = 37,
+      filename = "objects.tsx",
+      tilewidth = 32,
+      tileheight = 32,
+      spacing = 0,
+      margin = 0,
+      columns = 6,
+      image = "../tileset/objects.png",
       imagewidth = 192,
       imageheight = 192,
       tileoffset = {
@@ -106,6 +132,64 @@ return {
         2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 2,
         2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 2, 0, 2, 2, 0, 2, 2, 0, 0, 2, 0, 0, 2, 0, 2,
         2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
+      }
+    },
+    {
+      type = "objectgroup",
+      id = 5,
+      name = "Objects",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      draworder = "topdown",
+      properties = {},
+      objects = {
+        {
+          id = 5,
+          name = "",
+          type = "static_light_orange",
+          shape = "point",
+          x = 143,
+          y = 224,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["radius"] = 190
+          }
+        },
+        {
+          id = 7,
+          name = "",
+          type = "static_light_orange",
+          shape = "point",
+          x = 751,
+          y = 377,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["radius"] = 30
+          }
+        },
+        {
+          id = 8,
+          name = "",
+          type = "static_light_orange",
+          shape = "point",
+          x = 718,
+          y = 156,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["radius"] = 80
+          }
+        }
       }
     }
   }

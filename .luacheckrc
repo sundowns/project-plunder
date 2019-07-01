@@ -14,6 +14,8 @@ std = {
         "setfenv",
         "type",
         "loadstring",
+        "match",
+        "package",
         -- Third party libraries
         "love",
         "resources",
@@ -31,6 +33,7 @@ std = {
         "Bump",
         "Camera",
         "_util",
+        "luassert",
         -- Our globals
         "_constants",
         "_fonts",
