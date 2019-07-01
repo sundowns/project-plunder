@@ -53,7 +53,6 @@ commands:
           command: |
             cd tests
             ./run.sh
-            # lua test.lua ./**/*_spec.lua
 
   build_binary:
     description: "Build and save binary distributable"
