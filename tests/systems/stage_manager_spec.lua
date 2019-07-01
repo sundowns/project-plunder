@@ -1,6 +1,8 @@
-require("util.init_ecs") -- Must always come first
+package.path = "./tests/util/?.lua;./util/?.lua;" .. package.path
 
-local mocks = require("util.mocks")
+require("init_ecs") -- Must always come first
+
+local mocks = require("mocks")
 local stage_manager_system = nil
 local world_instance = nil
 

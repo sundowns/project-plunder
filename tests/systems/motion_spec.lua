@@ -1,4 +1,6 @@
-require("util.init_ecs") -- Must always come first
+package.path = "./tests/util/?.lua;./util/?.lua;" .. package.path
+
+require("init_ecs") -- Must always come first
 
 local motion_system = nil
 local world_instance = nil

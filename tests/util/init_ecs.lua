@@ -1,4 +1,6 @@
-package.path = "../libs/?.lua;../libs/?/init.lua;../src/?/init.lua;../src/?.lua;" .. package.path
+package.path =
+    "./libs/?.lua;../libs/?.lua;./libs/?/init.lua;../libs/?/init.lua;./src/?/init.lua;../src/?/init.lua;../src/?.lua;./src/?.lua;" ..
+    package.path
 
 local function init_ecs_world()
     ECS =
@@ -16,12 +18,11 @@ local function init_ecs_world()
 end
 
 local function load_dependencies()
-    Cartographer = require("cartographer")
     Timer = require("timer")
     Vector = require("vector")
     Behavior = require("behavior")
     _util = require("util")
-    init_ecs_world()
 end
 
 load_dependencies()
+init_ecs_world()
