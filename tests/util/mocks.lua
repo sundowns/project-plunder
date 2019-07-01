@@ -1,13 +1,15 @@
 package.path = "tests/data/?.lua;data/?.lua;" .. package.path
 
-local assert = require "luassert"
-local match = require "luassert.match"
 local spy = require "luassert.spy"
 
 -- TODO: Use spies to null functions so we can track invocations!!
 
 local mocks = {}
 mocks._null_fn = function()
+    return spy.new(
+        function()
+        end
+    )
 end
 
 -- function mocks:test(title, test)
@@ -18,10 +20,10 @@ end
 
 function mocks:love()
     love = {
-        load = self._null_fn,
+        load = self._null_fn(),
         graphics = {},
         filesystem = {
-            load = self._null_fn
+            load = self._null_fn()
         }
     }
 end

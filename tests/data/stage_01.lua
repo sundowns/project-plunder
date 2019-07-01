@@ -1,9 +1,9 @@
 return {
     layers = {
         ["World"] = {
-            data = {1},
-            height = 1,
-            width = 1
+            data = {1, 1, 1, 1},
+            height = 2,
+            width = 2
         }
     }
 }

@@ -2,6 +2,8 @@ package.path = "./tests/util/?.lua;./util/?.lua;" .. package.path
 
 require("init_ecs") -- Must always come first
 
+local assert = require "luassert"
+local match = require "luassert.match"
 local mocks = require("mocks")
 local stage_manager_system = nil
 local world_instance = nil
@@ -13,7 +15,7 @@ local function init_system(entities)
     world_instance:enableSystem(stage_manager_system, "load_stage")
     stage_manager_system:set_collision_world(
         {
-            add = mocks._null_fn
+            add = mocks._null_fn()
         }
     )
     if entities then
@@ -69,14 +71,14 @@ test(
                 test(
                     "Given map with valid tiles defined in 'World' layer",
                     function(test)
-                        -- Assert will error
+                        -- Act
                         world_instance:emit("load_stage", "stage_01")
-                        _util.t.print(stage_manager_system, 1)
-                        -- test:error(
-                        --     function()
-                        --     end,
-                        --     "then it throws an error"
-                        -- )
+
+                        -- Assert
+                        test:assert(
+                            assert.spy(stage_manager_system.collision_world.add).was.called(4),
+                            "The expected number of tiles were added to the collision world"
+                        )
                     end
                 )
             end
