@@ -11,7 +11,11 @@ local function init_system(entities)
     stage_manager_system = require("systems.stage_manager")()
     world_instance:addSystem(stage_manager_system, "load_stage")
     world_instance:enableSystem(stage_manager_system, "load_stage")
-    stage_manager_system:set_collision_world({})
+    stage_manager_system:set_collision_world(
+        {
+            add = mocks._null_fn
+        }
+    )
     if entities then
         for _, v in pairs(entities) do
             world_instance:addEntity(v)
@@ -55,10 +59,24 @@ test(
                         -- Assert will error
                         test:error(
                             function()
-                                world_instance:emit("load_stage", "stage_01")
+                                world_instance:emit("load_stage", "stage_00")
                             end,
                             "then it throws an error"
                         )
+                    end
+                )
+
+                test(
+                    "Given map with valid tiles defined in 'World' layer",
+                    function(test)
+                        -- Assert will error
+                        world_instance:emit("load_stage", "stage_01")
+                        _util.t.print(stage_manager_system, 1)
+                        -- test:error(
+                        --     function()
+                        --     end,
+                        --     "then it throws an error"
+                        -- )
                     end
                 )
             end

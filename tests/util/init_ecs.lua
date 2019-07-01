@@ -22,6 +22,7 @@ local function load_dependencies()
     Vector = require("vector")
     Behavior = require("behavior")
     _util = require("util")
+    _constants = require("constants")
 end
 
 load_dependencies()

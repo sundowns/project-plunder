@@ -10,7 +10,7 @@
 
 ### Running unit tests
 
-The bash script `tests/run.sh` can be invoked via a terminal to run all unit tests. In windows this is typically done like so (from project root): `./tests/run-unit-tests.sh`.
+The bash script `tests/run.sh` can be invoked via a terminal to run all unit tests. This script can be invoked from the project root (`./tests/run.sh`) or the tests directory itself (`./run.sh`)
 
 ---
 
