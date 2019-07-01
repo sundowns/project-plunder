@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+WHITE='\033[1;37m'
+NC='\033[0m' # No Color
+
 ROOT_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
 LUA_PATH='not set'
@@ -18,4 +23,9 @@ elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
     LUA_PATH='lua.exe'
 fi
 
+printf "\n${CYAN}=====| RUNNING ALL TESTS |=====${NC}\n\n"
+
+printf "${WHITE}"
 ${LUA_PATH} ${ROOT_PATH}/test.lua ${ROOT_PATH}/**/*_spec.lua
+
+printf "\n${GREEN}=====| ALL TESTS PASSED |=====${NC}\n"

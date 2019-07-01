@@ -127,7 +127,6 @@ if arg and arg[0] and arg[0]:gmatch("test.lua") then
     for i = 1, #arg do
         dofile(arg[i])
     end
-    print("=====| ALL TESTS PASSED |=====")
     _G.T = nil
 end
 
