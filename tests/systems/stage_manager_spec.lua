@@ -20,10 +20,21 @@ local function init_system(entities)
     end
 end
 
+-- TODO: make below all common code
 local test = function(title, test)
     print(title .. " - running.")
     T(title, test)
     print(title .. " - passed.")
+end
+
+local expect = function(t, condition, message)
+    t:assert(condition, message)
+    print("  " .. t.description .. "| " .. message .. " - success.")
+end
+
+local expect_error = function(t, action, message)
+    t:error(action, message)
+    print("  " .. t.description .. "| " .. message .. " - success.")
 end
 
 local reset_dependecies = function()
@@ -52,7 +63,8 @@ test(
                         reset_dependecies()
                         stage_manager_system:set_collision_world(nil)
                         -- Act & Assert will error
-                        test:error(
+                        expect_error(
+                            test,
                             function()
                                 world_instance:emit("load_stage", "stage_00")
                             end,
@@ -67,7 +79,8 @@ test(
                         -- Arrange
                         reset_dependecies()
                         -- Act & Assert will error
-                        test:error(
+                        expect_error(
+                            test,
                             function()
                                 world_instance:emit("load_stage", "stage_00")
                             end,
@@ -85,11 +98,13 @@ test(
                         world_instance:emit("load_stage", "stage_01")
 
                         -- Assert
-                        test:assert(
+                        expect(
+                            test,
                             assert.spy(stage_manager_system.collision_world.add).was.called(4),
                             "The expected number of tiles were added to the stage_manager table"
                         )
-                        test:assert(
+                        expect(
+                            test,
                             #stage_manager_system.tiles == 4,
                             "The expected number of tiles were added to the collision world"
                         )
@@ -106,15 +121,23 @@ test(
                         world_instance:emit("load_stage", "stage_02")
 
                         -- Assert
-                        test:assert(
+                        expect(
+                            test,
                             #stage_manager_system.objects == 2,
                             "The expected number of objects were added to the stage_manager table"
                         )
-                        test:assert(
+                        expect(
+                            test,
+                            world_instance.entities.size == 2,
+                            "The expected number of entities were added to the instance"
+                        )
+                        expect(
+                            test,
                             stage_manager_system.objects[1].type == "static_light_orange",
                             "The first object has the correct type"
                         )
-                        test:assert(
+                        expect(
+                            test,
                             stage_manager_system.objects[2].type == "static_light_orange",
                             "The second object has the correct type"
                         )
