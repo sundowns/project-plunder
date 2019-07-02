@@ -74,7 +74,8 @@ commands:
       - run:
           name: "Build releases"
           command: |
-            love-release -l 11.2 -D -W 32;
+            love-release -l 11.2 -D -W 32
+            true
       - store_artifacts:
           path: dist
 
