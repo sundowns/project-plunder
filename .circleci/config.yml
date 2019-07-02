@@ -18,8 +18,9 @@ commands:
       - run:
           name: "Install Lua"
           command: |
-            sudo apt install lua5.3	
+            sudo apt install lua5.3
             sudo apt-get install liblua5.3-dev
+            lua -v
 
   install_luarocks:
     description: "Installs luarocks"
@@ -53,7 +54,7 @@ commands:
       - run:
           name: "Install Lua"
           command: |
-            sudo apt install lua5.3	
+            sudo apt install lua5.3
       - run:
           name: "Run tests"
           command: |
