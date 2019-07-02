@@ -37,8 +37,6 @@ commands:
 
   luacheck:
     description: "Run luacheck"
-    # parameters:
-    # TODO: parameterise the luacheck target (src atm)
     steps:
       - run:
           name: "Install luacheck"
@@ -69,12 +67,12 @@ commands:
       - run:
           name: "build releases"
           command: |
-            love-release -D -W 32;
+            love-release -l 11.2 -D -W 32;
       - store_artifacts:
           path: dist
 
 jobs:
-  validate_and_test:
+  test_and_build:
     executor: ubuntu
     steps:
       - checkout
@@ -88,4 +86,4 @@ jobs:
 workflows:
   validate_and_build:
     jobs:
-      - validate_and_test
+      - test_and_build
