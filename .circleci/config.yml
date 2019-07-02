@@ -51,6 +51,10 @@ commands:
     description: "Run unit tests"
     steps:
       - run:
+          name: "Install Lua"
+          command: |
+            sudo apt install lua5.3	
+      - run:
           name: "Run tests"
           command: |
             cd tests
@@ -80,7 +84,7 @@ commands:
           destination: builds
 
 jobs:
-  test_and_build:
+  validate_and_test:
     executor: ubuntu
     steps:
       - checkout
@@ -88,10 +92,22 @@ jobs:
       - install_luarocks
       - luacheck
       - unit_test
+  build_binaries:
+    executor: ubuntu
+    steps:
+      - checkout
+      - install_lua
+      - install_luarocks
       - build_binaries
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
   validate_and_build:
     jobs:
-      - test_and_build
+      - validate_and_test
+      - build_binaries:
+          requires:
+            - validate_and_test
+          filters:
+            branches:
+              only: love-release # TODO: master
