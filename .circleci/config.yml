@@ -19,7 +19,7 @@ commands:
           name: "Install Lua"
           command: |
             sudo apt install lua5.3	
-            sudo apt-get install liblua5.2-dev
+            sudo apt-get install liblua5.3-dev
 
   install_luarocks:
     description: "Installs luarocks"
@@ -66,21 +66,11 @@ commands:
           command: |
             sudo luarocks install love-release
       - run:
-          name: "build .love"
+          name: "build releases"
           command: |
-            mkdir build;
-            cp src -r build;
-            cp libs -r build;
-            cp resources -r build;
-            cp main.lua build;
-            cp conf.lua build;
-            cd build;
-            love-release -D -W 32 -M;
-            ls;
-            # zip -9 -r grim-gamers.love .
+            love-release -D -M -W 32;
       - store_artifacts:
-          path: build
-          # destination: grim-gamers.love
+          path: dist
 
 jobs:
   validate_and_test:
