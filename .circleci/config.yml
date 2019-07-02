@@ -64,11 +64,12 @@ commands:
       - run:
           name: "install love-release"
           command: |
+            sudo apt-get install libzip-dev
             sudo luarocks install love-release
       - run:
           name: "build releases"
           command: |
-            love-release -D -M -W 32;
+            love-release -D -W 32;
       - store_artifacts:
           path: dist
 
