@@ -6,6 +6,24 @@ WHITE='\033[1;37m'
 RED='\033[1;31m'
 NC='\033[0m' # No Color
 
+
+# CI=false;
+
+while getopts :c: option
+do
+case "${option}"
+in
+c) CI=$OPTARG;;
+esac
+done
+
+echo $CI
+if [ $CI == true ]; then
+    alias lua=lua5.3
+    echo "wtf"
+fi
+    lua -v
+
 ROOT_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
 LUA_PATH='not set'
