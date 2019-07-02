@@ -51,7 +51,7 @@ commands:
     description: "Run unit tests"
     steps:
       - run:
-          name: "run tests"
+          name: "Run tests"
           command: |
             cd tests
             ./run.sh
@@ -60,12 +60,19 @@ commands:
     description: "Build and save binary distributable"
     steps:
       - run:
-          name: "install love-release"
+          name: "Install love"
+          command: |
+            sudo add-apt-repository ppa:bartbes/love-stable
+            sudo apt-get update
+            sudo apt-get install love
+            love --version
+      - run:
+          name: "Install love-release"
           command: |
             sudo apt-get install libzip-dev
             sudo luarocks install love-release
       - run:
-          name: "build releases"
+          name: "Build releases"
           command: |
             love-release -l 11.2 -D -W 32;
       - store_artifacts:
