@@ -5,7 +5,7 @@ function love.conf(t)
     t.console = true
 
     t.releases = {
-        title = "Grim Gamers", -- The project title (string)
+        title = "grim-gamers-2-dev", -- The project title (string)
         package = nil, -- The project command and package name (string)
         loveVersion = 11.2, -- The project LÖVE version
         version = "0.1", -- The project version

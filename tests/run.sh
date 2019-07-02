@@ -30,6 +30,8 @@ printf "${WHITE}"
 ${LUA_PATH} ${ROOT_PATH}/test.lua ${ROOT_PATH}/**/*_spec.lua
 if [ $? -eq 0 ]; then
     printf "\n${GREEN}=====| ALL TESTS PASSED :D |=====${NC}\n\n"
+    exit 0
 else
     printf "\n${RED}=====| SOME TESTS FAILED :c |=====${NC}\n\n"
+    exit 1
 fi
