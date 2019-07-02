@@ -54,24 +54,29 @@ commands:
             cd tests
             ./run.sh
 
-  build_binary:
+  build_binaries:
     description: "Build and save binary distributable"
     steps:
       - run:
+          name: "install love-release"
+          command: |
+            sudo luarocks install love-release
+      - run:
           name: "build .love"
           command: |
-            mkdir build;  
-            mkdir tmp;
+            mkdir build;
             cp src -r build;
             cp libs -r build;
             cp resources -r build;
             cp main.lua build;
             cp conf.lua build;
             cd build;
-            zip -9 -r grim-gamers.love .
+            love-release -D -W 32 -M;
+            ls;
+            # zip -9 -r grim-gamers.love .
       - store_artifacts:
-          path: build/grim-gamers.love
-          destination: grim-gamers.love
+          path: build
+          # destination: grim-gamers.love
 
 jobs:
   validate_and_test:
@@ -82,7 +87,7 @@ jobs:
       - install_luarocks
       - luacheck
       - unit_test
-      - build_binary
+      - build_binaries
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
