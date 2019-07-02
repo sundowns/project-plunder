@@ -27,9 +27,13 @@ commands:
       - run:
           name: "Install luarocks"
           command: |
-            sudo apt-get update
-            sudo apt-get install luarocks
-            luarocks --version
+            sudo apt install build-essential libreadline-dev
+            wget https://luarocks.org/releases/luarocks-3.1.3.tar.gz
+            tar zxpf luarocks-3.1.3.tar.gz
+            cd luarocks-3.1.3
+            ./configure
+            make build
+            sudo make install
 
   luacheck:
     description: "Run luacheck"
