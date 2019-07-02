@@ -20,7 +20,6 @@ commands:
           command: |
             sudo apt install lua5.3
             sudo apt-get install liblua5.3-dev
-            lua -v
 
   install_luarocks:
     description: "Installs luarocks"
@@ -52,13 +51,10 @@ commands:
     description: "Run unit tests"
     steps:
       - run:
-          name: "Install Lua"
-          command: |
-            sudo apt install lua5.3
-      - run:
           name: "Run tests"
           command: |
             cd tests
+            alias lua=lua5.3
             ./run.sh
 
   build_binaries:
