@@ -6,23 +6,9 @@ WHITE='\033[1;37m'
 RED='\033[1;31m'
 NC='\033[0m' # No Color
 
-
-# CI=false;
-
-while getopts :c: option
-do
-case "${option}"
-in
-c) CI=$OPTARG;;
-esac
-done
-
-echo $CI
-if [ $CI == true ]; then
-    alias lua=lua5.3
-    echo "wtf"
-fi
-    lua -v
+# TODO: remove these
+lua -v 
+lua5.3 -v
 
 ROOT_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
@@ -34,6 +20,9 @@ if [ "$(uname)" == "Darwin" ]; then
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # Do something under GNU/Linux platform
     LUA_PATH='lua'
+    if [ $1 -eq "-c" ]; then
+       LUA_PATH='lua5.3'
+    fi
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     # Do something under 32 bits Windows NT platform
     LUA_PATH='lua.exe'
