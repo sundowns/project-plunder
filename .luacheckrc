@@ -43,7 +43,8 @@ std = {
         "_collision_world",
         "_debug",
         "_config"
-    }
+    },
+    read_globals = {"T"}
 }
 
 codes = true

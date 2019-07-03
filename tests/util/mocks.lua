@@ -2,8 +2,6 @@ package.path = "tests/data/?.lua;data/?.lua;" .. package.path
 
 local spy = require "luassert.spy"
 
--- TODO: Use spies to null functions so we can track invocations!!
-
 local mocks = {}
 mocks._null_fn = function()
 end

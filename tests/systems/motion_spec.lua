@@ -1,6 +1,7 @@
 package.path = "./tests/util/?.lua;./util/?.lua;" .. package.path
 
-require("init_ecs") -- Must always come first
+require("init_ecs")
+local _t = require("testing")
 
 local motion_system = nil
 local world_instance = nil
@@ -17,29 +18,12 @@ local function init_system(entities)
     end
 end
 
--- TODO: make below all common code
-local test = function(title, test)
-    print(title .. " - running.")
-    T(title, test)
-    print(title .. " - passed.")
-end
-
-local expect = function(t, condition, message)
-    t:assert(condition, message)
-    print("  " .. t.description .. "| " .. message .. " - success.")
-end
-
-local expect_error = function(t, action, message)
-    t:error(action, message)
-    print("  " .. t.description .. "| " .. message .. " - success.")
-end
-
-test(
+_t.fixture(
     "Motion System",
-    function(test)
-        test(
+    function(fixture)
+        fixture(
             "Given an entity with no velocity",
-            function(test)
+            function(fixture)
                 -- Arrange data/world for test
                 init_system(
                     {
@@ -52,13 +36,13 @@ test(
 
                 -- Test / assert the outcomes
                 local transform = motion_system.pool:get(1):get(_components.transform)
-                expect(test, transform.position == Vector(0, 0), "The position does not change")
+                _t.expect(fixture, transform.position == Vector(0, 0), "The position does not change")
             end
         )
 
-        test(
+        fixture(
             "Given an entity with some velocity",
-            function(test)
+            function(fixture)
                 -- Arrange data/world for test
                 init_system(
                     {
@@ -71,7 +55,7 @@ test(
 
                 -- Test / assert the outcomes
                 local transform = motion_system.pool:get(1):get(_components.transform)
-                expect(test, transform.position == Vector(10, 50), "The position is updated correctly")
+                _t.expect(fixture, transform.position == Vector(10, 50), "The position is updated correctly")
             end
         )
     end
