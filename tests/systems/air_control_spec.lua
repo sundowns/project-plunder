@@ -39,6 +39,10 @@ _t.fixture(
                     "Given no input",
                     function(fixture)
                         --  assert: it has no velocity
+                        world_instance:emit("update", 1)
+
+                        local air_control_component = air_control_system.pool:get(1):get(_components.air_control)
+                        _t.expect(fixture, air_control_component.x_velocity == 0, "The position does not change")
                         fixture(
                             "when updating entity without air_control velocity",
                             function(fixture)

@@ -2,7 +2,7 @@
 local testing = {}
 
 function testing.fixture(title, test)
-    print(">> " .. title .. " - running.")
+    print(">> " .. title .. " - running.") -- TODO: colour these??
     T(title, test)
     print(">> " .. title .. " - finished.")
 end
