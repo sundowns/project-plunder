@@ -54,8 +54,7 @@ commands:
           name: "Run tests"
           command: |
             cd tests
-            alias lua=lua5.3
-            ./run.sh
+            ./run.sh -c
 
   build_binaries:
     description: "Build and save binary distributable"
