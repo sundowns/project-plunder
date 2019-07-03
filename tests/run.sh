@@ -8,6 +8,14 @@ NC='\033[0m' # No Color
 
 ROOT_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
+is_ci=false
+
+while getopts 'c' flag; do
+  case "${flag}" in
+    c) is_ci=true ;;
+  esac
+done
+
 LUA_PATH='not set'
 
 if [ "$(uname)" == "Darwin" ]; then
@@ -16,6 +24,9 @@ if [ "$(uname)" == "Darwin" ]; then
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # Do something under GNU/Linux platform
     LUA_PATH='lua'
+    if [ "$is_ci" = true ]; then
+       LUA_PATH='lua5.3'
+    fi
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     # Do something under 32 bits Windows NT platform
     LUA_PATH='lua.exe'
@@ -30,6 +41,8 @@ printf "${WHITE}"
 ${LUA_PATH} ${ROOT_PATH}/test.lua ${ROOT_PATH}/**/*_spec.lua
 if [ $? -eq 0 ]; then
     printf "\n${GREEN}=====| ALL TESTS PASSED :D |=====${NC}\n\n"
+    exit 0
 else
     printf "\n${RED}=====| SOME TESTS FAILED :c |=====${NC}\n\n"
+    exit 1
 fi
