@@ -111,4 +111,4 @@ workflows:
             - validate_and_test
           filters:
             branches:
-              only: love-release # TODO: master
+              only: master
