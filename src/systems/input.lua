@@ -2,8 +2,9 @@ local input = System({_components.controlled})
 
 function input:init()
     self.timer = Timer.new()
+    self.polling_rate = 0.01
     self.timer:every(
-        0.01,
+        self.polling_rate,
         function()
             self:poll_keys()
         end

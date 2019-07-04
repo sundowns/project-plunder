@@ -7,6 +7,7 @@ local air_control =
     end
 )
 
+-- This is triggered every key_poll, that is there is an 'assumed delta' equal to the polling rate
 function air_control:move(modifier)
     self.x_velocity = self.x_velocity + self.acceleration * modifier
     if math.abs(self.x_velocity) > self.max_speed then

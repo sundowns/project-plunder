@@ -27,26 +27,41 @@ _t.fixture(
         fixture(
             "Given an entity",
             function(fixture)
+                local no_velocity =
+                    Entity():give(_components.transform, Vector(0, 0), Vector(0, 0)):give(_components.controlled):give(
+                    _components.air_control
+                ):apply()
+
                 init_system(
                     {
-                        Entity():give(_components.transform, Vector(0, 0), Vector(0, 0)):give(_components.controlled):give(
-                            _components.air_control
-                        ):apply()
+                        no_velocity
                     }
                 )
 
                 fixture(
                     "Given no input",
                     function(fixture)
-                        --  assert: it has no velocity
-                        world_instance:emit("update", 1)
-
-                        local air_control_component = air_control_system.pool:get(1):get(_components.air_control)
-                        _t.expect(fixture, air_control_component.x_velocity == 0, "The position does not change")
                         fixture(
-                            "when updating entity without air_control velocity",
+                            "when updating",
                             function(fixture)
-                                -- assert: it does not move
+                                _t.expect(
+                                    fixture,
+                                    air_control_system.pool:get(1):get(_components.air_control).x_velocity == 0,
+                                    "the aerial drift velocity does not change"
+                                )
+                            end
+                        )
+
+                        fixture(
+                            "when updating an entity without aerial drift velocity",
+                            function(fixture)
+                                world_instance:emit("update", 1)
+                                local no_velocity_entity = air_control_system.pool:get(1)
+                                _t.expect(
+                                    fixture,
+                                    no_velocity_entity:get(_components.transform).position == Vector(0, 0),
+                                    "the position does not change"
+                                )
                             end
                         )
                     end
@@ -56,10 +71,27 @@ _t.fixture(
                     "Given a left input",
                     function(fixture)
                         --  assert: it has negative x velocity
+                        air_control_system:move("left", air_control_system.pool:get(1))
                         fixture(
-                            "when updating entity with negative air_control velocity",
+                            "",
+                            function()
+                                _t.expect(
+                                    fixture,
+                                    air_control_system.pool:get(1):get(_components.air_control).x_velocity < 0,
+                                    "the aerial drift velocity decreases"
+                                )
+                            end
+                        )
+
+                        fixture(
+                            "when updating an entity with a negative aerial drift velocity (moving left)",
                             function(fixture)
-                                -- assert: it moves to the left
+                                air_control_system:update(1)
+                                _t.expect(
+                                    fixture,
+                                    air_control_system.pool:get(1):get(_components.transform).position.x < 0,
+                                    "the transform translates accordingly"
+                                )
                             end
                         )
                     end
@@ -68,11 +100,44 @@ _t.fixture(
                 fixture(
                     "Given a right input",
                     function(fixture)
-                        --  assert: it has positive x velocity
+                        air_control_system:move("right", air_control_system.pool:get(1))
                         fixture(
-                            "when updating entity with positive air_control velocity",
+                            "",
+                            function()
+                                _t.expect(
+                                    fixture,
+                                    air_control_system.pool:get(1):get(_components.air_control).x_velocity > 0,
+                                    "the aerial drift velocity increases"
+                                )
+                            end
+                        )
+
+                        fixture(
+                            "when updating an entity with a positive aerial drift velocity (moving right)",
                             function(fixture)
-                                -- assert: it moves to the right
+                                air_control_system:update(1)
+                                _t.expect(
+                                    fixture,
+                                    air_control_system.pool:get(1):get(_components.transform).position.x > 0,
+                                    "the transform translates accordingly"
+                                )
+                            end
+                        )
+                    end
+                )
+
+                fixture(
+                    "Given some unknown input",
+                    function(fixture)
+                        air_control_system:move("jump", air_control_system.pool:get(1))
+                        fixture(
+                            "when updating",
+                            function(fixture)
+                                _t.expect(
+                                    fixture,
+                                    air_control_system.pool:get(1):get(_components.air_control).x_velocity == 0,
+                                    "the aerial drift velocity does not change"
+                                )
                             end
                         )
                     end
