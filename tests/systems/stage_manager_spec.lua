@@ -81,11 +81,6 @@ _t.fixture(
                 -- Assert
                 _t.expect(
                     fixture,
-                    assert.spy(stage_manager_system.collision_world.add).was.called(4),
-                    "the expected number of tiles were added to the stage_manager table"
-                )
-                _t.expect(
-                    fixture,
                     #stage_manager_system.tiles == 4,
                     "the expected number of tiles were added to the collision world"
                 )

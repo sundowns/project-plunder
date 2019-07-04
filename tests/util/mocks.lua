@@ -19,10 +19,16 @@ function mocks:love()
     }
 end
 
-function mocks.mappy(_)
+function mocks:mappy()
     Mappy = {
         load = function(path)
-            return require(path)
+            local stage = require(path)
+            if stage.layers["World"] then
+                stage.layers["World"].getCollidersIter = function()
+                    return self.null_spy()
+                end
+            end
+            return stage
         end
     }
 end

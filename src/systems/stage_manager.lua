@@ -20,6 +20,10 @@ function stage_manager:load_stage(path)
         end
     end
 
+    for rx, ry, rw, rh in self.stage.layers["World"]:getCollidersIter() do
+        self.collision_world:add({is_geometry = true}, rx, ry, rw, rh)
+    end
+
     if self.stage.layers["Objects"] then
         local object_data = self:read_object_layer(self.stage.layers["Objects"])
         for _, object in pairs(object_data.objects) do
@@ -35,7 +39,6 @@ function stage_manager:add_tile(id, _, columns)
     local new_tile = {is_tile = true, position = Vector(x, y)}
 
     table.insert(self.tiles, new_tile)
-    self.collision_world:add(new_tile, x, y, _constants.TILE_WIDTH, _constants.TILE_HEIGHT)
 end
 
 function stage_manager:add_object(object)
