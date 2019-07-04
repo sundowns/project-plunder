@@ -23,7 +23,7 @@ end
 
 local reset_dependecies = function()
     mocks:love()
-    mocks:cartographer()
+    mocks:mappy()
     stage_manager_system:set_collision_world(
         {
             add = mocks.null_spy()

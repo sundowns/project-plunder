@@ -19,8 +19,8 @@ function mocks:love()
     }
 end
 
-function mocks.cartographer(_)
-    Cartographer = {
+function mocks.mappy(_)
+    Mappy = {
         load = function(path)
             return require(path)
         end

@@ -24,7 +24,7 @@ function love.load()
     Vector = require("libs.vector")
     Behavior = require("libs.behavior")
     Bump = require("libs.bump")
-    Cartographer = require("libs.cartographer")
+    Mappy = require("libs.mappy")
     Camera = require("libs.camera")
 
     _fonts = {

@@ -8,7 +8,7 @@ function stage_manager:init()
 end
 
 function stage_manager:load_stage(path)
-    self.stage = Cartographer.load(path)
+    self.stage = Mappy.load(path)
     assert(self.collision_world, "stage_manager attempted to load stage with collision world unset")
     assert(self.stage.layers["World"], "attempted to load map without 'World' tile layer")
 

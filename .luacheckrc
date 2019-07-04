@@ -29,7 +29,7 @@ std = {
         "Component",
         "System",
         "Instance",
-        "Cartographer",
+        "Mappy",
         "Bump",
         "Camera",
         "_util",
