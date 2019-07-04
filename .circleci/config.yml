@@ -79,7 +79,7 @@ commands:
           name: "Build releases"
           command: |
             pwd
-            love-release -M -D
+            love-release -M -D -W 32
       - store_artifacts:
           path: dist
           destination: builds
