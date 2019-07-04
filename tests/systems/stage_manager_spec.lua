@@ -3,7 +3,6 @@ package.path = "./tests/util/?.lua;./util/?.lua;" .. package.path
 require("init_ecs") -- Must always come first
 
 local assert = require "luassert"
-local match = require "luassert.match"
 local mocks = require("mocks")
 local stage_manager_system = nil
 local world_instance = nil
@@ -13,11 +12,7 @@ local function init_system(entities)
     stage_manager_system = require("systems.stage_manager")()
     world_instance:addSystem(stage_manager_system, "load_stage")
     world_instance:enableSystem(stage_manager_system, "load_stage")
-    stage_manager_system:set_collision_world(
-        {
-            add = mocks._null_fn()
-        }
-    )
+
     if entities then
         for _, v in pairs(entities) do
             world_instance:addEntity(v)
@@ -25,28 +20,51 @@ local function init_system(entities)
     end
 end
 
+-- TODO: make below all common code
 local test = function(title, test)
     print(title .. " - running.")
     T(title, test)
     print(title .. " - passed.")
 end
 
+local expect = function(t, condition, message)
+    t:assert(condition, message)
+    print("  " .. t.description .. "| " .. message .. " - success.")
+end
+
+local expect_error = function(t, action, message)
+    t:error(action, message)
+    print("  " .. t.description .. "| " .. message .. " - success.")
+end
+
+local reset_dependecies = function()
+    mocks:love()
+    mocks:cartographer()
+    stage_manager_system:set_collision_world(
+        {
+            add = mocks.null_spy()
+        }
+    )
+end
+
 test(
     "Stage Manager System",
     function(test)
-        mocks:love()
-        mocks:cartographer()
         test(
             "Stage Loading Context",
             function(test)
                 init_system({})
+                reset_dependecies()
 
                 test(
                     "Given unset collision data",
                     function(test)
+                        -- Arrange
+                        reset_dependecies()
                         stage_manager_system:set_collision_world(nil)
-                        -- Assert will error
-                        test:error(
+                        -- Act & Assert will error
+                        expect_error(
+                            test,
                             function()
                                 world_instance:emit("load_stage", "stage_00")
                             end,
@@ -58,8 +76,11 @@ test(
                 test(
                     "Given map with no world layer",
                     function(test)
-                        -- Assert will error
-                        test:error(
+                        -- Arrange
+                        reset_dependecies()
+                        -- Act & Assert will error
+                        expect_error(
+                            test,
                             function()
                                 world_instance:emit("load_stage", "stage_00")
                             end,
@@ -71,13 +92,54 @@ test(
                 test(
                     "Given map with valid tiles defined in 'World' layer",
                     function(test)
+                        -- Arrange
+                        reset_dependecies()
                         -- Act
                         world_instance:emit("load_stage", "stage_01")
 
                         -- Assert
-                        test:assert(
+                        expect(
+                            test,
                             assert.spy(stage_manager_system.collision_world.add).was.called(4),
+                            "The expected number of tiles were added to the stage_manager table"
+                        )
+                        expect(
+                            test,
+                            #stage_manager_system.tiles == 4,
                             "The expected number of tiles were added to the collision world"
+                        )
+                    end
+                )
+
+                test(
+                    "Given map with valid objects defined in 'Object' layer",
+                    function(test)
+                        -- Arrange
+                        reset_dependecies()
+
+                        -- Act
+                        world_instance:emit("load_stage", "stage_02")
+
+                        -- Assert
+                        expect(
+                            test,
+                            #stage_manager_system.objects == 2,
+                            "The expected number of objects were added to the stage_manager table"
+                        )
+                        expect(
+                            test,
+                            world_instance.entities.size == 2,
+                            "The expected number of entities were added to the instance"
+                        )
+                        expect(
+                            test,
+                            stage_manager_system.objects[1].type == "static_light_orange",
+                            "The first object has the correct type"
+                        )
+                        expect(
+                            test,
+                            stage_manager_system.objects[2].type == "static_light_orange",
+                            "The second object has the correct type"
                         )
                     end
                 )

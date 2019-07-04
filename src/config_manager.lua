@@ -2,12 +2,11 @@ local config_manager = {}
 local config_path = "config.lua"
 local get_default_config = function()
     return {
-        ["ENABLE_LIGHTING"] = false
+        ["ENABLE_LIGHTING"] = true
     }
 end
 
 function config_manager:toggle(key)
-    _util.t.print(self._config)
     assert(self._config[key] ~= nil, "Attempted to toggle non-existent config value: " .. key)
     assert(type(self._config[key]) == "boolean")
 

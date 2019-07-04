@@ -18,8 +18,9 @@ commands:
       - run:
           name: "Install Lua"
           command: |
-            sudo apt install lua5.3	
-            sudo apt-get install liblua5.2-dev
+            sudo apt-get update
+            sudo apt install lua5.3
+            sudo apt-get install liblua5.3-dev
 
   install_luarocks:
     description: "Installs luarocks"
@@ -28,13 +29,17 @@ commands:
           name: "Install luarocks"
           command: |
             sudo apt-get update
-            sudo apt-get install luarocks
-            luarocks --version
+            sudo apt install build-essential libreadline-dev
+            mkdir tmp && cd tmp
+            wget https://luarocks.org/releases/luarocks-3.1.3.tar.gz
+            tar zxpf luarocks-3.1.3.tar.gz
+            cd luarocks-3.1.3
+            ./configure
+            make build
+            sudo make install
 
   luacheck:
     description: "Run luacheck"
-    # parameters:
-    # TODO: parameterise the luacheck target (src atm)
     steps:
       - run:
           name: "Install luacheck"
@@ -49,29 +54,35 @@ commands:
     description: "Run unit tests"
     steps:
       - run:
-          name: "run tests"
+          name: "Run tests"
           command: |
             cd tests
-            lua test.lua ./**/*_spec.lua
+            ./run.sh -c
 
-  build_binary:
+  build_binaries:
     description: "Build and save binary distributable"
     steps:
       - run:
-          name: "build .love"
+          name: "Install love"
           command: |
-            mkdir build;  
-            mkdir tmp;
-            cp src -r build;
-            cp libs -r build;
-            cp resources -r build;
-            cp main.lua build;
-            cp conf.lua build;
-            cd build;
-            zip -9 -r grim-gamers.love .
+            sudo add-apt-repository ppa:bartbes/love-stable
+            sudo apt-get update
+            sudo apt-get install love
+            love --version
+      - run:
+          name: "Install love-release"
+          command: |
+            sudo apt-get update
+            sudo apt-get install libzip-dev
+            sudo luarocks install love-release
+      - run:
+          name: "Build releases"
+          command: |
+            pwd
+            love-release -M -D
       - store_artifacts:
-          path: build/grim-gamers.love
-          destination: grim-gamers.love
+          path: dist
+          destination: builds
 
 jobs:
   validate_and_test:
@@ -82,10 +93,22 @@ jobs:
       - install_luarocks
       - luacheck
       - unit_test
-      - build_binary
+  build_binaries:
+    executor: ubuntu
+    steps:
+      - checkout
+      - install_lua
+      - install_luarocks
+      - build_binaries
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
   validate_and_build:
     jobs:
       - validate_and_test
+      - build_binaries:
+          requires:
+            - validate_and_test
+          filters:
+            branches:
+              only: master

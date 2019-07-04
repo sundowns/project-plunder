@@ -88,6 +88,9 @@ function deepprint(table, depth, max_depth)
   end
   for k, v in pairs(table) do
     if type(v) == "table" then
+      if type(k) == "table" then
+        k = "table"
+      end
       print(spacer .. "[" .. k .. "]:")
       deepprint(v, d + 1, max)
     else

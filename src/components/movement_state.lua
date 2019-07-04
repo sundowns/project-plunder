@@ -19,9 +19,6 @@ function movement_state:update(dt)
     self.current_state_elapsed = self.current_state_elapsed + dt
     self.behaviour:update(dt)
     self.timer:update(dt)
-    -- if love.keyboard.isDown("p") then --delete this
-    --     _util.t.print(self.previous_states)
-    -- end
 end
 
 function movement_state:set(new_state, instance, entity)

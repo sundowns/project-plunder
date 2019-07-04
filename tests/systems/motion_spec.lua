@@ -17,10 +17,21 @@ local function init_system(entities)
     end
 end
 
+-- TODO: make below all common code
 local test = function(title, test)
     print(title .. " - running.")
     T(title, test)
     print(title .. " - passed.")
+end
+
+local expect = function(t, condition, message)
+    t:assert(condition, message)
+    print("  " .. t.description .. "| " .. message .. " - success.")
+end
+
+local expect_error = function(t, action, message)
+    t:error(action, message)
+    print("  " .. t.description .. "| " .. message .. " - success.")
 end
 
 test(
@@ -41,7 +52,7 @@ test(
 
                 -- Test / assert the outcomes
                 local transform = motion_system.pool:get(1):get(_components.transform)
-                test:assert(transform.position == Vector(0, 0), "The position does not change")
+                expect(test, transform.position == Vector(0, 0), "The position does not change")
             end
         )
 
@@ -60,7 +71,7 @@ test(
 
                 -- Test / assert the outcomes
                 local transform = motion_system.pool:get(1):get(_components.transform)
-                test:assert(transform.position == Vector(10, 50), "The position is updated correctly")
+                expect(test, transform.position == Vector(10, 50), "The position is updated correctly")
             end
         )
     end

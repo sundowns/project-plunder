@@ -6,29 +6,22 @@ local spy = require "luassert.spy"
 
 local mocks = {}
 mocks._null_fn = function()
-    return spy.new(
-        function()
-        end
-    )
 end
-
--- function mocks:test(title, test)
---     print(title .. " - running.")
---     T(title, test)
---     print(title .. " - passed.")
--- end
+mocks.null_spy = function()
+    return spy.new(mocks._null_fn)
+end
 
 function mocks:love()
     love = {
-        load = self._null_fn(),
+        load = self.null_spy(),
         graphics = {},
         filesystem = {
-            load = self._null_fn()
+            load = self.null_spy()
         }
     }
 end
 
-function mocks:cartographer()
+function mocks.cartographer(_)
     Cartographer = {
         load = function(path)
             return require(path)
