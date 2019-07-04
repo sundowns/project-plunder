@@ -3,6 +3,7 @@ function love.conf(t)
     t.window.minwidth = 1280
     t.window.minheight = 720
     t.console = true
+    t.window.fullscreen = false
 
     t.releases = {
         title = "grim-gamers-2-dev", -- The project title (string)
@@ -14,7 +15,18 @@ function love.conf(t)
         description = "we gamer", -- The project description (string)
         homepage = "https://example.com", -- The project homepage (string)
         identifier = "grim.gamers", -- The project Uniform Type Identifier (string)
-        excludeFileList = {".git", "tests", ".luacheckrc", "README.md", ".vscode", ".circleci", ".gitignore", "tmp", "*.tmx", "libs/luassert"},
+        excludeFileList = {
+            ".git",
+            "tests",
+            ".luacheckrc",
+            "README.md",
+            ".vscode",
+            ".circleci",
+            ".gitignore",
+            "tmp",
+            "*.tmx",
+            "libs/luassert"
+        },
         releaseDirectory = "dist" -- Where to store the project releases (string)
     }
 end

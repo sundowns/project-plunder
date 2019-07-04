@@ -67,6 +67,7 @@ world:addSystem(jumping, "draw")
 world:addSystem(camera, "attach")
 world:addSystem(camera, "detach")
 world:addSystem(camera, "update")
+world:addSystem(camera, "toggle_fullscreen")
 
 -- ENABLE SYSTEMS
 
@@ -106,6 +107,7 @@ world:enableSystem(jumping, "draw")
 
 world:enableSystem(camera, "attach")
 world:enableSystem(camera, "detach")
+world:enableSystem(camera, "toggle_fullscreen")
 
 function world.enable_updates()
     world:enableSystem(lighting, "update")

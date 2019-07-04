@@ -35,12 +35,12 @@ function love.load()
     _entities = require("src.entities")
     _systems = require("src.systems")
     _instances = require("src.instances")
-    _collision_world = Bump.newWorld(32)
+    _collision_world = Bump.newWorld(_constants.TILE_WIDTH)
 
     _instances.world:emit("set_collision_world", _collision_world)
     _instances.world:emit("load_stage", "resources/stage/test.lua")
 
-    local player = _entities.player(Vector(love.graphics.getWidth() / 4, love.graphics.getHeight() / 2))
+    local player = _entities.player(Vector(love.graphics.getWidth() / 4, love.graphics.getHeight() / 4))
     _instances.world:addEntity(player)
     _instances.world:emit("sprite_state_updated", player, "run")
     _instances.world:addEntity(
@@ -81,6 +81,10 @@ function love.keypressed(key, _, _)
         love.event.quit()
     elseif key == "f1" then
         _config:toggle("DEBUG")
+    elseif key == "return" then
+        if love.keyboard.isDown("lalt", "ralt") then
+            _instances.world:emit("toggle_fullscreen", not love.window.getFullscreen())
+        end
     end
 
     _instances.world:emit("keypressed", key)

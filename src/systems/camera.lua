@@ -28,6 +28,13 @@ function camera:update()
     end
 end
 
+function camera.toggle_fullscreen(_)
+    love.window.setFullscreen(not love.window.getFullscreen())
+    if not love.window.getFullscreen() then
+        love.window.setMode(_constants.WINDOWED_RESOLUTION.x, _constants.WINDOWED_RESOLUTION.y)
+    end
+end
+
 function camera:set_camera(new_camera)
     self.current_camera = new_camera
     self.current_camera:zoomTo(1.8)
