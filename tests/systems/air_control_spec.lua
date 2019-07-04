@@ -21,11 +21,32 @@ local function init_system(entities)
     end
 end
 
+local function give_entity_state(entity, initial_state)
+    entity:give(
+        _components.movement_state,
+        {
+            default = {
+                {duration = 1}
+            },
+            walk = {
+                {duration = 1}
+            },
+            jump = {
+                {duration = 1}
+            },
+            fall = {
+                {duration = 1}
+            }
+        },
+        initial_state
+    ):apply()
+end
+
 _t.fixture(
     "Air Control System",
     function(fixture)
         fixture(
-            "Given an entity",
+            "Given a entity",
             function(fixture)
                 local no_velocity =
                     Entity():give(_components.transform, Vector(0, 0), Vector(0, 0)):give(_components.controlled):give(
@@ -74,7 +95,7 @@ _t.fixture(
                         air_control_system:move("left", air_control_system.pool:get(1))
                         fixture(
                             "",
-                            function()
+                            function(fixture)
                                 _t.expect(
                                     fixture,
                                     air_control_system.pool:get(1):get(_components.air_control).x_velocity < 0,
@@ -86,11 +107,63 @@ _t.fixture(
                         fixture(
                             "when updating an entity with a negative aerial drift velocity (moving left)",
                             function(fixture)
-                                air_control_system:update(1)
-                                _t.expect(
-                                    fixture,
-                                    air_control_system.pool:get(1):get(_components.transform).position.x < 0,
-                                    "the transform translates accordingly"
+                                fixture(
+                                    "and that entity is stateless",
+                                    function(fixture)
+                                        air_control_system:update(1)
+
+                                        _t.expect(
+                                            fixture,
+                                            air_control_system.pool:get(1):get(_components.transform).position.x < 0,
+                                            "the transform translates accordingly"
+                                        )
+                                    end
+                                )
+
+                                fixture(
+                                    "and that entity is falling",
+                                    function(fixture)
+                                        give_entity_state(air_control_system.pool:get(1), "fall")
+
+                                        air_control_system:update(1)
+
+                                        _t.expect(
+                                            fixture,
+                                            air_control_system.pool:get(1):get(_components.transform).position.x < 0,
+                                            "the transform translates accordingly"
+                                        )
+                                    end
+                                )
+
+                                fixture(
+                                    "and that entity is jumping",
+                                    function(fixture)
+                                        give_entity_state(air_control_system.pool:get(1), "jump")
+
+                                        air_control_system:update(1)
+
+                                        _t.expect(
+                                            fixture,
+                                            air_control_system.pool:get(1):get(_components.transform).position.x < 0,
+                                            "the transform translates accordingly"
+                                        )
+                                    end
+                                )
+
+                                fixture(
+                                    "and that entity is in any other state",
+                                    function(fixture)
+                                        give_entity_state(air_control_system.pool:get(1), "walk")
+
+                                        air_control_system:update(1)
+
+                                        _t.expect(
+                                            fixture,
+                                            air_control_system.pool:get(1):get(_components.transform).position ==
+                                                Vector(0, 0),
+                                            "the transform does not translate"
+                                        )
+                                    end
                                 )
                             end
                         )
@@ -103,7 +176,7 @@ _t.fixture(
                         air_control_system:move("right", air_control_system.pool:get(1))
                         fixture(
                             "",
-                            function()
+                            function(fixture)
                                 _t.expect(
                                     fixture,
                                     air_control_system.pool:get(1):get(_components.air_control).x_velocity > 0,
@@ -115,11 +188,63 @@ _t.fixture(
                         fixture(
                             "when updating an entity with a positive aerial drift velocity (moving right)",
                             function(fixture)
-                                air_control_system:update(1)
-                                _t.expect(
-                                    fixture,
-                                    air_control_system.pool:get(1):get(_components.transform).position.x > 0,
-                                    "the transform translates accordingly"
+                                fixture(
+                                    "and that entity is stateless",
+                                    function(fixture)
+                                        air_control_system:update(1)
+
+                                        _t.expect(
+                                            fixture,
+                                            air_control_system.pool:get(1):get(_components.transform).position.x > 0,
+                                            "the transform translates accordingly"
+                                        )
+                                    end
+                                )
+
+                                fixture(
+                                    "and that entity is falling",
+                                    function(fixture)
+                                        give_entity_state(air_control_system.pool:get(1), "fall")
+
+                                        air_control_system:update(1)
+
+                                        _t.expect(
+                                            fixture,
+                                            air_control_system.pool:get(1):get(_components.transform).position.x > 0,
+                                            "the transform translates accordingly"
+                                        )
+                                    end
+                                )
+
+                                fixture(
+                                    "and that entity is jumping",
+                                    function(fixture)
+                                        give_entity_state(air_control_system.pool:get(1), "jump")
+
+                                        air_control_system:update(1)
+
+                                        _t.expect(
+                                            fixture,
+                                            air_control_system.pool:get(1):get(_components.transform).position.x > 0,
+                                            "the transform translates accordingly"
+                                        )
+                                    end
+                                )
+
+                                fixture(
+                                    "and that entity is in any other state",
+                                    function(fixture)
+                                        give_entity_state(air_control_system.pool:get(1), "walk")
+
+                                        air_control_system:update(1)
+
+                                        _t.expect(
+                                            fixture,
+                                            air_control_system.pool:get(1):get(_components.transform).position ==
+                                                Vector(0, 0),
+                                            "the transform does not translate"
+                                        )
+                                    end
                                 )
                             end
                         )

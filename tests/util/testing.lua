@@ -15,7 +15,8 @@ end
 function testing.expect(fixture, condition, message)
     fixture:assert(condition, message)
     local output = fixture.description .. divider .. message
-    if fixture.parent and fixture.parent.currentNodeIndex ~= 0 then -- TODO: recurse down the chain until this condition is true (not just 1)
+    -- TODO: recurse down the chain until this condition is true (not just 1)
+    if fixture.parent and fixture.parent.currentNodeIndex ~= 0 then
         print(indent .. fixture.parent.description .. divider .. output)
     else
         print(output)
