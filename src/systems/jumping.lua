@@ -159,7 +159,7 @@ function jumping:update(_)
 end
 
 function jumping:draw()
-    if _debug then
+    if _config:get("DEBUG") then
         love.graphics.setColor(0, 1, 1)
         for i = 1, self.ALL.size do
             local e = self.ALL:get(i)

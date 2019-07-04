@@ -62,7 +62,7 @@ function encircling:update(_)
 end
 
 function encircling:draw_debug()
-    if _debug then
+    if _config:get("DEBUG") then
         for i = 1, self.pool.size do
             local e = self.pool:get(i)
             local transform = e:get(_components.transform)

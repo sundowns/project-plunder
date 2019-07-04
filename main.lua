@@ -1,5 +1,3 @@
-_debug = false
-
 local _instances = nil -- should not have visbility of each other...
 
 function love.load()
@@ -9,6 +7,7 @@ function love.load()
     _util = require("libs.util")
     serialize = require("libs.serialize")
     _config = require("src.config_manager")
+    _config:fetch_user_config()
     anim8 = require("libs.anim8")
     resources = require("libs.cargo").init("resources")
     ECS =
@@ -81,7 +80,7 @@ function love.keypressed(key, _, _)
     elseif key == "escape" then
         love.event.quit()
     elseif key == "f1" then
-        _debug = not _debug
+        _config:toggle("DEBUG")
     end
 
     _instances.world:emit("keypressed", key)
