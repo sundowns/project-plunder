@@ -60,7 +60,7 @@ _t.fixture(
                 )
 
                 fixture(
-                    "Given no input",
+                    "and no input",
                     function(fixture)
                         fixture(
                             "when updating",
@@ -89,7 +89,7 @@ _t.fixture(
                 )
 
                 fixture(
-                    "Given a left input",
+                    "and a left input",
                     function(fixture)
                         --  assert: it has negative x velocity
                         air_control_system:move("left", air_control_system.pool:get(1))
@@ -171,7 +171,7 @@ _t.fixture(
                 )
 
                 fixture(
-                    "Given a right input",
+                    "and a right input",
                     function(fixture)
                         air_control_system:move("right", air_control_system.pool:get(1))
                         fixture(
