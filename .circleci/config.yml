@@ -84,6 +84,23 @@ commands:
           path: dist
           destination: builds
 
+  build_love:
+    description: "zip directory contents and rename to .love"
+    steps:
+      - run:
+          name: "build .love"
+          command: |
+            mkdir dist
+            cp src -r dist
+            cp libs -r dist
+            cp resources -r dist
+            cp main.lua dist
+            cp conf.lua dist
+            cd dist
+            zip -9 -r grim-gamers.love .
+      - store_artifacts:
+          path: dist/grim-gamers.love
+          destination: builds/grim-gamers.love
 jobs:
   validate_and_test:
     executor: ubuntu
@@ -100,12 +117,23 @@ jobs:
       - install_lua
       - install_luarocks
       - build_binaries
+  build_love:
+    executor: ubuntu
+    steps:
+      - checkout
+      - build_love
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
   validate_and_build:
     jobs:
       - validate_and_test
+      - build_love:
+          requires:
+            - validate_and_test
+          filters:
+              branches:
+                ignore: master
       - build_binaries:
           requires:
             - validate_and_test
