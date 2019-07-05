@@ -49,8 +49,8 @@ end
 function lighting:update(dt)
     self.timer:update(dt)
 
-    self.point_lighting_shader:send("light_count", self.pool.size)
-    self.point_lighting_shader:send("breath_offset", self.light_breath_radius_offset)
+    self.point_lighting_shader:send("num_lights", self.pool.size)
+    -- self.point_lighting_shader:send("breath_offset", self.light_breath_radius_offset)
 
     self.light_breath_radius_offset = self.light_breath_radius_offset + dt * 100
 
@@ -75,7 +75,7 @@ function lighting:update(dt)
         self.point_lighting_shader:send("lights[" .. i - 1 .. "].position", {position.x, position.y})
         self.point_lighting_shader:send("lights[" .. i - 1 .. "].diffuse", point_light.colour)
         self.point_lighting_shader:send("lights[" .. i - 1 .. "].strength", point_light.strength)
-        self.point_lighting_shader:send("lights[" .. i - 1 .. "].radius", radius)
+        -- self.point_lighting_shader:send("lights[" .. i - 1 .. "].radius", radius)
     end
 end
 
