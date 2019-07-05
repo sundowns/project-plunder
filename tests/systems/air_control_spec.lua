@@ -46,7 +46,7 @@ _t.fixture(
     "Air Control System",
     function(fixture)
         fixture(
-            "Given a entity",
+            "Given an entity",
             function(fixture)
                 local no_velocity =
                     Entity():give(_components.transform, Vector(0, 0), Vector(0, 0)):give(_components.controlled):give(
