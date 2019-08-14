@@ -1,45 +1,14 @@
 local config_manager = {}
 local config_path = "config.lua"
+
 local get_default_config = function()
     return {
+        ["DEBUG"] = false,
         ["ENABLE_LIGHTING"] = true
     }
 end
 
-function config_manager:toggle(key)
-    assert(self._config[key] ~= nil, "Attempted to toggle non-existent config value: " .. key)
-    assert(type(self._config[key]) == "boolean")
-
-    self:update_setting(key, not self._config[key])
-end
-
-function config_manager:init()
-    self._config = get_default_config()
-    self:fetch_user_config()
-end
-
-function config_manager:get(key)
-    if self._config[key] ~= nil then
-        return self._config[key]
-    else
-        assert(false, "non-existent key in config: " .. key)
-    end
-end
-
-function config_manager:update_setting(key, value)
-    assert(not self._config[key] or type(value) == type(self._config[key]))
-    self._config[key] = value
-    self:save_user_config()
-end
-
-function config_manager:set_config(new_config)
-    -- for each key -- TODO:
-    --   if in new_config
-    --      set from new_config
-    --   else set from default
-    self._config = new_config
-    self:save_user_config()
-end
+config_manager.config = {}
 
 function config_manager:fetch_user_config()
     local contents, _ = love.filesystem.read(config_path)
@@ -56,12 +25,42 @@ function config_manager:fetch_user_config()
     end
 end
 
+function config_manager:toggle(key)
+    -- assert(self.config[key] ~= nil, "Attempted to toggle non-existent config value: " .. key)
+    assert(type(get_default_config()[key]) == "boolean")
+    if self.config[key] == nil then
+        -- fix it
+        self:update_setting(key, get_default_config()[key])
+    end
+
+    self:update_setting(key, not self.config[key])
+end
+
+function config_manager:get(key)
+    if self.config[key] ~= nil then
+        return self.config[key]
+    else
+        assert(get_default_config()[key] ~= nil, "Attempted to index non-existent default config key: " .. key)
+        return get_default_config()[key]
+    end
+end
+
+function config_manager:update_setting(key, value)
+    assert(self.config[key] == nil or type(value) == type(self.config[key]))
+    self.config[key] = value
+    self:save_user_config()
+end
+
+function config_manager:set_config(new_config)
+    self.config = new_config
+    self:save_user_config()
+end
+
 function config_manager:save_user_config()
     local file = love.filesystem.newFile(config_path)
     file:open("w")
-    file:write(serialize(self._config))
+    file:write(serialize(self.config))
+    file:close()
 end
-
-config_manager:init()
 
 return config_manager

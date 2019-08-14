@@ -29,7 +29,7 @@ std = {
         "Component",
         "System",
         "Instance",
-        "Cartographer",
+        "Mappy",
         "Bump",
         "Camera",
         "_util",
@@ -41,7 +41,6 @@ std = {
         "_entities",
         "_systems",
         "_collision_world",
-        "_debug",
         "_config"
     },
     read_globals = {"T"}

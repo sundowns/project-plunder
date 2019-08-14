@@ -8,7 +8,7 @@ function stage_manager:init()
 end
 
 function stage_manager:load_stage(path)
-    self.stage = Cartographer.load(path)
+    self.stage = Mappy.load(path)
     assert(self.collision_world, "stage_manager attempted to load stage with collision world unset")
     assert(self.stage.layers["World"], "attempted to load map without 'World' tile layer")
 
@@ -18,6 +18,10 @@ function stage_manager:load_stage(path)
         if tile ~= 0 then -- 0 means no tile
             self:add_tile(id, tile, collidable_tile_data.columns)
         end
+    end
+
+    for rx, ry, rw, rh in self.stage.layers["World"]:getCollidersIter() do
+        self.collision_world:add({is_geometry = true}, rx, ry, rw, rh)
     end
 
     if self.stage.layers["Objects"] then
@@ -35,7 +39,6 @@ function stage_manager:add_tile(id, _, columns)
     local new_tile = {is_tile = true, position = Vector(x, y)}
 
     table.insert(self.tiles, new_tile)
-    self.collision_world:add(new_tile, x, y, _constants.TILE_WIDTH, _constants.TILE_HEIGHT)
 end
 
 function stage_manager:add_object(object)

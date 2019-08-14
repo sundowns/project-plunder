@@ -36,7 +36,7 @@ _t.fixture(
 
                 -- Test / assert the outcomes
                 local transform = motion_system.pool:get(1):get(_components.transform)
-                _t.expect(fixture, transform.position == Vector(0, 0), "the position does not change")
+                _t.expect(fixture, transform.position == Vector(0, 0), "The position does not change")
             end
         )
 
@@ -55,7 +55,7 @@ _t.fixture(
 
                 -- Test / assert the outcomes
                 local transform = motion_system.pool:get(1):get(_components.transform)
-                _t.expect(fixture, transform.position == Vector(10, 50), "the position is updated correctly")
+                _t.expect(fixture, transform.position == Vector(10, 50), "The position is updated correctly")
             end
         )
     end

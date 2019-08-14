@@ -3,6 +3,7 @@ function love.conf(t)
     t.window.minwidth = 1280
     t.window.minheight = 720
     t.console = true
+    t.window.fullscreen = false
 
     t.releases = {
         title = "grim gamers 2 dev", -- The project title (string)

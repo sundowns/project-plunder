@@ -26,7 +26,7 @@ function collider:update(_)
 end
 
 function collider:draw()
-    if _debug then
+    if _config:get("DEBUG") then
         love.graphics.setColor(1, 0, 0)
         love.graphics.setLineWidth(1)
         local items, _ = self.collision_world:getItems()

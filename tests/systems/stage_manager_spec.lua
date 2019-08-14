@@ -23,7 +23,7 @@ end
 
 local reset_dependecies = function()
     mocks:love()
-    mocks:cartographer()
+    mocks:mappy()
     stage_manager_system:set_collision_world(
         {
             add = mocks.null_spy()
@@ -79,11 +79,6 @@ _t.fixture(
                 world_instance:emit("load_stage", "stage_01")
 
                 -- Assert
-                _t.expect(
-                    fixture,
-                    assert.spy(stage_manager_system.collision_world.add).was.called(4),
-                    "the expected number of tiles were added to the stage_manager table"
-                )
                 _t.expect(
                     fixture,
                     #stage_manager_system.tiles == 4,

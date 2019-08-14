@@ -1,5 +1,3 @@
-_debug = false
-
 local _instances = nil -- should not have visbility of each other...
 
 function love.load()
@@ -9,6 +7,7 @@ function love.load()
     _util = require("libs.util")
     serialize = require("libs.serialize")
     _config = require("src.config_manager")
+    _config:fetch_user_config()
     anim8 = require("libs.anim8")
     resources = require("libs.cargo").init("resources")
     ECS =
@@ -25,7 +24,7 @@ function love.load()
     Vector = require("libs.vector")
     Behavior = require("libs.behavior")
     Bump = require("libs.bump")
-    Cartographer = require("libs.cartographer")
+    Mappy = require("libs.mappy")
     Camera = require("libs.camera")
 
     _fonts = {
@@ -36,12 +35,12 @@ function love.load()
     _entities = require("src.entities")
     _systems = require("src.systems")
     _instances = require("src.instances")
-    _collision_world = Bump.newWorld(32)
+    _collision_world = Bump.newWorld(_constants.TILE_WIDTH)
 
     _instances.world:emit("set_collision_world", _collision_world)
     _instances.world:emit("load_stage", "resources/stage/test.lua")
 
-    local player = _entities.player(Vector(love.graphics.getWidth() / 4, love.graphics.getHeight() / 2))
+    local player = _entities.player(Vector(love.graphics.getWidth() / 4, love.graphics.getHeight() / 4))
     _instances.world:addEntity(player)
     _instances.world:emit("sprite_state_updated", player, "run")
     _instances.world:addEntity(
@@ -81,7 +80,11 @@ function love.keypressed(key, _, _)
     elseif key == "escape" then
         love.event.quit()
     elseif key == "f1" then
-        _debug = not _debug
+        _config:toggle("DEBUG")
+    elseif key == "return" then
+        if love.keyboard.isDown("lalt", "ralt") then
+            _instances.world:emit("toggle_fullscreen", not love.window.getFullscreen())
+        end
     end
 
     _instances.world:emit("keypressed", key)

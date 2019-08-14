@@ -29,5 +29,6 @@ return {
     WORLD_SCALE = 1,
     TILE_WIDTH = 32,
     TILE_HEIGHT = 32,
-    CAMERA_DAMPENING = 15
+    CAMERA_DAMPENING = 15,
+    WINDOWED_RESOLUTION = {x = 1280, y = 720}
 }
