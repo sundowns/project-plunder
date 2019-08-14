@@ -14,5 +14,6 @@ return {
     gravity = require(PATH .. ".gravity"),
     movement_state = require(PATH .. ".movement_state"),
     collides = require(PATH .. ".collides"),
-    camera_target = require(PATH .. ".camera_target")
+    camera_target = require(PATH .. ".camera_target"),
+    inventory = require(PATH .. ".inventory")
 }
