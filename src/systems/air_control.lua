@@ -53,6 +53,9 @@ function air_control:update(dt)
             else
                 air_controlled.x_velocity = 0
             end
+        else
+            -- stateless entity, just move them
+            transform.position.x = transform.position.x + (air_controlled.x_velocity * dt)
         end
     end
 end

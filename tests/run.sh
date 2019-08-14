@@ -11,9 +11,9 @@ ROOT_PATH=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 is_ci=false
 
 while getopts 'c' flag; do
-  case "${flag}" in
-    c) is_ci=true ;;
-  esac
+    case "${flag}" in
+        c) is_ci=true ;;
+    esac
 done
 
 LUA_PATH='not set'
@@ -25,7 +25,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
     # Do something under GNU/Linux platform
     LUA_PATH='lua'
     if [ "$is_ci" = true ]; then
-       LUA_PATH='lua5.3'
+        LUA_PATH='lua5.3'
     fi
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     # Do something under 32 bits Windows NT platform
