@@ -13,6 +13,7 @@ local state_manager = _systems.state_manager()
 local stage_manager = _systems.stage_manager()
 local collider = _systems.collider()
 local camera = _systems.camera()
+local inventory_manager = _systems.inventory_manager()
 
 -- ADD SYSTEMS
 
@@ -69,6 +70,8 @@ world:addSystem(camera, "detach")
 world:addSystem(camera, "update")
 world:addSystem(camera, "toggle_fullscreen")
 
+world:addSystem(inventory_manager, "draw_ui")
+
 -- ENABLE SYSTEMS
 
 if _config:get("ENABLE_LIGHTING") then
@@ -108,6 +111,8 @@ world:enableSystem(jumping, "draw")
 world:enableSystem(camera, "attach")
 world:enableSystem(camera, "detach")
 world:enableSystem(camera, "toggle_fullscreen")
+
+world:enableSystem(inventory_manager, "draw_ui")
 
 function world.enable_updates()
     world:enableSystem(lighting, "update")

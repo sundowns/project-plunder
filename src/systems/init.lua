@@ -14,5 +14,5 @@ return {
     stage_manager = require(PATH .. ".stage_manager"),
     collider = require(PATH .. ".collider"),
     camera = require(PATH .. ".camera"),
-    inventory = require(PATH .. ".inventory")
+    inventory_manager = require(PATH .. ".inventory_manager")
 }

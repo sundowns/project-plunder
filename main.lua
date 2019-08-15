@@ -64,7 +64,7 @@ function love.draw()
     _instances.world:emit("detach")
     _instances.world:emit("detach_lighting")
     _instances.world:emit("draw_debug")
-    -- _instances.world:emit("draw_ui")
+    _instances.world:emit("draw_ui")
 end
 
 function love.keyreleased(key)

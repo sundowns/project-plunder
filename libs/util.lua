@@ -269,6 +269,10 @@ end
 
 ---------------------- LOVE2D
 
+function util.love.resetColor()
+  util.love.resetColour()
+end
+
 function util.love.resetColour()
   love.graphics.setColor(1, 1, 1, 1)
 end

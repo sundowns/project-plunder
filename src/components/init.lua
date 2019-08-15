@@ -15,5 +15,6 @@ return {
     movement_state = require(PATH .. ".movement_state"),
     collides = require(PATH .. ".collides"),
     camera_target = require(PATH .. ".camera_target"),
-    inventory = require(PATH .. ".inventory")
+    inventory = require(PATH .. ".inventory"),
+    item = require(PATH .. ".item")
 }
