@@ -1,3 +1,4 @@
+-- https://github.com/prime31/mappy-lua
 local stage_manager = System()
 
 function stage_manager:init()
@@ -44,13 +45,17 @@ end
 function stage_manager:add_object(object)
     assert(object and object.type, "stage_manager received object with no type defined")
     local valid = true
-    if object.type == "static_light_orange" then
+    if object.type == "static_light_orange" then -- TODO: Introduce an item registry and place all this logic there
         self:getInstance():addEntity(
             _entities.static_light_source(
                 Vector(object.x - _constants.TILE_WIDTH / 2, object.y - _constants.TILE_HEIGHT),
                 _constants.COLOURS.ORANGE_TORCHLIGHT,
                 object.properties["radius"]
             )
+        )
+    elseif object.type == "chest" then
+        self:getInstance():addEntity(
+            _entities.chest(Vector(object.x - _constants.TILE_WIDTH / 2, object.y - _constants.TILE_HEIGHT))
         )
     else
         valid = false
@@ -83,7 +88,8 @@ end
 
 function stage_manager:draw()
     if self.stage then
-        self.stage:draw()
+        self.stage.layers["Background"]:draw()
+        self.stage.layers["World"]:draw()
     end
 end
 

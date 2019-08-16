@@ -14,6 +14,8 @@ local stage_manager = _systems.stage_manager()
 local collider = _systems.collider()
 local camera = _systems.camera()
 local inventory_manager = _systems.inventory_manager()
+local item_manager = _systems.item_manager()
+local levitation = _systems.levitation()
 
 -- ADD SYSTEMS
 
@@ -75,6 +77,11 @@ world:addSystem(inventory_manager, "action_pressed")
 world:addSystem(inventory_manager, "action_held")
 world:addSystem(inventory_manager, "resize")
 
+world:addSystem(item_manager, "update")
+world:addSystem(item_manager, "draw")
+
+world:addSystem(levitation, "update")
+
 -- ENABLE SYSTEMS
 
 if _config:get("ENABLE_LIGHTING") then
@@ -120,6 +127,8 @@ world:enableSystem(inventory_manager, "action_pressed")
 world:enableSystem(inventory_manager, "action_held")
 world:enableSystem(inventory_manager, "resize")
 
+world:enableSystem(item_manager, "draw")
+
 function world.enable_updates()
     world:enableSystem(lighting, "update")
     world:enableSystem(sprite_renderer, "update")
@@ -133,6 +142,8 @@ function world.enable_updates()
     world:enableSystem(state_manager, "update")
     world:enableSystem(collider, "update")
     world:enableSystem(camera, "update")
+    world:enableSystem(levitation, "update")
+    world:enableSystem(item_manager, "update")
 end
 
 function world.disable_updates()
@@ -148,6 +159,8 @@ function world.disable_updates()
     world:disableSystem(state_manager, "update")
     world:disableSystem(collider, "update")
     world:disableSystem(camera, "update")
+    world:disableSystem(levitation, "update")
+    world:disableSystem(item_manager, "update")
 end
 
 world.enable_updates()
