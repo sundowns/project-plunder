@@ -71,6 +71,8 @@ world:addSystem(camera, "update")
 world:addSystem(camera, "toggle_fullscreen")
 
 world:addSystem(inventory_manager, "draw_ui")
+world:addSystem(inventory_manager, "action_pressed")
+world:addSystem(inventory_manager, "action_held")
 
 -- ENABLE SYSTEMS
 
@@ -113,6 +115,8 @@ world:enableSystem(camera, "detach")
 world:enableSystem(camera, "toggle_fullscreen")
 
 world:enableSystem(inventory_manager, "draw_ui")
+world:enableSystem(inventory_manager, "action_pressed")
+world:enableSystem(inventory_manager, "action_held")
 
 function world.enable_updates()
     world:enableSystem(lighting, "update")
