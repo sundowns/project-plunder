@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="9">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="21">
  <tileset firstgid="1" source="../tileset/tileset.tsx"/>
  <tileset firstgid="37" source="objects.tsx"/>
+ <tileset firstgid="73" source="../tileset/Items.tsx"/>
  <layer id="4" name="Background" width="32" height="16">
   <data encoding="csv">
 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,
@@ -64,5 +65,7 @@
    </properties>
    <point/>
   </object>
+  <object id="16" type="chest" gid="73" x="352" y="480" width="32" height="32"/>
+  <object id="17" type="chest" gid="73" x="448" y="352" width="32" height="32"/>
  </objectgroup>
 </map>
