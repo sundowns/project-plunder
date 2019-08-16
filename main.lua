@@ -97,3 +97,7 @@ end
 function love.mousereleased(x, y, button, _, _)
     _instances.world:emit("mousereleased", x, y, button)
 end
+
+function love.resize(w, h)
+    _instances.world:emit("resize", w, h)
+end

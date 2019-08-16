@@ -1,12 +1,13 @@
 local inventory_manager =
     System({_components.inventory, "ALL"}, {_components.inventory, _components.controlled, "PLAYER"})
 
-local INVENTORY_SCREEN_OFFSET_RATIO = Vector(0.1, 0.1)
-local INVENTORY_CELL_SIZE_RATIO = nil
+local INVENTORY_SCREEN_OFFSET_RATIO = Vector(0.2, 0.2)
+local INVENTORY_CELL_SIZE = nil
+local INVENTORY_SLOTS_PER_ROW = 10
 
 function inventory_manager:init()
-    INVENTORY_CELL_SIZE_RATIO =
-        (INVENTORY_SCREEN_OFFSET_RATIO.x * 2 / 8 * love.graphics.getWidth()) / love.graphics.getWidth()
+    INVENTORY_CELL_SIZE =
+        (love.graphics.getWidth() * (1 - INVENTORY_SCREEN_OFFSET_RATIO.x*2) / INVENTORY_SLOTS_PER_ROW)
     for i = 1, self.ALL.size do
         local inventory = self.ALL:get(i):get(_components.inventory)
         for j = 1, inventory.size do
@@ -15,6 +16,11 @@ function inventory_manager:init()
     end
 
     self.current_open_inventory = nil
+end
+
+function inventory_manager:resize(w, h)
+    INVENTORY_CELL_SIZE =
+    (w * (1 - INVENTORY_SCREEN_OFFSET_RATIO.x*2) / INVENTORY_SLOTS_PER_ROW)
 end
 
 function inventory_manager:entityAdded(e)
@@ -69,7 +75,6 @@ end
 --     end
 -- end
 
--- TODO: Wrap inventory display dynamically
 function inventory_manager:draw_ui()
     for i = 1, self.ALL.size do
         local inventory = self.ALL:get(i):get(_components.inventory)
@@ -79,14 +84,19 @@ function inventory_manager:draw_ui()
                 INVENTORY_SCREEN_OFFSET_RATIO.x * love.graphics.getWidth(),
                 INVENTORY_SCREEN_OFFSET_RATIO.y * love.graphics.getHeight()
             )
-            local cell_width = INVENTORY_CELL_SIZE_RATIO * love.graphics.getWidth()
-            for j = 1, inventory.size do
+            local cell_width = INVENTORY_CELL_SIZE
+            for j = 0, inventory.size-1 do
+                if j % INVENTORY_SLOTS_PER_ROW == 0 then
+                    offset.y = offset.y + cell_width
+                    offset.x = INVENTORY_SCREEN_OFFSET_RATIO.x * love.graphics.getWidth()
+                end
                 love.graphics.setColor(0.6, 0.6, 0.6, 1)
                 love.graphics.setLineWidth(4)
-                love.graphics.rectangle("line", offset.x + cell_width * (j - 1), offset.y, cell_width, cell_width)
+                love.graphics.rectangle("line", offset.x, offset.y, cell_width, cell_width)
                 love.graphics.setLineWidth(10)
                 love.graphics.setColor(0.6, 0.6, 0.6, 0.5)
-                love.graphics.rectangle("fill", offset.x + cell_width * (j - 1), offset.y, cell_width, cell_width)
+                love.graphics.rectangle("fill", offset.x, offset.y, cell_width, cell_width)
+                offset.x = offset.x + cell_width
             end
         end
     end

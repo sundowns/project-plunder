@@ -73,6 +73,7 @@ world:addSystem(camera, "toggle_fullscreen")
 world:addSystem(inventory_manager, "draw_ui")
 world:addSystem(inventory_manager, "action_pressed")
 world:addSystem(inventory_manager, "action_held")
+world:addSystem(inventory_manager, "resize")
 
 -- ENABLE SYSTEMS
 
@@ -117,6 +118,7 @@ world:enableSystem(camera, "toggle_fullscreen")
 world:enableSystem(inventory_manager, "draw_ui")
 world:enableSystem(inventory_manager, "action_pressed")
 world:enableSystem(inventory_manager, "action_held")
+world:enableSystem(inventory_manager, "resize")
 
 function world.enable_updates()
     world:enableSystem(lighting, "update")
