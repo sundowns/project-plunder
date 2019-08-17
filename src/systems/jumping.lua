@@ -1,6 +1,14 @@
 local jumping =
     System({_components.transform, _components.jump, _components.movement_state, _components.collides, "ALL"})
 
+local world_filter = function(item)
+    if item.type == "world" then
+        return true
+    else
+        return false
+    end
+end
+
 function jumping:init()
     self.collision_world = nil
 end
@@ -59,7 +67,8 @@ function jumping:update(_)
                     transform.position.x + collides.offset.x + collides.width * 0.2,
                     transform.position.y + collides.offset.y - 1,
                     collides.width * 0.6,
-                    0.1
+                    0.1,
+                    world_filter
                 )
                 if len > 0 then
                     movement_state:set("fall", self:getInstance(), e)
@@ -73,21 +82,24 @@ function jumping:update(_)
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x,
                 transform.position.y + collides.offset.y +
-                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED,
+                world_filter
             )
 
             local _, len_centre =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x + collides.width / 2,
                 transform.position.y + collides.offset.y +
-                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED,
+                world_filter
             )
 
             local _, len_right =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x + collides.width,
                 transform.position.y + collides.offset.y +
-                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED,
+                world_filter
             )
             if len_left == 0 and len_right == 0 and len_centre == 0 then
                 movement_state:set("fall", self:getInstance(), e)
@@ -114,21 +126,24 @@ function jumping:update(_)
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x,
                 transform.position.y + collides.offset.y +
-                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED,
+                world_filter
             )
 
             local _, len_centre =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x + collides.width / 2,
                 transform.position.y + collides.offset.y +
-                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED,
+                world_filter
             )
 
             local _, len_right =
                 self.collision_world:queryPoint(
                 transform.position.x + collides.offset.x + collides.width,
                 transform.position.y + collides.offset.y +
-                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED
+                    collides.height * _constants.Y_OFFSET_TO_TEST_PLAYER_IS_GROUNDED,
+                world_filter
             )
             if len_centre > 0 or len_right > 0 or len_left > 0 then
                 transform.velocity.y = 0

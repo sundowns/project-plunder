@@ -45,7 +45,17 @@ function collider:update_entity(e)
         self.collision_world:move(
         collides,
         transform.position.x + collides.offset.x,
-        transform.position.y + collides.offset.y
+        transform.position.y + collides.offset.y,
+        function(item, other)
+            if not item.collides_with then
+                return "slide"
+            end
+            if string.match(item.collides_with, other.type) then
+                return "slide"
+            else
+                return "cross"
+            end
+        end
     )
     transform:setPosition(Vector(actualX - collides.offset.x, actualY - collides.offset.y))
 end

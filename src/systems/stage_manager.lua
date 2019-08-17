@@ -22,7 +22,7 @@ function stage_manager:load_stage(path)
     end
 
     for rx, ry, rw, rh in self.stage.layers["World"]:getCollidersIter() do
-        self.collision_world:add({is_geometry = true}, rx, ry, rw, rh)
+        self.collision_world:add({is_geometry = true, type="world", collides_with="*"}, rx, ry, rw, rh)
     end
 
     if self.stage.layers["Objects"] then
