@@ -15,16 +15,30 @@ end
 
 function item_manager:init()
   self.collision_world = nil
+  self.item_registry = {}
+  self._identifier_map = {} -- used for reverse lookup (key -> index in registry)
+  self:register_item("chest")
+end
+
+function item_manager:register_item(identifier)
+  assert(self._identifier_map[identifier] == nil, "Attempted to re-register existing item: " .. identifier)
+  local new_index = #self.item_registry + 1
+  self.item_registry[new_index] = identifier
+  self._identifier_map[identifier] = new_index -- map the identifier -> index for reverse lookup
+  print("Registered [" .. new_index .. "] - " .. self.item_registry[new_index])
+end
+
+function item_manager:spawn_item(identifier, position)
+  assert(identifier, "Received invalid identifier to spawn_item: " .. identifier)
+  assert(position and position.x and position.y, "Received non-vector argument for position to spawn_item")
+  assert(self._identifier_map[identifier], "Attempted to spawn unregistered item: " .. identifier)
+
+  -- this is awesome as long as item entities dont require additional unique parameters
+  self:getInstance():addEntity(_entities[identifier](position, self._identifier_map[identifier]))
 end
 
 function item_manager:set_collision_world(collision_world)
   self.collision_world = collision_world
-end
-
-function item_manager:entityAdded(e)
-end
-
-function item_manager:entityRemoved(e)
 end
 
 function item_manager:update(_)
@@ -46,20 +60,24 @@ function item_manager:check_for_pickups(e)
 
   -- check the entity for collisions (filter to just items)
   local x, y = transform.position.x + collides.offset.x, transform.position.y + collides.offset.y
-  -- local actualX, actualY, cols, len = self.collision_world:queryRect(collides, x, y, items_only_filter)
   local items, len = self.collision_world:queryRect(x, y, collides.width, collides.height, items_only_filter)
 
   local items_collided_with = {}
   -- if there's a collision, grab the inventory from this entity & insert (i guess?)
   for i = 1, len do
-    local owning_entity = items[i].owner
     if items[i].owner then
-      table.insert(items_collided_with, items[i])
+      table.insert(items_collided_with, items[i].owner)
     end
   end
 
-  if #items_collided_with > 0 then
-    print("collided with " .. #items_collided_with .. " item(s)")
+  for _, entity in pairs(items_collided_with) do
+    local item = entity:get(_components.item)
+    print("picking up item: " .. item.id)
+    --[[ TODO: actually consume the item
+      - remove position component
+      - remove from collision world,
+      - add to inventory ]]
+    --
   end
 end
 

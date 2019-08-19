@@ -1,7 +1,7 @@
 local pickup_items =
-    Component(
-    function(e)
-    end
+  Component(
+  function(_)
+  end
 )
 
 return pickup_items
