@@ -11,6 +11,7 @@ end
 function collider:entityAdded(e)
     local position = e:get(_components.transform).position
     local collides = e:get(_components.collides)
+    collides:set_owner(e)
     self.collision_world:add(collides, position.x, position.y, collides.width, collides.height)
 end
 

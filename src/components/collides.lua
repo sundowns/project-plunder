@@ -10,7 +10,12 @@ local collides =
         e.height = height
         e.type = type
         e.collides_with = collides_with
+        e.owner = nil
     end
 )
+
+function collides:set_owner(owner)
+  self.owner = owner
+end
 
 return collides

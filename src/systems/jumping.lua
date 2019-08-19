@@ -41,7 +41,7 @@ function jumping:jump(action, entity)
     if
         movement_state.behaviour.state == "walk" or movement_state.behaviour.state == "default" or
             movement_state.is_forgiving_jump
-     then
+    then
         movement_state:set("jump", self:getInstance(), entity)
         air_controlled.x_velocity = walk.x_velocity * _constants.PLAYER_GROUND_TO_AIR_MOMENTUM_CONSERVATION_RATIO
 

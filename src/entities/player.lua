@@ -36,6 +36,6 @@ return function(position)
         Vector(6, 12),
         "player",
         "world" -- offset relative to transform (arbitrary numbers that look nice atm)
-    ):give(_components.camera_target):give(_components.inventory, _constants.DEFAULT_INVENTORY_SIZE):apply()
+    ):give(_components.camera_target):give(_components.inventory, _constants.DEFAULT_INVENTORY_SIZE):give(_components.pickup_items):apply()
     return player
 end

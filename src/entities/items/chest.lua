@@ -1,7 +1,7 @@
 -- #position (optional) is an vector with world coordinates (vec<float>)
 return function(position)
     local chest =
-        Entity():give(_components.transform, position, Vector(0, 0)):give(_components.sprite, "CHEST", 0.65, 0.65):give(
+        Entity():give(_components.sprite, "CHEST", 0.65, 0.65):give(
         _components.gravity,
         _constants.GRAVITY,
         _constants.GRAVITY_DECELERATION

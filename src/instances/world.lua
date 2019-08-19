@@ -79,6 +79,7 @@ world:addSystem(inventory_manager, "resize")
 
 world:addSystem(item_manager, "update")
 world:addSystem(item_manager, "draw")
+world:addSystem(item_manager, "set_collision_world")
 
 world:addSystem(levitation, "update")
 
@@ -128,6 +129,7 @@ world:enableSystem(inventory_manager, "action_held")
 world:enableSystem(inventory_manager, "resize")
 
 world:enableSystem(item_manager, "draw")
+world:enableSystem(item_manager, "set_collision_world")
 
 function world.enable_updates()
     world:enableSystem(lighting, "update")

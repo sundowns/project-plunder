@@ -17,6 +17,6 @@ return {
     camera_target = require(PATH .. ".camera_target"),
     inventory = require(PATH .. ".inventory"),
     item = require(PATH .. ".item"),
-    icon = require(PATH .. ".icon"),
-    levitating = require(PATH .. ".levitating")
+    levitating = require(PATH .. ".levitating"),
+    pickup_items = require(PATH .. ".pickup_items")
 }
