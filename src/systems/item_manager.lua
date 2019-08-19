@@ -71,13 +71,8 @@ function item_manager:check_for_pickups(e)
   end
 
   for _, entity in pairs(items_collided_with) do
-    local item = entity:get(_components.item)
-    print("picking up item: " .. item.id)
-    --[[ TODO: actually consume the item
-      - remove position component
-      - remove from collision world,
-      - add to inventory ]]
-    --
+    self:getInstance():emit("item_picked_up", entity, e)
+    entity:remove(_components.transform):remove(_components.sprite):remove(_components.collides):apply()
   end
 end
 
