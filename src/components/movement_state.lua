@@ -37,7 +37,7 @@ end
 function movement_state:forgive_jump()
     self.is_forgiving_jump = true
     self.timer:after(
-        0.1,
+        0.05,
         function()
             self.is_forgiving_jump = false
         end

@@ -7,7 +7,7 @@ return function(position)
         _components.direction
     ):give(_components.dimensions, _constants.PLAYER_WIDTH, _constants.PLAYER_HEIGHT):give(
         _components.controlled,
-        {a = "left", d = "right", space = "jump", mouse1 = "target_light"}
+        {a = "left", d = "right", space = "jump", mouse1 = "target_light", i = "toggle_inventory"}
     ):give(_components.walk):give(_components.air_control):give(_components.jump):give(
         _components.gravity,
         _constants.GRAVITY,
@@ -33,7 +33,9 @@ return function(position)
         _components.collides,
         _constants.PLAYER_WIDTH,
         _constants.PLAYER_HEIGHT,
-        Vector(6, 12) -- offset relative to transform (arbitrary numbers that look nice atm)
-    ):give(_components.camera_target):apply()
+        Vector(6, 12),
+        "player",
+        "world" -- offset relative to transform (arbitrary numbers that look nice atm)
+    ):give(_components.camera_target):give(_components.inventory, _constants.DEFAULT_INVENTORY_SIZE):apply()
     return player
 end

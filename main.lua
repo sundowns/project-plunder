@@ -64,7 +64,7 @@ function love.draw()
     _instances.world:emit("detach")
     _instances.world:emit("detach_lighting")
     _instances.world:emit("draw_debug")
-    -- _instances.world:emit("draw_ui")
+    _instances.world:emit("draw_ui")
 end
 
 function love.keyreleased(key)
@@ -96,4 +96,8 @@ end
 
 function love.mousereleased(x, y, button, _, _)
     _instances.world:emit("mousereleased", x, y, button)
+end
+
+function love.resize(w, h)
+    _instances.world:emit("resize", w, h)
 end

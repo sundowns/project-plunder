@@ -9,7 +9,7 @@ return {
   tilewidth = 32,
   tileheight = 32,
   nextlayerid = 7,
-  nextobjectid = 9,
+  nextobjectid = 21,
   properties = {},
   tilesets = {
     {
@@ -48,6 +48,32 @@ return {
       margin = 0,
       columns = 6,
       image = "../tileset/objects.png",
+      imagewidth = 192,
+      imageheight = 192,
+      tileoffset = {
+        x = 0,
+        y = 0
+      },
+      grid = {
+        orientation = "orthogonal",
+        width = 32,
+        height = 32
+      },
+      properties = {},
+      terrains = {},
+      tilecount = 36,
+      tiles = {}
+    },
+    {
+      name = "Items",
+      firstgid = 73,
+      filename = "../tileset/Items.tsx",
+      tilewidth = 32,
+      tileheight = 32,
+      spacing = 0,
+      margin = 0,
+      columns = 6,
+      image = "../sprites/items.png",
       imagewidth = 192,
       imageheight = 192,
       tileoffset = {
@@ -189,6 +215,34 @@ return {
           properties = {
             ["radius"] = 80
           }
+        },
+        {
+          id = 16,
+          name = "",
+          type = "chest",
+          shape = "rectangle",
+          x = 352,
+          y = 480,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 73,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 17,
+          name = "",
+          type = "chest",
+          shape = "rectangle",
+          x = 448,
+          y = 352,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          gid = 73,
+          visible = true,
+          properties = {}
         }
       }
     }
