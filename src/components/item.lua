@@ -1,8 +1,9 @@
 local item =
-    Component(
-    function(e, id)
-        e.id = id
-    end
+  Component(
+  function(e, id)
+    assert(id, "Received nil id for item component")
+    e.id = id
+  end
 )
 
 return item

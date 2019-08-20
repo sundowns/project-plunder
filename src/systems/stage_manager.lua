@@ -2,101 +2,96 @@
 local stage_manager = System()
 
 function stage_manager:init()
-    self.stage = nil
-    self.collision_world = nil
-    self.objects = {}
-    self.tiles = {}
+  self.stage = nil
+  self.collision_world = nil
+  self.objects = {}
+  self.tiles = {}
 end
 
 function stage_manager:load_stage(path)
-    self.stage = Mappy.load(path)
-    assert(self.collision_world, "stage_manager attempted to load stage with collision world unset")
-    assert(self.stage.layers["World"], "attempted to load map without 'World' tile layer")
+  self.stage = Mappy.load(path)
+  assert(self.collision_world, "stage_manager attempted to load stage with collision world unset")
+  assert(self.stage.layers["World"], "attempted to load map without 'World' tile layer")
 
-    local collidable_tile_data = self:read_tile_layer(self.stage.layers["World"])
-    -- Stage data is stored in a 1 dimensional array of tiles
-    for id, tile in ipairs(collidable_tile_data.tiles) do
-        if tile ~= 0 then -- 0 means no tile
-            self:add_tile(id, tile, collidable_tile_data.columns)
-        end
+  local collidable_tile_data = self:read_tile_layer(self.stage.layers["World"])
+  -- Stage data is stored in a 1 dimensional array of tiles
+  for id, tile in ipairs(collidable_tile_data.tiles) do
+    if tile ~= 0 then -- 0 means no tile
+      self:add_tile(id, tile, collidable_tile_data.columns)
     end
+  end
 
-    for rx, ry, rw, rh in self.stage.layers["World"]:getCollidersIter() do
-        self.collision_world:add({is_geometry = true, type="world", collides_with="*"}, rx, ry, rw, rh)
-    end
+  for rx, ry, rw, rh in self.stage.layers["World"]:getCollidersIter() do
+    self.collision_world:add({is_geometry = true, type = "world", collides_with = "*", owner = nil}, rx, ry, rw, rh)
+  end
 
-    if self.stage.layers["Objects"] then
-        local object_data = self:read_object_layer(self.stage.layers["Objects"])
-        for _, object in pairs(object_data.objects) do
-            self:add_object(object)
-        end
+  if self.stage.layers["Objects"] then
+    local object_data = self:read_object_layer(self.stage.layers["Objects"])
+    for _, object in pairs(object_data.objects) do
+      self:add_object(object)
     end
+  end
 end
 
 -- second parameter is tile id, unused for now
 function stage_manager:add_tile(id, _, columns)
-    local x = ((id - 1) % columns) * _constants.TILE_WIDTH
-    local y = math.floor((id - 1) / columns) * _constants.TILE_HEIGHT
-    local new_tile = {is_tile = true, position = Vector(x, y)}
+  local x = ((id - 1) % columns) * _constants.TILE_WIDTH
+  local y = math.floor((id - 1) / columns) * _constants.TILE_HEIGHT
+  local new_tile = {is_tile = true, position = Vector(x, y)}
 
-    table.insert(self.tiles, new_tile)
+  table.insert(self.tiles, new_tile)
 end
 
 function stage_manager:add_object(object)
-    assert(object and object.type, "stage_manager received object with no type defined")
-    local valid = true
-    if object.type == "static_light_orange" then -- TODO: Introduce an item registry and place all this logic there
-        self:getInstance():addEntity(
-            _entities.static_light_source(
-                Vector(object.x - _constants.TILE_WIDTH / 2, object.y - _constants.TILE_HEIGHT),
-                _constants.COLOURS.ORANGE_TORCHLIGHT,
-                object.properties["radius"]
-            )
-        )
-    elseif object.type == "chest" then
-        self:getInstance():addEntity(
-            _entities.chest(Vector(object.x - _constants.TILE_WIDTH / 2, object.y - _constants.TILE_HEIGHT))
-        )
-    else
-        valid = false
-    end
+  assert(object and object.type, "stage_manager received object with no type defined")
+  local valid = true
+  local position = Vector(object.x - _constants.TILE_WIDTH / 2, object.y - _constants.TILE_HEIGHT)
+  if object.type == "static_light_orange" then
+    self:getInstance():addEntity(
+      _entities.static_light_source(position, _constants.COLOURS.ORANGE_TORCHLIGHT, object.properties["radius"])
+    )
+  elseif object.type == "chest" then -- TODO: should be type 'item' instead. Use metadata to define 'item_identifier'
+    self:getInstance():emit("spawn_item", "chest", position)
+  else
+    valid = false
+  end
 
-    if valid then
-        table.insert(self.objects, object)
-    end
+  if valid then
+    table.insert(self.objects, object)
+  end
 end
 
 function stage_manager.read_tile_layer(_, layer)
-    assert(layer.data)
-    return {
-        columns = layer.width,
-        rows = layer.height,
-        tiles = layer.data
-    }
+  assert(layer.data)
+  return {
+    columns = layer.width,
+    rows = layer.height,
+    tiles = layer.data
+  }
 end
 
 function stage_manager.read_object_layer(_, layer)
-    assert(layer and layer.objects, "Received nil object layer")
-    return {
-        objects = layer.objects
-    }
+  assert(layer and layer.objects, "Received nil object layer")
+  return {
+    objects = layer.objects
+  }
 end
 
 function stage_manager:set_collision_world(collision_world)
-    self.collision_world = collision_world
+  self.collision_world = collision_world
 end
 
 function stage_manager:draw()
-    if self.stage then
-        self.stage.layers["Background"]:draw()
-        self.stage.layers["World"]:draw()
-    end
+  if self.stage then
+    self.stage.layers["Background"]:draw()
+    self.stage.layers["World"]:draw()
+  end
 end
 
 function stage_manager:update(dt)
-    if self.stage then
-        self.stage:update(dt)
-    end
+  if self.stage then
+    self.stage:update(dt)
+  end
 end
 
 return stage_manager

@@ -1,9 +1,9 @@
 local icon =
-    Component(
-    function(e, path)
-        assert(path, "received invalid path for icon")
-        e.image = love.graphics.newImage(path)
-    end
+  Component(
+  function(e, path)
+    assert(path, "Received invalid path to icon component: " .. path)
+    e.image = love.graphics.newImage(path)
+  end
 )
 
 return icon
