@@ -72,7 +72,6 @@ function item_manager:check_for_pickups(e)
 
   for _, entity in pairs(items_collided_with) do
     self:getInstance():emit("item_picked_up", entity, e)
-    entity:remove(_components.transform):remove(_components.sprite):remove(_components.collides):apply()
   end
 end
 

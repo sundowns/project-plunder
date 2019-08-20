@@ -1,7 +1,11 @@
 local inventory_manager =
   System(
   {_components.inventory, "ALL"},
-  {_components.toolbar, _components.toolbar, "TOOLBAR"},
+  {
+    _components.toolbar,
+    _components.toolbar,
+    "TOOLBAR"
+  },
   {
     _components.inventory,
     _components.toolbar,
@@ -19,20 +23,22 @@ local function new_slot(index)
 end
 
 local function draw_slot(origin, slot, slot_size, slots_per_row)
-  local offset = Vector(slot_size * (slot.index % slots_per_row), 0)
+  _util.l.resetColour()
+  local offset =
+    Vector(slot_size * ((slot.index - 1) % slots_per_row), (math.ceil(slot.index / slots_per_row) - 1) * slot_size)
+  love.graphics.setLineWidth(10)
+  love.graphics.setColor(0.6, 0.6, 0.6, 0.8) -- TODO: make constants
+  love.graphics.rectangle("fill", origin.x + offset.x, origin.y + offset.y, slot_size, slot_size)
   love.graphics.setColor(0.6, 0.6, 0.6, 1)
   love.graphics.setLineWidth(4)
-  love.graphics.rectangle("line", origin.x + offset.x, origin.y, slot_size, slot_size)
-  love.graphics.setLineWidth(10)
-  love.graphics.setColor(0.6, 0.6, 0.6, 0.8)
-  love.graphics.rectangle("fill", origin.x + offset.x, origin.y, slot_size, slot_size)
-
+  love.graphics.rectangle("line", origin.x + offset.x, origin.y + offset.y, slot_size, slot_size)
   _util.l.resetColour()
+
   if slot.item then
     if slot.item:has(_components.icon) then
       local icon = slot.item:get(_components.icon).image
       local scale = slot_size / icon:getWidth()
-      love.graphics.draw(icon, offset.x, offset.y, 0, scale, scale, slot_size * 2, 0) -- TODO: solve offset when resizing
+      love.graphics.draw(icon, origin.x + offset.x, origin.y + offset.y, 0, scale, scale, 0, 0)
     else
       print("Missing icon for item in inventory slot: " .. slot.index .. "")
     end
@@ -52,12 +58,16 @@ function inventory_manager.resize(_, w, _)
 end
 
 function inventory_manager:item_picked_up(item, actor)
+  local consumed = false
   if actor:has(_components.toolbar) then
-  -- check toolbar slots
-  -- TODO: add to toolbar instead
+    consumed = self:add_item_to_inventory(item, actor:get(_components.toolbar))
   end
-  if actor:has(_components.inventory) then
-    self:add_item_to_inventory(item, actor:get(_components.inventory))
+  if not consumed and actor:has(_components.inventory) then
+    consumed = self:add_item_to_inventory(item, actor:get(_components.inventory))
+  end
+
+  if consumed then
+    item:remove(_components.transform):remove(_components.sprite):remove(_components.collides):apply()
   end
 end
 
@@ -108,21 +118,22 @@ function inventory_manager:toggle_inventory(action, entity)
   end
 end
 
+-- inventory could be toolbar or inventory components (just needs size and slots table)
 function inventory_manager.add_item_to_inventory(_, item, inventory)
   assert(item, "Received null item to inventory:add")
+  assert(inventory and inventory.size and inventory.slots, "Received invalid inventory for `add_item_to_inventory`")
   local target_slot = nil
   for i = 1, inventory.size do
-    if not inventory.slots[i].occupied then
+    if not inventory.slots[i].item then
       target_slot = i
       break
     end
   end
   if target_slot then
     inventory.slots[target_slot].item = item
-    inventory.slots[target_slot].occupied = true
+    return true -- item picked up
   else
-    print("Failed to add item to inventory. No appropriate inventory slot found")
-    return false
+    return false -- item not picked up
   end
 end
 
@@ -144,37 +155,14 @@ function inventory_manager:draw_ui()
   for i = 1, self.ALL.size do
     local entity = self.ALL:get(i)
     local inventory = entity:get(_components.inventory)
-    -- TODO: use draw_slot function!!!!!!
-    local offset =
-      Vector(
-      _constants.INVENTORY_SCREEN_OFFSET_RATIO.x * love.graphics.getWidth(),
-      _constants.INVENTORY_SCREEN_OFFSET_RATIO.y * love.graphics.getHeight()
-    )
     if self.current_open_inventory and self.current_open_inventory.id == inventory.id then
+      local origin =
+        Vector(
+        _constants.INVENTORY_SCREEN_OFFSET_RATIO.x * love.graphics.getWidth(),
+        _constants.INVENTORY_SCREEN_OFFSET_RATIO.y * love.graphics.getHeight()
+      )
       for j = 1, inventory.size do
-        if (j - 1) % _constants.INVENTORY_SLOTS_PER_ROW == 0 then
-          offset.y = offset.y + INVENTORY_CELL_SIZE
-          offset.x = _constants.INVENTORY_SCREEN_OFFSET_RATIO.x * love.graphics.getWidth()
-        end
-        love.graphics.setColor(0.6, 0.6, 0.6, 1)
-        love.graphics.setLineWidth(4)
-        love.graphics.rectangle("line", offset.x, offset.y, INVENTORY_CELL_SIZE, INVENTORY_CELL_SIZE)
-        love.graphics.setLineWidth(10)
-        love.graphics.setColor(0.6, 0.6, 0.6, 0.8)
-        love.graphics.rectangle("fill", offset.x, offset.y, INVENTORY_CELL_SIZE, INVENTORY_CELL_SIZE)
-        offset.x = offset.x + INVENTORY_CELL_SIZE
-
-        _util.l.resetColour()
-        local slot = self.current_open_inventory.slots[j]
-        if slot.item then
-          if slot.item:has(_components.icon) then
-            local icon = slot.item:get(_components.icon).image
-            local scale = INVENTORY_CELL_SIZE / icon:getWidth()
-            love.graphics.draw(icon, offset.x, offset.y, 0, scale, scale, INVENTORY_CELL_SIZE * 2, 0) -- TODO: solve offset when resizing
-          else
-            print("Missing icon for item in inventory slot: " .. j .. "")
-          end
-        end
+        draw_slot(origin, self.current_open_inventory.slots[j], INVENTORY_CELL_SIZE, _constants.INVENTORY_SLOTS_PER_ROW)
       end
     end
   end

@@ -85,6 +85,8 @@ function love.keypressed(key, _, _)
     if love.keyboard.isDown("lalt", "ralt") then
       _instances.world:emit("toggle_fullscreen", not love.window.getFullscreen())
     end
+  elseif key == "c" then
+    _instances.world:emit("spawn_item", "chest", Vector(love.graphics.getWidth() / 3, love.graphics.getHeight() / 4))
   end
 
   _instances.world:emit("keypressed", key)
