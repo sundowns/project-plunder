@@ -95,8 +95,8 @@ function inventory_manager:draw_ui()
         INVENTORY_SCREEN_OFFSET_RATIO.y * love.graphics.getHeight()
       )
       local cell_width = INVENTORY_CELL_SIZE
-      for j = 0, inventory.size - 1 do
-        if j % INVENTORY_SLOTS_PER_ROW == 0 then
+      for j = 1, inventory.size do
+        if (j - 1) % INVENTORY_SLOTS_PER_ROW == 0 then
           offset.y = offset.y + cell_width
           offset.x = INVENTORY_SCREEN_OFFSET_RATIO.x * love.graphics.getWidth()
         end
@@ -108,10 +108,15 @@ function inventory_manager:draw_ui()
         love.graphics.rectangle("fill", offset.x, offset.y, cell_width, cell_width)
         offset.x = offset.x + cell_width
 
-        for k = 1, #self.current_open_inventory.slots do
-          local slot = self.current_open_inventory.slots[k]
-          if slot.occupied then
-            _util.t.print(slot, 3)
+        _util.l.resetColour()
+        local slot = self.current_open_inventory.slots[j]
+        if slot.occupied then
+          if slot.item:has(_components.icon) then
+            local icon = slot.item:get(_components.icon).image
+            local scale = 1 / 2 -- TODO: we're hardcoding scale here, add it to the icon
+            love.graphics.draw(icon, offset.x, offset.y, 0, scale, scale, (icon:getWidth() / 2) * 1 / scale)
+          else
+            print("Missing icon for item in inventory slot: " .. j .. "")
           end
         end
       end
