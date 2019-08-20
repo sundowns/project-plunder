@@ -14,7 +14,8 @@ return function(position, item_registry_index)
     "world"
   ):give(_components.icon, "resources/icons/chest.png")
 
-  -- chest:give(_components.point_light, 0.5, nil, _constants.ITEM_LIGHT_SOURCE_RADIUS) -- TODO:
+  -- TODO: some kind of colour-bleeding-outwards effect
+  -- chest:give(_components.point_light, 0.5, nil, _constants.ITEM_LIGHT_SOURCE_RADIUS)
 
   if position then
     chest:give(_components.transform, position, Vector(0, 0))

@@ -19,5 +19,6 @@ return {
   item = require(PATH .. ".item"),
   levitating = require(PATH .. ".levitating"),
   pickup_items = require(PATH .. ".pickup_items"),
-  icon = require(PATH .. ".icon")
+  icon = require(PATH .. ".icon"),
+  toolbar = require(PATH .. ".toolbar")
 }

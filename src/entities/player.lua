@@ -38,6 +38,6 @@ return function(position)
     "world" -- offset relative to transform (arbitrary numbers that look nice atm)
   ):give(_components.camera_target):give(_components.inventory, _constants.DEFAULT_INVENTORY_SIZE):give(
     _components.pickup_items
-  ):apply()
+  ):give(_components.toolbar, _constants.INVENTORY_SLOTS_PER_ROW):apply()
   return player
 end
