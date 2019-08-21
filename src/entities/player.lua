@@ -7,7 +7,7 @@ return function(position)
     _components.direction
   ):give(_components.dimensions, _constants.PLAYER_WIDTH, _constants.PLAYER_HEIGHT):give(
     _components.controlled,
-    {a = "left", d = "right", space = "jump", mouse1 = "target_light", i = "toggle_inventory"}
+    {a = "left", d = "right", space = "jump", mouse1 = "target_light", i = "toggle_inventory", q = "drop_item"}
   ):give(_components.walk):give(_components.air_control):give(_components.jump):give(
     _components.gravity,
     _constants.GRAVITY,
@@ -38,6 +38,6 @@ return function(position)
     "world" -- offset relative to transform (arbitrary numbers that look nice atm)
   ):give(_components.camera_target):give(_components.inventory, _constants.DEFAULT_INVENTORY_SIZE):give(
     _components.pickup_items
-  ):give(_components.toolbar, _constants.INVENTORY_SLOTS_PER_ROW):apply()
+  ):give(_components.toolbar, _constants.INVENTORY_SLOTS_PER_ROW):give(_components.visible):apply()
   return player
 end

@@ -77,6 +77,7 @@ world:addSystem(inventory_manager, "action_pressed")
 world:addSystem(inventory_manager, "action_held")
 world:addSystem(inventory_manager, "resize")
 world:addSystem(inventory_manager, "item_picked_up")
+world:addSystem(inventory_manager, "update")
 
 world:addSystem(item_manager, "update")
 world:addSystem(item_manager, "draw")
@@ -150,6 +151,7 @@ function world.enable_updates()
   world:enableSystem(camera, "update")
   world:enableSystem(levitation, "update")
   world:enableSystem(item_manager, "update")
+  world:enableSystem(inventory_manager, "update")
 end
 
 function world.disable_updates()
@@ -167,6 +169,7 @@ function world.disable_updates()
   world:disableSystem(camera, "update")
   world:disableSystem(levitation, "update")
   world:disableSystem(item_manager, "update")
+  world:disableSystem(inventory_manager, "update")
 end
 
 world.enable_updates()

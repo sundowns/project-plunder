@@ -20,5 +20,8 @@ return {
   levitating = require(PATH .. ".levitating"),
   pickup_items = require(PATH .. ".pickup_items"),
   icon = require(PATH .. ".icon"),
-  toolbar = require(PATH .. ".toolbar")
+  toolbar = require(PATH .. ".toolbar"),
+  visible = require(PATH .. ".visible"),
+  grabbable = require(PATH .. ".grabbable"),
+  invulnerability = require(PATH .. ".invulnerability")
 }

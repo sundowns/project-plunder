@@ -65,7 +65,7 @@ function item_manager:check_for_pickups(e)
   local items_collided_with = {}
   -- if there's a collision, grab the inventory from this entity & insert (i guess?)
   for i = 1, len do
-    if items[i].owner then
+    if items[i].owner and not items[i].owner:has(_components.invulnerability) then
       table.insert(items_collided_with, items[i].owner)
     end
   end

@@ -47,6 +47,7 @@ end
 
 -- inventory_manager system
 function inventory_manager:init()
+  self.timer = Timer.new()
   INVENTORY_CELL_SIZE =
     (love.graphics.getWidth() * (1 - _constants.INVENTORY_SCREEN_OFFSET_RATIO.x * 2) /
     _constants.INVENTORY_SLOTS_PER_ROW)
@@ -67,7 +68,7 @@ function inventory_manager:item_picked_up(item, actor)
   end
 
   if consumed then
-    item:remove(_components.transform):remove(_components.sprite):remove(_components.collides):apply()
+    item:remove(_components.transform):remove(_components.visible):apply()
   end
 end
 
@@ -96,17 +97,59 @@ function inventory_manager.action_held(_, _, _)
 end
 
 function inventory_manager:action_pressed(action, entity)
+  if not self[action] then -- dip on actions we dont have callbacks for
+    return
+  end
   if entity:has(_components.inventory) then
-    self:toggle_inventory(action, entity)
+    if action == "toggle_inventory" then
+      self:toggle_inventory(entity)
+    elseif action == "drop_item" then
+      self:drop_item(entity, 1)
+    end
   end
 end
 
-function inventory_manager:toggle_inventory(action, entity)
-  assert(action)
+function inventory_manager:drop_item(entity, index)
   assert(entity)
-  if action ~= "toggle_inventory" then
-    return
+  assert(index)
+  assert(entity:has(_components.transform), "entity with no transform attempted to drop item in the world")
+  local item = nil
+  -- remove item from slot at given index if it exists
+  if entity:has(_components.toolbar) then
+    local toolbar = entity:get(_components.toolbar)
+    if toolbar.slots[index] and toolbar.slots[index].item then
+      item = toolbar.slots[index].item
+      toolbar.slots[index].item = nil
+    end
   end
+  if not item and entity:has(_components.inventory) then
+    local inventory = entity:get(_components.inventory)
+    if inventory.slots[index] and inventory.slots[index].item then
+      item = inventory.slots[index].item
+      inventory.slots[index].item = nil
+    end
+  end
+
+  if item then
+    -- drop item into the world
+    local dropper_position = entity:get(_components.transform).position
+    item:give(_components.transform, dropper_position, Vector(0, 0)):give(_components.visible):give(
+      _components.invulnerability
+    ):apply()
+
+    self.timer:after(
+      _constants.ITEM_DROP_INVULNERABILITY_DURATION,
+      function()
+        if item:has(_components.invulnerability) then
+          item:remove(_components.invulnerability):apply()
+        end
+      end
+    )
+  end
+end
+
+function inventory_manager:toggle_inventory(entity)
+  assert(entity)
 
   local inventory = entity:get(_components.inventory)
   if (self.current_open_inventory and self.current_open_inventory.id == inventory.id) then
@@ -135,6 +178,10 @@ function inventory_manager.add_item_to_inventory(_, item, inventory)
   else
     return false -- item not picked up
   end
+end
+
+function inventory_manager:update(dt)
+  self.timer:update(dt)
 end
 
 function inventory_manager:draw_ui()
