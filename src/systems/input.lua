@@ -11,6 +11,7 @@ function input:init()
   )
 end
 
+-- TODO: add some sort of sensible 'subscribe-to-actions' mechanism for input callbacks!!!
 function input:poll_keys()
   for i = 1, self.pool.size do
     local controlled = self.pool:get(i):get(_components.controlled)

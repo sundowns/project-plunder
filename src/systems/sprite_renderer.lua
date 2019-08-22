@@ -1,4 +1,4 @@
-local sprite_renderer = System({_components.sprite, _components.transform})
+local sprite_renderer = System({_components.sprite, _components.transform, _components.visible})
 
 function sprite_renderer:init()
   self.spriteBank = {}

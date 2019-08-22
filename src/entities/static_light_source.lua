@@ -7,6 +7,6 @@ return function(position, light_colour, radius)
     1,
     light_colour,
     radius or _constants.STATIC_LIGHT_SOURCE_RADIUS
-  ):give(_components.sprite, "TORCH"):give(_components.dimensions, 32, 32):apply()
+  ):give(_components.sprite, "TORCH"):give(_components.visible):give(_components.dimensions, 32, 32):apply()
   return static_light_source
 end

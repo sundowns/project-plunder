@@ -3,6 +3,7 @@ local _instances = nil -- should not have visbility of each other...
 function love.load()
   love.graphics.setDefaultFilter("nearest", "nearest", 0)
   -- Globals
+  Vector = require("libs.vector")
   _constants = require("src.constants")
   _util = require("libs.util")
   serialize = require("libs.serialize")
@@ -21,7 +22,6 @@ function love.load()
   Instance = require("libs.concord.instance")
   System = require("libs.concord.system")
   Timer = require("libs.timer")
-  Vector = require("libs.vector")
   Behavior = require("libs.behavior")
   Bump = require("libs.bump")
   Mappy = require("libs.mappy")
@@ -85,6 +85,8 @@ function love.keypressed(key, _, _)
     if love.keyboard.isDown("lalt", "ralt") then
       _instances.world:emit("toggle_fullscreen", not love.window.getFullscreen())
     end
+  elseif key == "c" then
+    _instances.world:emit("spawn_item", "chest", Vector(love.graphics.getWidth() / 3, love.graphics.getHeight() / 4))
   end
 
   _instances.world:emit("keypressed", key)

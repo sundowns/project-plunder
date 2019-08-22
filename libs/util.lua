@@ -321,4 +321,9 @@ function util.string.randomLetter()
   return string.char(math.random(97, 122))
 end
 
+-- TODO: document this
+function util.string.starts_with(str, start)
+  return str:sub(1, #start) == start
+end
+
 return util
