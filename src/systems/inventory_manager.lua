@@ -109,6 +109,34 @@ function inventory_manager:action_pressed(action, entity)
   end
 end
 
+local get_dropped_item_velocity = function(dropper)
+  local velocity = Vector(30, -150) -- TODO: make this base throw velocity a constant
+  if dropper:has(_components.direction) then
+    if dropper:get(_components.direction).value == "LEFT" then
+      velocity.x = -velocity.x
+    end
+  end
+
+  if dropper:has(_components.transform) then
+    velocity = velocity + (dropper:get(_components.transform).velocity) / 4
+  end
+
+  if dropper:has(_components.movement_state) then
+    -- TODO: use player state to determine which velocity to give it. if no player state, give it a constant velocity
+    local movement_state = dropper:get(_components.movement_state)
+    if movement_state.behaviour.state == "walk" then
+      velocity.x = velocity.x + (dropper:get(_components.walk).x_velocity)
+    elseif movement_state.behaviour.state == "jump" or movement_state.behaviour == "fall" then
+      velocity.x = velocity.x + (dropper:get(_components.air_control).x_velocity)
+    end
+  end
+
+  -- TODO: we need aerial drag
+  -- TODO: set a cap for the velocity
+  print("x: " .. velocity.x, " y: " .. velocity.y)
+  return velocity
+end
+
 function inventory_manager:drop_item(entity, index)
   assert(entity)
   assert(index)
@@ -132,8 +160,16 @@ function inventory_manager:drop_item(entity, index)
 
   if item then
     -- drop item into the world
-    local dropper_position = entity:get(_components.transform).position
-    item:give(_components.transform, dropper_position, Vector(0, 0)):give(_components.visible):give(
+    local transform = entity:get(_components.transform)
+    local position = transform.position:clone()
+    if entity:has(_components.dimensions) then
+      local dimensions = entity:get(_components.dimensions)
+      position.x = position.x + dimensions.width / 2
+      position.y = position.y + dimensions.height / 2
+    end
+    -- TODO: apply a generic 'throw forwards' velocity. Add some component of player velocity so movement affects throwing
+    local resultant_velocity = get_dropped_item_velocity(entity)
+    item:give(_components.transform, position, resultant_velocity):give(_components.visible):give(
       _components.invulnerability
     ):apply()
 
