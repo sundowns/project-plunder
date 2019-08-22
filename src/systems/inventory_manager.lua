@@ -117,6 +117,7 @@ function inventory_manager:action_pressed(action, entity)
   end
 end
 
+-- TODO: this whole function is likely to change with velocity refactor/consolidation
 local get_dropped_item_velocity = function(dropper)
   local velocity = _constants.BASE_ITEM_THROWN_VELOCITY:clone()
   if dropper:has(_components.direction) then
