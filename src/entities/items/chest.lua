@@ -12,7 +12,7 @@ return function(position, item_registry_index)
     Vector(0, 0), -- offset relative to transform (arbitrary numbers that look nice atm)
     "item",
     "world"
-  ):give(_components.icon, "resources/icons/chest.png"):give(_components.grabbable)
+  ):give(_components.icon, "resources/icons/chest.png")
 
   -- TODO: some kind of colour-bleeding-outwards effect?
   -- chest:give(_components.point_light, 0.5, nil, _constants.ITEM_LIGHT_SOURCE_RADIUS)
