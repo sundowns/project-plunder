@@ -22,16 +22,21 @@ local function new_slot(index)
   return {item = nil, index = index}
 end
 
-local function draw_slot(origin, slot, slot_size, slots_per_row)
+local function draw_slot(origin, slot, slot_size, slots_per_row, is_selected)
   _util.l.resetColour()
   local offset =
     Vector(slot_size * ((slot.index - 1) % slots_per_row), (math.ceil(slot.index / slots_per_row) - 1) * slot_size)
-  love.graphics.setLineWidth(10)
-  love.graphics.setColor(0.6, 0.6, 0.6, 0.8) -- TODO: make constants
-  love.graphics.rectangle("fill", origin.x + offset.x, origin.y + offset.y, slot_size, slot_size)
-  love.graphics.setColor(0.6, 0.6, 0.6, 1)
+  love.graphics.setColor(_constants.COLOURS.INVENTORY_SLOT_OUTLINE)
   love.graphics.setLineWidth(4)
   love.graphics.rectangle("line", origin.x + offset.x, origin.y + offset.y, slot_size, slot_size)
+  love.graphics.setLineWidth(10)
+  if is_selected then
+    love.graphics.setColor(_constants.COLOURS.INVENTORY_SLOT_SELECTED)
+  else
+    love.graphics.setColor(_constants.COLOURS.INVENTORY_SLOT)
+  end
+  love.graphics.rectangle("fill", origin.x + offset.x, origin.y + offset.y, slot_size, slot_size)
+
   _util.l.resetColour()
 
   if slot.item then
@@ -96,21 +101,24 @@ end
 function inventory_manager.action_held(_, _, _)
 end
 
+-- TODO: add some sort of sensible 'subscription' mechanism for input callbacks!!!
 function inventory_manager:action_pressed(action, entity)
-  if not self[action] then -- dip on actions we dont have callbacks for
+  if not entity:has(_components.inventory) and not entity:has(_components.toolbar) then
     return
   end
-  if entity:has(_components.inventory) then
-    if action == "toggle_inventory" then
-      self:toggle_inventory(entity)
-    elseif action == "drop_item" then
-      self:drop_item(entity, 1)
-    end
+  if action == "toggle_inventory" then
+    self:toggle_inventory(entity)
+  elseif action == "drop_item" then
+    self:drop_item(entity)
+  elseif _util.s.starts_with(action, "select") then
+    local index = tonumber(string.match(action, "%d+"))
+    assert(index, "Received an invalid selection index to toolbar")
+    entity:get(_components.toolbar):select(index)
   end
 end
 
 local get_dropped_item_velocity = function(dropper)
-  local velocity = Vector(30, -150) -- TODO: make this base throw velocity a constant
+  local velocity = _constants.BASE_ITEM_THROWN_VELOCITY:clone()
   if dropper:has(_components.direction) then
     if dropper:get(_components.direction).value == "LEFT" then
       velocity.x = -velocity.x
@@ -122,7 +130,6 @@ local get_dropped_item_velocity = function(dropper)
   end
 
   if dropper:has(_components.movement_state) then
-    -- TODO: use player state to determine which velocity to give it. if no player state, give it a constant velocity
     local movement_state = dropper:get(_components.movement_state)
     if movement_state.behaviour.state == "walk" then
       velocity.x = velocity.x + (dropper:get(_components.walk).x_velocity)
@@ -133,24 +140,24 @@ local get_dropped_item_velocity = function(dropper)
 
   -- TODO: we need aerial drag
   -- TODO: set a cap for the velocity
-  print("x: " .. velocity.x, " y: " .. velocity.y)
+  --   print("x: " .. velocity.x, " y: " .. velocity.y)
   return velocity
 end
 
-function inventory_manager:drop_item(entity, index)
+function inventory_manager:drop_item(entity)
   assert(entity)
-  assert(index)
   assert(entity:has(_components.transform), "entity with no transform attempted to drop item in the world")
   local item = nil
   -- remove item from slot at given index if it exists
   if entity:has(_components.toolbar) then
     local toolbar = entity:get(_components.toolbar)
-    if toolbar.slots[index] and toolbar.slots[index].item then
-      item = toolbar.slots[index].item
-      toolbar.slots[index].item = nil
+    if toolbar.slots[toolbar.selected_index] and toolbar.slots[toolbar.selected_index].item then
+      item = toolbar.slots[toolbar.selected_index].item
+      toolbar.slots[toolbar.selected_index].item = nil
     end
   end
   if not item and entity:has(_components.inventory) then
+    local index = 1
     local inventory = entity:get(_components.inventory)
     if inventory.slots[index] and inventory.slots[index].item then
       item = inventory.slots[index].item
@@ -167,7 +174,6 @@ function inventory_manager:drop_item(entity, index)
       position.x = position.x + dimensions.width / 2
       position.y = position.y + dimensions.height / 2
     end
-    -- TODO: apply a generic 'throw forwards' velocity. Add some component of player velocity so movement affects throwing
     local resultant_velocity = get_dropped_item_velocity(entity)
     item:give(_components.transform, position, resultant_velocity):give(_components.visible):give(
       _components.invulnerability
@@ -230,7 +236,7 @@ function inventory_manager:draw_ui()
       _constants.TOOLBAR_SCREEN_OFFSET_RATIO.y * love.graphics.getHeight()
     )
     for j = 1, toolbar.size do
-      draw_slot(origin, toolbar.slots[j], INVENTORY_CELL_SIZE, toolbar.size)
+      draw_slot(origin, toolbar.slots[j], INVENTORY_CELL_SIZE, toolbar.size, toolbar.selected_index == j)
     end
   end
   _util.l.resetColour()

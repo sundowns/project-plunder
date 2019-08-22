@@ -16,6 +16,7 @@ std = {
     "loadstring",
     "match",
     "package",
+    "tonumber",
     -- Third party libraries
     "love",
     "resources",
