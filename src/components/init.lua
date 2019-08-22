@@ -22,5 +22,5 @@ return {
   icon = require(PATH .. ".icon"),
   toolbar = require(PATH .. ".toolbar"),
   visible = require(PATH .. ".visible"),
-  invulnerability = require(PATH .. ".invulnerability")
+  invulnerable = require(PATH .. ".invulnerable")
 }

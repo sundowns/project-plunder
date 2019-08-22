@@ -177,14 +177,14 @@ function inventory_manager:drop_item(entity)
     end
     local resultant_velocity = get_dropped_item_velocity(entity)
     item:give(_components.transform, position, resultant_velocity):give(_components.visible):give(
-      _components.invulnerability
+      _components.invulnerable
     ):apply()
 
     self.timer:after(
       _constants.ITEM_DROP_INVULNERABILITY_DURATION,
       function()
-        if item:has(_components.invulnerability) then
-          item:remove(_components.invulnerability):apply()
+        if item:has(_components.invulnerable) then
+          item:remove(_components.invulnerable):apply()
         end
       end
     )
